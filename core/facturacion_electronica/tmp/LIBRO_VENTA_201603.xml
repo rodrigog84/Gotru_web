@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<LibroCompraVenta xmlns="http://www.sii.cl/SiiDte" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sii.cl/SiiDte LibroCV_v10.xsd" version="1.0">
+  <EnvioLibro ID="LIBRO_VENTA_763695948_201603_1462563232">
+    <Caratula>
+      <RutEmisorLibro>76369594-8</RutEmisorLibro>
+      <RutEnvia>15140682-3</RutEnvia>
+      <PeriodoTributario>2016-03</PeriodoTributario>
+      <FchResol>2014-08-22</FchResol>
+      <NroResol>80</NroResol>
+      <TipoOperacion>VENTA</TipoOperacion>
+      <TipoLibro>MENSUAL</TipoLibro>
+      <TipoEnvio>TOTAL</TipoEnvio>
+    </Caratula>
+    <ResumenPeriodo>
+      <TotalesPeriodo>
+        <TpoDoc>33</TpoDoc>
+        <TotDoc>7</TotDoc>
+        <TotMntExe>0</TotMntExe>
+        <TotMntNeto>4201924</TotMntNeto>
+        <TotMntIVA>798366</TotMntIVA>
+        <TotMntTotal>5000290</TotMntTotal>
+      </TotalesPeriodo>
+      <TotalesPeriodo>
+        <TpoDoc>34</TpoDoc>
+        <TotDoc>4</TotDoc>
+        <TotMntExe>2471000</TotMntExe>
+        <TotMntNeto>0</TotMntNeto>
+        <TotMntIVA>0</TotMntIVA>
+        <TotMntTotal>2471000</TotMntTotal>
+      </TotalesPeriodo>
+      <TotalesPeriodo>
+        <TpoDoc>61</TpoDoc>
+        <TotDoc>2</TotDoc>
+        <TotMntExe>0</TotMntExe>
+        <TotMntNeto>4459462</TotMntNeto>
+        <TotMntIVA>847298</TotMntIVA>
+        <TotMntTotal>5306760</TotMntTotal>
+      </TotalesPeriodo>
+    </ResumenPeriodo>
+    <Detalle>
+      <TpoDoc>33</TpoDoc>
+      <NroDoc>17</NroDoc>
+      <TasaImp>19</TasaImp>
+      <FchDoc>2016-03-01</FchDoc>
+      <RUTDoc>78549450-4</RUTDoc>
+      <RznSoc>GOTRU ALIMENTOS SPA</RznSoc>
+      <MntNeto>745933</MntNeto>
+      <MntIVA>141727</MntIVA>
+      <MntTotal>887660</MntTotal>
+    </Detalle>
+    <Detalle>
+      <TpoDoc>33</TpoDoc>
+      <NroDoc>18</NroDoc>
+      <TasaImp>19</TasaImp>
+      <FchDoc>2016-03-28</FchDoc>
+      <RUTDoc>78549450-4</RUTDoc>
+      <RznSoc>GOTRU ALIMENTOS SPA</RznSoc>
+      <MntNeto>748405</MntNeto>
+      <MntIVA>142197</MntIVA>
+      <MntTotal>890602</MntTotal>
+    </Detalle>
+    <Detalle>
+      <TpoDoc>33</TpoDoc>
+      <NroDoc>19</NroDoc>
+      <TasaImp>19</TasaImp>
+      <FchDoc>2016-03-01</FchDoc>
+      <RUTDoc>76019353-4</RUTDoc>
+      <RznSoc>SOCIEDAD COMERCIAL DEIK Y COMP</RznSoc>
+      <MntNeto>216063</MntNeto>
+      <MntIVA>41052</MntIVA>
+      <MntTotal>257115</MntTotal>
+    </Detalle>
+    <Detalle>
+      <TpoDoc>33</TpoDoc>
+      <NroDoc>20</NroDoc>
+      <TasaImp>19</TasaImp>
+      <FchDoc>2016-03-01</FchDoc>
+      <RUTDoc>77733670-3</RUTDoc>
+      <RznSoc>SOC. COMERCIAL EL SEMBRADOR LT</RznSoc>
+      <MntNeto>510063</MntNeto>
+      <MntIVA>96912</MntIVA>
+      <MntTotal>606975</MntTotal>
+    </Detalle>
+    <Detalle>
+      <TpoDoc>33</TpoDoc>
+      <NroDoc>21</NroDoc>
+      <TasaImp>19</TasaImp>
+      <FchDoc>2016-03-22</FchDoc>
+      <RUTDoc>79521980-3</RUTDoc>
+      <RznSoc>CARLOS VALENZUELA Y CIA LIMITA</RznSoc>
+      <MntNeto>696320</MntNeto>
+      <MntIVA>132301</MntIVA>
+      <MntTotal>828621</MntTotal>
+    </Detalle>
+    <Detalle>
+      <TpoDoc>33</TpoDoc>
+      <NroDoc>22</NroDoc>
+      <TasaImp>19</TasaImp>
+      <FchDoc>2016-03-28</FchDoc>
+      <RUTDoc>78549450-4</RUTDoc>
+      <RznSoc>GOTRU ALIMENTOS SPA</RznSoc>
+      <MntNeto>748405</MntNeto>
+      <MntIVA>142197</MntIVA>
+      <MntTotal>890602</MntTotal>
+    </Detalle>
+    <Detalle>
+      <TpoDoc>33</TpoDoc>
+      <NroDoc>23</NroDoc>
+      <TasaImp>19</TasaImp>
+      <FchDoc>2016-03-28</FchDoc>
+      <RUTDoc>89435600-6</RUTDoc>
+      <RznSoc>CORDERO S.A.</RznSoc>
+      <MntNeto>536735</MntNeto>
+      <MntIVA>101980</MntIVA>
+      <MntTotal>638715</MntTotal>
+    </Detalle>
+    <Detalle>
+      <TpoDoc>34</TpoDoc>
+      <NroDoc>23</NroDoc>
+      <TasaImp>0</TasaImp>
+      <FchDoc>2016-01-25</FchDoc>
+      <RUTDoc>90380000-3</RUTDoc>
+      <RznSoc>SA FERIA DE LOS AGRICULTORES</RznSoc>
+      <MntExe>437000</MntExe>
+      <MntIVA>0</MntIVA>
+      <MntTotal>437000</MntTotal>
+    </Detalle>
+    <Detalle>
+      <TpoDoc>34</TpoDoc>
+      <NroDoc>24</NroDoc>
+      <TasaImp>0</TasaImp>
+      <FchDoc>2016-01-26</FchDoc>
+      <RUTDoc>96516320-4</RUTDoc>
+      <RznSoc>AGRICOLA Y COMERCIAL LIRCAY SA</RznSoc>
+      <MntExe>350000</MntExe>
+      <MntIVA>0</MntIVA>
+      <MntTotal>350000</MntTotal>
+    </Detalle>
+    <Detalle>
+      <TpoDoc>34</TpoDoc>
+      <NroDoc>25</NroDoc>
+      <TasaImp>0</TasaImp>
+      <FchDoc>2016-02-23</FchDoc>
+      <RUTDoc>90380000-3</RUTDoc>
+      <RznSoc>SA FERIA DE LOS AGRICULTORES</RznSoc>
+      <MntExe>1247000</MntExe>
+      <MntIVA>0</MntIVA>
+      <MntTotal>1247000</MntTotal>
+    </Detalle>
+    <Detalle>
+      <TpoDoc>34</TpoDoc>
+      <NroDoc>26</NroDoc>
+      <TasaImp>0</TasaImp>
+      <FchDoc>2016-03-29</FchDoc>
+      <RUTDoc>90380000-3</RUTDoc>
+      <RznSoc>S.A. FERIA DE LOS AGRICULTORES</RznSoc>
+      <MntExe>437000</MntExe>
+      <MntIVA>0</MntIVA>
+      <MntTotal>437000</MntTotal>
+    </Detalle>
+    <Detalle>
+      <TpoDoc>61</TpoDoc>
+      <NroDoc>2</NroDoc>
+      <TasaImp>19</TasaImp>
+      <FchDoc>2016-02-06</FchDoc>
+      <RUTDoc>78549450-4</RUTDoc>
+      <RznSoc>GOTRU ALIMENTOS SPA</RznSoc>
+      <MntNeto>2229731</MntNeto>
+      <MntIVA>423649</MntIVA>
+      <MntTotal>2653380</MntTotal>
+    </Detalle>
+    <Detalle>
+      <TpoDoc>61</TpoDoc>
+      <NroDoc>3</NroDoc>
+      <TasaImp>19</TasaImp>
+      <FchDoc>2016-01-31</FchDoc>
+      <RUTDoc>78549450-4</RUTDoc>
+      <RznSoc>GOTRU ALIMENTOS SPA</RznSoc>
+      <MntNeto>2229731</MntNeto>
+      <MntIVA>423649</MntIVA>
+      <MntTotal>2653380</MntTotal>
+    </Detalle>
+    <TmstFirma>2016-05-06T16:33:52</TmstFirma>
+  </EnvioLibro>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo xmlns="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI="#LIBRO_VENTA_763695948_201603_1462563232"><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>I3C7TTBnmctVH4XjvpRtKu0T38A=</DigestValue></Reference></SignedInfo><SignatureValue>Zjb93NYJSwRLT6DdhI5MOeAmTOc/IrL5ERgWzNwR7+Hz84ZnB8lzeHM1Gl2SMgAC
+vYd/RsCT1y05RkNXjT7IstDDOdsSlY3g9/EbFA5JekypyuHwHkgI2cFJbc+RIVu5
+hrDdMuHCT6Mf5Y1BrM7aAiJquV0Bvxw+n6NtgI3zXv8jb/iCZYBPjFwXhgFtLGyS
+DGGruDuUqzFGRvmDIFAMnxdXk06Fn7t7zCFAYLUAfbq7pEhsKk9pfpmfPDawkdrv
+aNt+LUSJzIjH8hmjV82f0MBqqJe5neskMo88hU5XJWYaa2igXIZE4lS0YY0Il0o1
+VWxbf8FmGJh23FtnokiorA==</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>tW2H1jxwazn1hbXVU6krNR8/EH5pdaIxtujG4hVJ4jPmtmBKb3Uq/+ScNdwX5oo0
+JAYb2Sn62zDJTXjfJv8ITsPenUXrjH5hkFOaGCBP2NRm01KXLLjB4wINK2nZyVqf
+KqrSQStSfCp52x77qkQWKTUgg4UO7np0sgSN6Q3CvlFGHQlkCSj3E8gvK+8QjtoR
+KgCkx7cJaXFa+1N05A+LT5Wn7cblOxXiEyCK5+M+1fzwNAwk034TWCiDYZPwxWx0
+BuGByqy8wZ+5WFBtrVccn1O7PnSxWZ+5yVLZWTOFts+pCMxxqUvwr8yK8RlX1tCz
+PuuDJF+s0+zhwE/OeTMQ+w==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIF4jCCBMqgAwIBAgICEgMwDQYJKoZIhvcNAQEFBQAwgaYxCzAJBgNVBAYTAkNM
+MRgwFgYDVQQKEw9BY2VwdGEuY29tIFMuQS4xSDBGBgNVBAMTP0FjZXB0YS5jb20g
+QXV0b3JpZGFkIENlcnRpZmljYWRvcmEgQ2xhc2UgMiBQZXJzb25hIE5hdHVyYWwg
+LSBHMzEeMBwGCSqGSIb3DQEJARYPaW5mb0BhY2VwdGEuY29tMRMwEQYDVQQFEwo5
+NjkxOTA1MC04MB4XDTE1MTIxNTE4MTIzOFoXDTE2MTIxNTE4MTIzOFowgY4xCzAJ
+BgNVBAYTAkNMMRgwFgYDVQQMEw9QRVJTT05BIE5BVFVSQUwxJzAlBgNVBAMTHkNF
+U0FSIEVEVUFSRE8gTU9SQUdBIEdVVElFUlJFWjEnMCUGCSqGSIb3DQEJARYYQ0VT
+QVIuTU9SQUdBQElORk8tU1lTLkNMMRMwEQYDVQQFEwoxNTE0MDY4Mi0zMIIBIjAN
+BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtW2H1jxwazn1hbXVU6krNR8/EH5p
+daIxtujG4hVJ4jPmtmBKb3Uq/+ScNdwX5oo0JAYb2Sn62zDJTXjfJv8ITsPenUXr
+jH5hkFOaGCBP2NRm01KXLLjB4wINK2nZyVqfKqrSQStSfCp52x77qkQWKTUgg4UO
+7np0sgSN6Q3CvlFGHQlkCSj3E8gvK+8QjtoRKgCkx7cJaXFa+1N05A+LT5Wn7cbl
+OxXiEyCK5+M+1fzwNAwk034TWCiDYZPwxWx0BuGByqy8wZ+5WFBtrVccn1O7PnSx
+WZ+5yVLZWTOFts+pCMxxqUvwr8yK8RlX1tCzPuuDJF+s0+zhwE/OeTMQ+wIDAQAB
+o4ICLjCCAiowHwYDVR0jBBgwFoAUQCQaPakxeoV3ej2ecpM5hOVAOBkwHQYDVR0O
+BBYEFIGurg7y4b1aWihAg0bUCPwUdbVyMAsGA1UdDwQEAwIE8DAdBgNVHSUEFjAU
+BggrBgEFBQcDAgYIKwYBBQUHAwQwEQYJYIZIAYb4QgEBBAQDAgWgMG4GA1UdIARn
+MGUwYwYKKwYBBAG1a4dqCjBVMCgGCCsGAQUFBwIBFhxodHRwOi8vd3d3LmFjZXB0
+YS5jb20vQ1BTLUczMCkGCCsGAQUFBwICMB0wFhYPQWNlcHRhLmNvbSBTLkEuMAMC
+AQkaA1RCRDBaBgNVHRIEUzBRoBgGCCsGAQQBwQECoAwWCjk2OTE5MDUwLTigJAYI
+KwYBBQUHCAOgGDAWDAo5NjkxOTA1MC04BggrBgEEAcEBAoEPaW5mb0BhY2VwdGEu
+Y29tMGMGA1UdEQRcMFqgGAYIKwYBBAHBAQGgDBYKMTUxNDA2ODItM6AkBggrBgEF
+BQcIA6AYMBYMCjE1MTQwNjgyLTMGCCsGAQQBwQECgRhDRVNBUi5NT1JBR0FASU5G
+Ty1TWVMuQ0wwPwYIKwYBBQUHAQEEMzAxMC8GCCsGAQUFBzABhiNodHRwOi8vb2Nz
+cC5hY2VwdGEuY29tL0NsYXNlM0Jpby1HMzA3BgNVHR8EMDAuMCygKqAohiZodHRw
+Oi8vY3JsLmFjZXB0YS5jb20vQ2xhc2UzQmlvLUczLmNybDANBgkqhkiG9w0BAQUF
+AAOCAQEAHA88G0eHysm3Zw/qRRAwGnXzbkfuUoFg8ZCEipoXkxrBPUHoCiw2gbeZ
+6hk2PpE/G2Vpc0ShCANKbS25iNaGM7+pzqvXYCm1APjsSoxy2PK4721WVE3SqHuN
+9aJpDgFyvy4u+5T0iA5Rsi480B8/NQx3tiZE5cnoPDTUS6Wg02s8gdHH08RJouxv
+ndFh/sIGhY09Ccs+NnhQFmyX7b/mwC5MnB2uuc6JRwmtxkRqmMVBjm0xmzyqiFKv
+tyNa+Tr8AlsPuaRUvWCwe158Zj1VjfHDmML9BPbuBnaRCewCcfW6z0ABr9VI4R8j
+5h4Y0rQQ27olwuPgpkroEuTsBmvRPw==</X509Certificate></X509Data></KeyInfo></Signature></LibroCompraVenta>

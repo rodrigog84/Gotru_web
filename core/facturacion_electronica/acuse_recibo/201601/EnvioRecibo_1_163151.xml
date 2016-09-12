@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<EnvioRecibos xmlns="http://www.sii.cl/SiiDte" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sii.cl/SiiDte EnvioRecibos_v10.xsd" version="1.0">
+  <SetRecibos ID="SetDteRecibidos">
+    <Caratula version="1.0">
+      <RutResponde>76369594-8</RutResponde>
+      <RutRecibe>87845500-2</RutRecibe>
+      <TmstFirmaEnv>2016-01-28T16:31:51</TmstFirmaEnv>
+    </Caratula>
+    <Recibo version="1.0">
+  <DocumentoRecibo ID="T33F40025723">
+    <TipoDoc>33</TipoDoc>
+    <Folio>40025723</Folio>
+    <FchEmis>2016-01-19</FchEmis>
+    <RUTEmisor>87845500-2</RUTEmisor>
+    <RUTRecep>76369594-8</RUTRecep>
+    <MntTotal>35557</MntTotal>
+    <Recinto>Oficina central</Recinto>
+    <RutFirma>15140682-3</RutFirma>
+    <Declaracion>El acuse de recibo que se declara en este acto, de acuerdo a lo dispuesto en la letra b) del Art. 4, y la letra c) del Art. 5 de la Ley 19.983, acredita que la entrega de mercaderias o servicio(s) prestado(s) ha(n) sido recibido(s).</Declaracion>
+    <TmstFirmaRecibo>2016-01-28T16:31:51</TmstFirmaRecibo>
+  </DocumentoRecibo>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo xmlns="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI="#T33F40025723"><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>rdIhPJPgZ05MOVNoEKxoRt18ig0=</DigestValue></Reference></SignedInfo><SignatureValue>SEZZIsZESBQ1zJMEtq9590JqaJP5mk3GoevZZ0BhMKHVuRyzeZXRyAW2YVYM81dy
+GKDSIMwJMKQSwR8p59V5iAhN+r3dC0FaWEeMRG10mZv+g52FBWArkBlhHtBw5H41
+44Gi6oGA1Yx4gig003oLnDWDoNeRrQ/X9oY3aPDBOhLTNO1oim4RhzCMHrhbyq5A
+WuoHtsNBHen42lRD9cuZnqGHUvcw7t3jYNLc/u727Z5KuwBFU5F2vtISWyNnSYrY
+NWNuTT1CaFMq8qiNp3kvOWkf8e0yjE/8t+5mnnIJlDadEWjMMXmvGLkboQK+dzEH
+JkpxrJAx65thnHSbfjXU8g==</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>tW2H1jxwazn1hbXVU6krNR8/EH5pdaIxtujG4hVJ4jPmtmBKb3Uq/+ScNdwX5oo0
+JAYb2Sn62zDJTXjfJv8ITsPenUXrjH5hkFOaGCBP2NRm01KXLLjB4wINK2nZyVqf
+KqrSQStSfCp52x77qkQWKTUgg4UO7np0sgSN6Q3CvlFGHQlkCSj3E8gvK+8QjtoR
+KgCkx7cJaXFa+1N05A+LT5Wn7cblOxXiEyCK5+M+1fzwNAwk034TWCiDYZPwxWx0
+BuGByqy8wZ+5WFBtrVccn1O7PnSxWZ+5yVLZWTOFts+pCMxxqUvwr8yK8RlX1tCz
+PuuDJF+s0+zhwE/OeTMQ+w==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIF4jCCBMqgAwIBAgICEgMwDQYJKoZIhvcNAQEFBQAwgaYxCzAJBgNVBAYTAkNM
+MRgwFgYDVQQKEw9BY2VwdGEuY29tIFMuQS4xSDBGBgNVBAMTP0FjZXB0YS5jb20g
+QXV0b3JpZGFkIENlcnRpZmljYWRvcmEgQ2xhc2UgMiBQZXJzb25hIE5hdHVyYWwg
+LSBHMzEeMBwGCSqGSIb3DQEJARYPaW5mb0BhY2VwdGEuY29tMRMwEQYDVQQFEwo5
+NjkxOTA1MC04MB4XDTE1MTIxNTE4MTIzOFoXDTE2MTIxNTE4MTIzOFowgY4xCzAJ
+BgNVBAYTAkNMMRgwFgYDVQQMEw9QRVJTT05BIE5BVFVSQUwxJzAlBgNVBAMTHkNF
+U0FSIEVEVUFSRE8gTU9SQUdBIEdVVElFUlJFWjEnMCUGCSqGSIb3DQEJARYYQ0VT
+QVIuTU9SQUdBQElORk8tU1lTLkNMMRMwEQYDVQQFEwoxNTE0MDY4Mi0zMIIBIjAN
+BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtW2H1jxwazn1hbXVU6krNR8/EH5p
+daIxtujG4hVJ4jPmtmBKb3Uq/+ScNdwX5oo0JAYb2Sn62zDJTXjfJv8ITsPenUXr
+jH5hkFOaGCBP2NRm01KXLLjB4wINK2nZyVqfKqrSQStSfCp52x77qkQWKTUgg4UO
+7np0sgSN6Q3CvlFGHQlkCSj3E8gvK+8QjtoRKgCkx7cJaXFa+1N05A+LT5Wn7cbl
+OxXiEyCK5+M+1fzwNAwk034TWCiDYZPwxWx0BuGByqy8wZ+5WFBtrVccn1O7PnSx
+WZ+5yVLZWTOFts+pCMxxqUvwr8yK8RlX1tCzPuuDJF+s0+zhwE/OeTMQ+wIDAQAB
+o4ICLjCCAiowHwYDVR0jBBgwFoAUQCQaPakxeoV3ej2ecpM5hOVAOBkwHQYDVR0O
+BBYEFIGurg7y4b1aWihAg0bUCPwUdbVyMAsGA1UdDwQEAwIE8DAdBgNVHSUEFjAU
+BggrBgEFBQcDAgYIKwYBBQUHAwQwEQYJYIZIAYb4QgEBBAQDAgWgMG4GA1UdIARn
+MGUwYwYKKwYBBAG1a4dqCjBVMCgGCCsGAQUFBwIBFhxodHRwOi8vd3d3LmFjZXB0
+YS5jb20vQ1BTLUczMCkGCCsGAQUFBwICMB0wFhYPQWNlcHRhLmNvbSBTLkEuMAMC
+AQkaA1RCRDBaBgNVHRIEUzBRoBgGCCsGAQQBwQECoAwWCjk2OTE5MDUwLTigJAYI
+KwYBBQUHCAOgGDAWDAo5NjkxOTA1MC04BggrBgEEAcEBAoEPaW5mb0BhY2VwdGEu
+Y29tMGMGA1UdEQRcMFqgGAYIKwYBBAHBAQGgDBYKMTUxNDA2ODItM6AkBggrBgEF
+BQcIA6AYMBYMCjE1MTQwNjgyLTMGCCsGAQQBwQECgRhDRVNBUi5NT1JBR0FASU5G
+Ty1TWVMuQ0wwPwYIKwYBBQUHAQEEMzAxMC8GCCsGAQUFBzABhiNodHRwOi8vb2Nz
+cC5hY2VwdGEuY29tL0NsYXNlM0Jpby1HMzA3BgNVHR8EMDAuMCygKqAohiZodHRw
+Oi8vY3JsLmFjZXB0YS5jb20vQ2xhc2UzQmlvLUczLmNybDANBgkqhkiG9w0BAQUF
+AAOCAQEAHA88G0eHysm3Zw/qRRAwGnXzbkfuUoFg8ZCEipoXkxrBPUHoCiw2gbeZ
+6hk2PpE/G2Vpc0ShCANKbS25iNaGM7+pzqvXYCm1APjsSoxy2PK4721WVE3SqHuN
+9aJpDgFyvy4u+5T0iA5Rsi480B8/NQx3tiZE5cnoPDTUS6Wg02s8gdHH08RJouxv
+ndFh/sIGhY09Ccs+NnhQFmyX7b/mwC5MnB2uuc6JRwmtxkRqmMVBjm0xmzyqiFKv
+tyNa+Tr8AlsPuaRUvWCwe158Zj1VjfHDmML9BPbuBnaRCewCcfW6z0ABr9VI4R8j
+5h4Y0rQQ27olwuPgpkroEuTsBmvRPw==</X509Certificate></X509Data></KeyInfo></Signature></Recibo>
+  </SetRecibos>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo xmlns="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI="#SetDteRecibidos"><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>+ogNg6rDmi+pydC7Umk4JoUtgAU=</DigestValue></Reference></SignedInfo><SignatureValue>iS3uVMe5NzNfmDcHx2QufCb0A0pyWGxdOkUR/qR7Io1An3WVVYLnC6fm9VWI3C2Q
+xTWOP2tpWQ62oD9EPYV0oSLVW0deFms8YDsvpF0mN5mYKCWFhGxqTuWsoerCbevr
+5VsonDgQorftGou12tTBmlU/iT1YdkhTFC1H/mGljXyt6MvFQ3wBvRrnv82DHfqU
+zPJeDDwDabcJbnY328mXdXSPFOLuK7stEeuO4G7g3gN3F/cmKHcpjYl0MFSNpCk0
+eCOi/QdDKAXSS5pKlngtiISnD+BhbaD3GgOsKZmYBaYe44iPBo985Q4WAt7DRg7y
+ss4PJhlWpdq3Jq1msKZffQ==</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>tW2H1jxwazn1hbXVU6krNR8/EH5pdaIxtujG4hVJ4jPmtmBKb3Uq/+ScNdwX5oo0
+JAYb2Sn62zDJTXjfJv8ITsPenUXrjH5hkFOaGCBP2NRm01KXLLjB4wINK2nZyVqf
+KqrSQStSfCp52x77qkQWKTUgg4UO7np0sgSN6Q3CvlFGHQlkCSj3E8gvK+8QjtoR
+KgCkx7cJaXFa+1N05A+LT5Wn7cblOxXiEyCK5+M+1fzwNAwk034TWCiDYZPwxWx0
+BuGByqy8wZ+5WFBtrVccn1O7PnSxWZ+5yVLZWTOFts+pCMxxqUvwr8yK8RlX1tCz
+PuuDJF+s0+zhwE/OeTMQ+w==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIF4jCCBMqgAwIBAgICEgMwDQYJKoZIhvcNAQEFBQAwgaYxCzAJBgNVBAYTAkNM
+MRgwFgYDVQQKEw9BY2VwdGEuY29tIFMuQS4xSDBGBgNVBAMTP0FjZXB0YS5jb20g
+QXV0b3JpZGFkIENlcnRpZmljYWRvcmEgQ2xhc2UgMiBQZXJzb25hIE5hdHVyYWwg
+LSBHMzEeMBwGCSqGSIb3DQEJARYPaW5mb0BhY2VwdGEuY29tMRMwEQYDVQQFEwo5
+NjkxOTA1MC04MB4XDTE1MTIxNTE4MTIzOFoXDTE2MTIxNTE4MTIzOFowgY4xCzAJ
+BgNVBAYTAkNMMRgwFgYDVQQMEw9QRVJTT05BIE5BVFVSQUwxJzAlBgNVBAMTHkNF
+U0FSIEVEVUFSRE8gTU9SQUdBIEdVVElFUlJFWjEnMCUGCSqGSIb3DQEJARYYQ0VT
+QVIuTU9SQUdBQElORk8tU1lTLkNMMRMwEQYDVQQFEwoxNTE0MDY4Mi0zMIIBIjAN
+BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtW2H1jxwazn1hbXVU6krNR8/EH5p
+daIxtujG4hVJ4jPmtmBKb3Uq/+ScNdwX5oo0JAYb2Sn62zDJTXjfJv8ITsPenUXr
+jH5hkFOaGCBP2NRm01KXLLjB4wINK2nZyVqfKqrSQStSfCp52x77qkQWKTUgg4UO
+7np0sgSN6Q3CvlFGHQlkCSj3E8gvK+8QjtoRKgCkx7cJaXFa+1N05A+LT5Wn7cbl
+OxXiEyCK5+M+1fzwNAwk034TWCiDYZPwxWx0BuGByqy8wZ+5WFBtrVccn1O7PnSx
+WZ+5yVLZWTOFts+pCMxxqUvwr8yK8RlX1tCzPuuDJF+s0+zhwE/OeTMQ+wIDAQAB
+o4ICLjCCAiowHwYDVR0jBBgwFoAUQCQaPakxeoV3ej2ecpM5hOVAOBkwHQYDVR0O
+BBYEFIGurg7y4b1aWihAg0bUCPwUdbVyMAsGA1UdDwQEAwIE8DAdBgNVHSUEFjAU
+BggrBgEFBQcDAgYIKwYBBQUHAwQwEQYJYIZIAYb4QgEBBAQDAgWgMG4GA1UdIARn
+MGUwYwYKKwYBBAG1a4dqCjBVMCgGCCsGAQUFBwIBFhxodHRwOi8vd3d3LmFjZXB0
+YS5jb20vQ1BTLUczMCkGCCsGAQUFBwICMB0wFhYPQWNlcHRhLmNvbSBTLkEuMAMC
+AQkaA1RCRDBaBgNVHRIEUzBRoBgGCCsGAQQBwQECoAwWCjk2OTE5MDUwLTigJAYI
+KwYBBQUHCAOgGDAWDAo5NjkxOTA1MC04BggrBgEEAcEBAoEPaW5mb0BhY2VwdGEu
+Y29tMGMGA1UdEQRcMFqgGAYIKwYBBAHBAQGgDBYKMTUxNDA2ODItM6AkBggrBgEF
+BQcIA6AYMBYMCjE1MTQwNjgyLTMGCCsGAQQBwQECgRhDRVNBUi5NT1JBR0FASU5G
+Ty1TWVMuQ0wwPwYIKwYBBQUHAQEEMzAxMC8GCCsGAQUFBzABhiNodHRwOi8vb2Nz
+cC5hY2VwdGEuY29tL0NsYXNlM0Jpby1HMzA3BgNVHR8EMDAuMCygKqAohiZodHRw
+Oi8vY3JsLmFjZXB0YS5jb20vQ2xhc2UzQmlvLUczLmNybDANBgkqhkiG9w0BAQUF
+AAOCAQEAHA88G0eHysm3Zw/qRRAwGnXzbkfuUoFg8ZCEipoXkxrBPUHoCiw2gbeZ
+6hk2PpE/G2Vpc0ShCANKbS25iNaGM7+pzqvXYCm1APjsSoxy2PK4721WVE3SqHuN
+9aJpDgFyvy4u+5T0iA5Rsi480B8/NQx3tiZE5cnoPDTUS6Wg02s8gdHH08RJouxv
+ndFh/sIGhY09Ccs+NnhQFmyX7b/mwC5MnB2uuc6JRwmtxkRqmMVBjm0xmzyqiFKv
+tyNa+Tr8AlsPuaRUvWCwe158Zj1VjfHDmML9BPbuBnaRCewCcfW6z0ABr9VI4R8j
+5h4Y0rQQ27olwuPgpkroEuTsBmvRPw==</X509Certificate></X509Data></KeyInfo></Signature></EnvioRecibos>
