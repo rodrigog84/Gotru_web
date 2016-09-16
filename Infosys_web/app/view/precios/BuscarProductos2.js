@@ -18,7 +18,7 @@ Ext.define('Infosys_web.view.precios.BuscarProductos2' ,{
             iconCls: 'icon-grid',
 
             title : 'Productos',
-            store: 'Productosf',
+            store: 'Productosbusca',
             autoHeight: true,
             viewConfig: {
                 forceFit: true
@@ -59,17 +59,35 @@ Ext.define('Infosys_web.view.precios.BuscarProductos2' ,{
             xtype: 'toolbar',
             dock: 'top',
             items: [
-            {
+             {
                 width: 450,
                 xtype: 'textfield',
+                itemId: 'listaId',
+                fieldLabel: 'Lista',
+                hidden: true
+            },{
+                xtype: 'combo',
+                itemId: 'tipoSeleccionId',
+                fieldLabel: '',
+                width: 120,
+                forceSelection : true,
+                editable : false,
+                valueField : 'id',
+                value: "Nombre",
+                displayField : 'nombre',
+                emptyText : "Seleccione",
+                store : 'productos.Selector'
+            },{
+                width: 340,
+                xtype: 'textfield',
                 itemId: 'nombreId',
-                fieldLabel: 'Nombre'
+                fieldLabel: ''
             },
             '-',
             {
                 xtype: 'button',
                 iconCls: 'icon-search',
-                action: 'buscar',
+                action: 'buscarproprecios2',
                 text : 'Buscar'
             }
             ]      
@@ -83,7 +101,7 @@ Ext.define('Infosys_web.view.precios.BuscarProductos2' ,{
         {
             xtype: 'pagingtoolbar',
             dock:'bottom',
-            store: 'Productosf',
+            store: 'Productosbusca',
             displayInfo: true
         }];
         

@@ -62,9 +62,7 @@ class Productosfact extends CI_Controller {
 	   		 $resp['success'] = false;
 
 	   		
-	   	};
-
-		
+	   	};	
 
 	   	
         echo json_encode($resp);
@@ -143,7 +141,64 @@ class Productosfact extends CI_Controller {
         echo json_encode($resp);
 	}
 
-	
+	public function getAlllista2(){
+
+		$resp = array();
+        $nombre = $this->input->get('nombre');
+        $opcion = $this->input->get('opcion');
+        $lista = $this->input->get('lista');
+
+        if(!$opcion){        	
+        	$opcion="Todos";
+        };
+       
+        if($opcion=="Codigo"){
+
+        	$query = $this->db->query('SELECT acc.*, c.nombre as nombre, c.codigo as 	
+        	codigo, b.nombre as nom_bodega, acc.valor as p_venta
+        	FROM detalle_lista_precios acc
+			left join bodegas b on (acc.id_bodega = b.id)	
+			left join productos c on (acc.id_producto = c.id)
+			left join mae_medida m on (acc.id_medida = m.id)
+			WHERE c.codigo = "'.$nombre.'" and acc.id_lista = "'.$lista.'"');        	
+
+        };
+
+        if($opcion=="Nombre"){
+
+        	$query = $this->db->query('SELECT acc.*, c.nombre as nombre, c.codigo as 	
+        	codigo, b.nombre as nom_bodega, acc.valor as p_venta
+        	FROM detalle_lista_precios acc
+			left join bodegas b on (acc.id_bodega = b.id)	
+			left join productos c on (acc.id_producto = c.id)
+			left join mae_medida m on (acc.id_medida = m.id)
+			WHERE c.nombre = "'.$nombre.'" and acc.id_lista = "'.$lista.'"');        	
+
+        };
+
+        if($opcion=="Todos"){
+
+        	$query = $this->db->query('SELECT acc.*, c.nombre as nombre, c.codigo as 	
+        	codigo, b.nombre as nom_bodega, acc.valor as p_venta
+        	FROM detalle_lista_precios acc
+			left join bodegas b on (acc.id_bodega = b.id)	
+			left join productos c on (acc.id_producto = c.id)
+			left join mae_medida m on (acc.id_medida = m.id)
+			WHERE acc.id_lista = "'.$lista.'"');       	
+
+        };
+
+        foreach ($query->result() as $row)
+		{
+			$data[] = $row;
+		}
+        $resp['success'] = true;
+        //$resp['total'] = $countAll;
+        $resp['data'] = $data;
+
+        echo json_encode($resp);
+
+	}	
 	
 	public function getAll(){
 		$resp = array();
@@ -229,7 +284,6 @@ class Productosfact extends CI_Controller {
 			}
 
 			$countAll = $total;
-
 			
 
 		}else if($agrupacion) {
