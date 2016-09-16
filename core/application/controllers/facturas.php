@@ -19,9 +19,14 @@ class Facturas extends CI_Controller {
 
 
 	public function dteproveegetAll(){
-		$this->db->select('d.id, p.nombres as proveedor, p.e_mail, d.path_dte, d.arch_rec_dte, d.arch_res_dte, d.arch_env_rec, date_format(d.fecha_documento,"%d/%m/%Y") as fecha_documento , date_format(d.created_at,"%d/%m/%Y") as fecha_creacion ',false)
+		$this->load->model('facturaelectronica');
+		$tabla_contribuyentes = $this->facturaelectronica->busca_parametro_fe('tabla_contribuyentes');
+
+
+		$this->db->select('d.id, p.nombres as proveedor, ifnull(ca.mail,p.e_mail) as e_mail, d.path_dte, d.arch_rec_dte, d.arch_res_dte, d.arch_env_rec, date_format(d.fecha_documento,"%d/%m/%Y") as fecha_documento , date_format(d.created_at,"%d/%m/%Y") as fecha_creacion ',false)
 		  ->from('dte_proveedores d')
 		  ->join('proveedores p','d.idproveedor = p.id')
+		  ->join($tabla_contribuyentes . ' ca','p.rut = concat(ca.rut,ca.dv)','left')
 		  ->order_by('d.id','desc');
 		$query = $this->db->get();
 		$dte_provee = $query->result();
@@ -68,7 +73,7 @@ class Facturas extends CI_Controller {
 	public function get_proveedores_mail(){
 		$this->db->select('p.id, p.nombres as proveedor')
 		  ->from('proveedores p')
-		  ->where("e_mail <> ''  and e_mail like '%@%'")
+		 // ->where("e_mail <> ''  and e_mail like '%@%'")
 		  ->order_by('p.nombres asc');
 		$query = $this->db->get();
 		$provee = $query->result();
