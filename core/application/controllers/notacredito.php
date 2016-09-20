@@ -295,9 +295,7 @@ class Notacredito extends CI_Controller {
 	public function save(){
 		
 		$resp = array();
-		$numfactura_asoc = $this->input->post('numfactura_asoc'); //ID OBTENIDO PARA REBAJAR EN CUENTA CORRIENTE
-
-
+		$numfactura_asoc = $this->input->post('numfactura_asoc'); //ID OBTENIDO PARA REBAJAR 
 		$idcliente = $this->input->post('idcliente');
 		$numfactura = $this->input->post('numfactura_asoc');
 		$numdocuemnto = $this->input->post('numdocumento');
@@ -312,8 +310,6 @@ class Notacredito extends CI_Controller {
 		$fafecto = $this->input->post('afectofactura');
 		$ftotal = $this->input->post('totalfacturas');
 		$tipodocumento = $this->input->post('tipodocumento');
-
-
 
 		$data3 = array(
 	         'correlativo' => $numdocuemnto
@@ -703,17 +699,61 @@ class Notacredito extends CI_Controller {
         $tipo = "11";
         $tipo2 = "102";
 
-		$countAll = $this->db->count_all_results("factura_clientes");
+		//$countAll = $this->db->count_all_results("factura_clientes");
 		$data = array();
 		$total = 0;
 
 		if($opcion == "Rut"){
+
+			  $query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, td.descripcion as tipo_doc	FROM factura_clientes acc
+			left join clientes c on (acc.id_cliente = c.id)
+			left join vendedores v on (acc.id_vendedor = v.id)
+			left join tipo_documento td on (acc.tipo_documento = td.id)
+			WHERE acc.tipo_documento in ('.$tipo.','.$tipo2.') and c.rut = '.$nombres.'');
+
+			$total = 0;
+			
+			foreach ($query->result() as $row)
+				{
+					$total = $total +1;
+				
+				};
+
+			$countAll = $total;
 		
 			$query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, td.descripcion as tipo_doc	FROM factura_clientes acc
 			left join clientes c on (acc.id_cliente = c.id)
 			left join vendedores v on (acc.id_vendedor = v.id)
 			left join tipo_documento td on (acc.tipo_documento = td.id)
 			WHERE acc.tipo_documento in ('.$tipo.','.$tipo2.') and c.rut = '.$nombres.'
+			order by acc.id desc		
+			limit '.$start.', '.$limit.''		 
+
+		);
+
+	    }else if($opcion == "Numero"){
+
+			  $query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, td.descripcion as tipo_doc	FROM factura_clientes acc
+			left join clientes c on (acc.id_cliente = c.id)
+			left join vendedores v on (acc.id_vendedor = v.id)
+			left join tipo_documento td on (acc.tipo_documento = td.id)
+			WHERE acc.tipo_documento in ('.$tipo.','.$tipo2.') and acc.num_factura = '.$nombres.'');
+
+			$total = 0;
+			
+			foreach ($query->result() as $row)
+				{
+					$total = $total +1;
+				
+				};
+
+			$countAll = $total;
+		
+			$query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, td.descripcion as tipo_doc	FROM factura_clientes acc
+			left join clientes c on (acc.id_cliente = c.id)
+			left join vendedores v on (acc.id_vendedor = v.id)
+			left join tipo_documento td on (acc.tipo_documento = td.id)
+			WHERE acc.tipo_documento in ('.$tipo.','.$tipo2.') and acc.num_factura = '.$nombres.'
 			order by acc.id desc		
 			limit '.$start.', '.$limit.''		 
 
@@ -728,6 +768,22 @@ class Notacredito extends CI_Controller {
 	        foreach ($arrayNombre as $nombre) {
 	        	$sql_nombre .= "and c.nombres like '%".$nombre."%' ";
 	        }
+
+	        $query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, td.descripcion as tipo_doc	FROM factura_clientes acc
+			left join clientes c on (acc.id_cliente = c.id)
+			left join vendedores v on (acc.id_vendedor = v.id)
+			left join tipo_documento td on (acc.tipo_documento = td.id)
+			WHERE acc.tipo_documento in ('.$tipo.','.$tipo2.') ' . $sql_nombre . '');
+
+			$total = 0;
+			
+			foreach ($query->result() as $row)
+				{
+					$total = $total +1;
+				
+				};
+
+			$countAll = $total;
 	        	    	
 			$query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, td.descripcion as tipo_doc	FROM factura_clientes acc
 			left join clientes c on (acc.id_cliente = c.id)
@@ -740,6 +796,22 @@ class Notacredito extends CI_Controller {
 			);
 	 
 		}else if($opcion == "Todos"){
+
+			$query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, td.descripcion as tipo_doc	FROM factura_clientes acc
+			left join clientes c on (acc.id_cliente = c.id)
+			left join vendedores v on (acc.id_vendedor = v.id)
+			left join tipo_documento td on (acc.tipo_documento = td.id)
+			WHERE acc.tipo_documento in ('.$tipo.','.$tipo2.')');
+
+			$total = 0;
+			
+			foreach ($query->result() as $row)
+				{
+					$total = $total +1;
+				
+				};
+
+			$countAll = $total;
 
 			
 			$query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, td.descripcion as tipo_doc	FROM factura_clientes acc
@@ -755,15 +827,29 @@ class Notacredito extends CI_Controller {
 
 		}else{
 
-			
-		$query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, td.descripcion as tipo_doc	FROM factura_clientes acc
+			$query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, td.descripcion as tipo_doc	FROM factura_clientes acc
 			left join clientes c on (acc.id_cliente = c.id)
+			left join vendedores v on (acc.id_vendedor = v.id)
+			left join tipo_documento td on (acc.tipo_documento = td.id)
+			WHERE acc.tipo_documento in ('.$tipo.','.$tipo2.')');
+
+			$total = 0;
+			
+			foreach ($query->result() as $row)
+				{
+					$total = $total +1;
+				
+				};
+
+			$countAll = $total;
+			
+			$query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, td.descripcion as tipo_doc	FROM factura_clientes acc
+				left join clientes c on (acc.id_cliente = c.id)
 			left join vendedores v on (acc.id_vendedor = v.id)
 			left join tipo_documento td on (acc.tipo_documento = td.id)
 			WHERE acc.tipo_documento in ('.$tipo.','.$tipo2.')
 			order by acc.id desc		
-			limit '.$start.', '.$limit.''	
-
+			limit '.$start.', '.$limit.''
 			);
 
 
@@ -793,11 +879,9 @@ class Notacredito extends CI_Controller {
 		      $row->rut_cliente = ($ruta2."-".$ruta1);
 		     
 		    };
-		    $total = $total +1;
-			
-		 
+		   
 			$data[] = $row;
-			$countAll = $total;
+			
 		}
 
         $resp['success'] = true;
