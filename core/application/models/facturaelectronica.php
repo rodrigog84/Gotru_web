@@ -227,7 +227,7 @@ class Facturaelectronica extends CI_Model
 
 	public function datos_dte($idfactura){
 
-		$this->db->select('f.id, f.folio, f.path_dte, f.archivo_dte, f.dte, f.pdf, f.pdf_cedible, f.trackid, c.tipo_caf, tc.nombre as tipo_doc, cae.nombre as giro ')
+		$this->db->select('f.id, f.folio, f.path_dte, f.archivo_dte, f.archivo_dte_cliente, f.dte, f.pdf, f.pdf_cedible, f.trackid, c.tipo_caf, tc.nombre as tipo_doc, cae.nombre as giro ')
 		  ->from('folios_caf f')
 		  ->join('caf c','f.idcaf = c.id')
 		  ->join('tipo_caf tc','c.tipo_caf = tc.id')
@@ -445,7 +445,9 @@ class Facturaelectronica extends CI_Model
 			$factura = $this->datos_dte($idfactura);
 			$track_id = $factura->trackid;
 			$path = $factura->path_dte;
-			$nombre_dte = $factura->archivo_dte;
+
+			$nombre_dte = $factura->archivo_dte_cliente != '' ? $factura->archivo_dte_cliente : $factura->archivo_dte;
+			//$nombre_dte = $factura->archivo_dte;
 
 			$empresa = $this->get_empresa();
 			$datos_empresa_factura = $this->get_empresa_factura($idfactura);
@@ -459,7 +461,7 @@ class Facturaelectronica extends CI_Model
 	        $messageBody .= $datos_empresa_factura->nombre_cliente.'<br>';
 	        $messageBody .= 'RUT:'.substr($datos_empresa_factura->rut_cliente,0,strlen($datos_empresa_factura->rut_cliente) - 1)."-".substr($datos_empresa_factura->rut_cliente,-1) .'<br><br>';			        
 
-	        $messageBody .= '<a href="'. base_url() .'facturas/exportFePDF_mail/'.$track_id.'" >Ver Factura</a><br><br>';
+	        //$messageBody .= '<a href="'. base_url() .'facturas/exportFePDF_mail/'.$track_id.'" >Ver Factura</a><br><br>';
 
 	        $messageBody .= 'Este correo adjunta Documentos Tributarios Electrónicos (DTE) para el receptor electrónico indicado. Por favor responda con un acuse de recibo (RespuestaDTE) conforme al modelo de intercambio de Factura Electrónica del SII.<br><br>';
 	        $messageBody .= 'Facturación Electrónica Infosys SPA.';
@@ -489,7 +491,10 @@ class Facturaelectronica extends CI_Model
 			    $this->email->subject('Envio de DTE ' .$track_id . '_'.$empresa->rut.'-'.$empresa->dv."_".substr($datos_empresa_factura->rut_cliente,0,strlen($datos_empresa_factura->rut_cliente) - 1)."-".substr($datos_empresa_factura->rut_cliente,-1));
 			    $this->email->message($messageBody);
 
-			    $this->email->attach('./facturacion_electronica/dte/'.$path.$nombre_dte);
+			    //$this->email->attach('./facturacion_electronica/dte/'.$path.$nombre_dte);
+				$ruta =  $factura->archivo_dte_cliente != '' ? 'dte_cliente' : 'dte';
+ 			    $this->email->attach('./facturacion_electronica/' . $ruta .'/'.$path.$nombre_dte);	
+
 
 			    try {
 			      $this->email->send();
@@ -790,6 +795,32 @@ class Facturaelectronica extends CI_Model
 		$query = $this->db->get();
 		return $query->row();
 	 }	 
+
+
+	public function crea_archivo_dte($xml,$idfactura,$tipo_caf,$tipo_dte){
+
+				$datos_factura = $this->get_factura($idfactura);
+				$datos_empresa_factura = $this->get_empresa_factura($idfactura);
+				$rutCliente = substr($datos_empresa_factura->rut_cliente,0,strlen($datos_empresa_factura->rut_cliente) - 1)."-".substr($datos_empresa_factura->rut_cliente,-1);
+
+			    $xml_dte = $tipo_dte == 'sii' ? $xml : str_replace("60803000-K",$rutCliente,$xml);
+
+				$file_name = $tipo_dte == 'sii' ? "SII_" : "CLI_";
+				$nombre_dte = $datos_factura->num_factura."_". $tipo_caf ."_".$idfactura."_".$file_name.date("His").".xml"; // nombre archivo
+				$ruta = $tipo_dte == 'sii' ? 'dte' : 'dte_cliente';
+				$path = date('Ym').'/'; // ruta guardado
+				if(!file_exists('./facturacion_electronica/' . $ruta . '/'.$path)){
+					mkdir('./facturacion_electronica/' . $ruta . '/'.$path,0777,true);
+				}				
+				$f_archivo = fopen('./facturacion_electronica/' . $ruta .'/'.$path.$nombre_dte,'w');
+				fwrite($f_archivo,$xml_dte);
+				fclose($f_archivo);
+
+				return array('xml_dte' => $xml_dte,
+							 'nombre_dte' => $nombre_dte,
+							 'path' => $path);
+
+	 }	 	 
 
 	public function crea_dte($idfactura){
 

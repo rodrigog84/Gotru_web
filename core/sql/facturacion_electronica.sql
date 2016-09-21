@@ -276,3 +276,12 @@ ENGINE=InnoDB
  /******************************************************************/
  INSERT INTO `tipo_documento` (`id`, `descripcion`, `correlativo`) VALUES (104, 'NOTA DE DEBITO ELECTRONICA', 0);
  INSERT INTO `tipo_documento` (`id`, `descripcion`, `correlativo`) VALUES (16, 'NOTAS DE DEBITO', 0);
+
+
+
+ /*********************************************************************/
+
+ ALTER TABLE `folios_caf`
+	ADD COLUMN `dte_cliente` TEXT NOT NULL AFTER `dte`;
+ALTER TABLE `folios_caf`
+	ADD COLUMN `archivo_dte_cliente` VARCHAR(50) NOT NULL AFTER `archivo_dte`;	
