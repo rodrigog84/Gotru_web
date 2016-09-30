@@ -788,7 +788,7 @@ class Facturaelectronica extends CI_Model
 
 	public function get_factura($id_factura){
 
-		$this->db->select('fc.tipo_documento, fc.num_factura, fc.fecha_factura, fc.sub_total, fc.descuento, fc.neto, fc.iva, fc.totalfactura, fc.forma')
+		$this->db->select('fc.tipo_documento, fc.num_factura, fc.fecha_factura, fc.sub_total, fc.descuento, fc.neto, fc.iva, fc.totalfactura, fc.forma, fc.id_factura')
 		  ->from('factura_clientes fc')
 		  ->where('fc.id',$id_factura)
 		  ->limit(1);
@@ -825,15 +825,19 @@ class Facturaelectronica extends CI_Model
 	public function crea_dte($idfactura){
 
 		$data_factura = $this->get_factura($idfactura);
+
 		$tipodocumento = $data_factura->tipo_documento;
 		$numfactura = $data_factura->num_factura;
 		$fecemision = $data_factura->fecha_factura;
+
 		if($tipodocumento == 101){
 			$tipo_caf = 33;
 		}else if($tipodocumento == 103){
 			$tipo_caf = 34;
 		}else if($tipodocumento == 105){
 			$tipo_caf = 52;
+		}else if($tipodocumento == 102){
+			$tipo_caf = 61;
 		}		
 
 
@@ -860,7 +864,7 @@ class Facturaelectronica extends CI_Model
 			//$lista_detalle[$i]['PrcItem'] = round($neto/$detalle->cantidad,2);
 			//$lista_detalle[$i]['PrcItem'] = $tipo_caf == 33 ? floor($detalle->precio/1.19) : floor($detalle->precio);
 
-			$lista_detalle[$i]['PrcItem'] = $tipo_caf == 33 ? floor(($detalle->totalproducto - $detalle->iva)/$detalle->cantidad) : floor($detalle->precio);
+			$lista_detalle[$i]['PrcItem'] = $tipo_caf == 33 ? floor(($detalle->totalproducto - $detalle->iva)/$detalle->cantidad) : round($detalle->precio,3);
 			if($tipo_caf == 33){
 				$lista_detalle[$i]['MontoItem'] = ($detalle->totalproducto - $detalle->iva);
 			}				
@@ -875,33 +879,73 @@ class Facturaelectronica extends CI_Model
 			$i++;
 		}
 
+		if($tipo_caf == 61){
+			$tipo_nota_credito = 1;
+			$numfactura_asoc = $data_factura->id_factura;
+			$glosa = $tipo_nota_credito == 1 ? 'Anula factura '. $numfactura_asoc : 'Correccion factura '. $numfactura_asoc;
+			// datos
+			$factura = [
+			    'Encabezado' => [
+			        'IdDoc' => [
+			            'TipoDTE' => $tipo_caf,
+			            'Folio' => $numfactura,
+			            'FchEmis' => $fecemision
+			        ],
+			        'Emisor' => [
+			            'RUTEmisor' => $empresa->rut.'-'.$empresa->dv,
+			            'RznSoc' => substr($empresa->razon_social,0,100), //LARGO DE RAZON SOCIAL NO PUEDE SER SUPERIOR A 100 CARACTERES
+			            'GiroEmis' => substr($empresa->giro,0,80), //LARGO DE GIRO DEL EMISOR NO PUEDE SER SUPERIOR A 80 CARACTERES
+			            'Acteco' => $empresa->cod_actividad,
+			            'DirOrigen' => substr($empresa->dir_origen,0,70), //LARGO DE DIRECCION DE ORIGEN NO PUEDE SER SUPERIOR A 70 CARACTERES
+			            'CmnaOrigen' => substr($empresa->comuna_origen,0,20), //LARGO DE COMUNA DE ORIGEN NO PUEDE SER SUPERIOR A 20 CARACTERES
+			        ],
+			        'Receptor' => [
+			            'RUTRecep' => substr($datos_empresa_factura->rut_cliente,0,strlen($datos_empresa_factura->rut_cliente) - 1)."-".substr($datos_empresa_factura->rut_cliente,-1),
+			            'RznSocRecep' => substr($datos_empresa_factura->nombre_cliente,0,100), //LARGO DE RAZON SOCIAL NO PUEDE SER SUPERIOR A 100 CARACTERES
+			            'GiroRecep' => substr($datos_empresa_factura->giro,0,40),  //LARGO DEL GIRO NO PUEDE SER SUPERIOR A 40 CARACTERES
+			            'DirRecep' => substr($datos_empresa_factura->direccion,0,70), //LARGO DE DIRECCION NO PUEDE SER SUPERIOR A 70 CARACTERES
+			            'CmnaRecep' => substr($datos_empresa_factura->nombre_comuna,0,20), //LARGO DE COMUNA NO PUEDE SER SUPERIOR A 20 CARACTERES
+			        ],
+			    ],
+				'Detalle' => $lista_detalle,
+		        'Referencia' => [
+		            'TpoDocRef' => 33,
+		            'FolioRef' => $numfactura_asoc,
+		            'CodRef' => $tipo_nota_credito,
+		            'RazonRef' => $glosa,
+		        ]				
+			];
 
-		// datos
-		$factura = [
-		    'Encabezado' => [
-		        'IdDoc' => [
-		            'TipoDTE' => $tipo_caf,
-		            'Folio' => $numfactura,
-		            'FchEmis' => $fecemision
-		        ],
-		        'Emisor' => [
-		            'RUTEmisor' => $empresa->rut.'-'.$empresa->dv,
-		            'RznSoc' => substr($empresa->razon_social,0,100), //LARGO DE RAZON SOCIAL NO PUEDE SER SUPERIOR A 100 CARACTERES
-		            'GiroEmis' => substr($empresa->giro,0,80), //LARGO DE GIRO DEL EMISOR NO PUEDE SER SUPERIOR A 80 CARACTERES
-		            'Acteco' => $empresa->cod_actividad,
-		            'DirOrigen' => substr($empresa->dir_origen,0,70), //LARGO DE DIRECCION DE ORIGEN NO PUEDE SER SUPERIOR A 70 CARACTERES
-		            'CmnaOrigen' => substr($empresa->comuna_origen,0,20), //LARGO DE COMUNA DE ORIGEN NO PUEDE SER SUPERIOR A 20 CARACTERES
-		        ],
-		        'Receptor' => [
-		            'RUTRecep' => substr($datos_empresa_factura->rut_cliente,0,strlen($datos_empresa_factura->rut_cliente) - 1)."-".substr($datos_empresa_factura->rut_cliente,-1),
-		            'RznSocRecep' => substr($datos_empresa_factura->nombre_cliente,0,100), //LARGO DE RAZON SOCIAL NO PUEDE SER SUPERIOR A 100 CARACTERES
-		            'GiroRecep' => substr($datos_empresa_factura->giro,0,40),  //LARGO DEL GIRO NO PUEDE SER SUPERIOR A 40 CARACTERES
-		            'DirRecep' => substr($datos_empresa_factura->direccion,0,70), //LARGO DE DIRECCION NO PUEDE SER SUPERIOR A 70 CARACTERES
-		            'CmnaRecep' => substr($datos_empresa_factura->nombre_comuna,0,20), //LARGO DE COMUNA NO PUEDE SER SUPERIOR A 20 CARACTERES
-		        ],
-		    ],
-			'Detalle' => $lista_detalle
-		];
+
+		}else{
+			// datos
+			$factura = [
+			    'Encabezado' => [
+			        'IdDoc' => [
+			            'TipoDTE' => $tipo_caf,
+			            'Folio' => $numfactura,
+			            'FchEmis' => $fecemision
+			        ],
+			        'Emisor' => [
+			            'RUTEmisor' => $empresa->rut.'-'.$empresa->dv,
+			            'RznSoc' => substr($empresa->razon_social,0,100), //LARGO DE RAZON SOCIAL NO PUEDE SER SUPERIOR A 100 CARACTERES
+			            'GiroEmis' => substr($empresa->giro,0,80), //LARGO DE GIRO DEL EMISOR NO PUEDE SER SUPERIOR A 80 CARACTERES
+			            'Acteco' => $empresa->cod_actividad,
+			            'DirOrigen' => substr($empresa->dir_origen,0,70), //LARGO DE DIRECCION DE ORIGEN NO PUEDE SER SUPERIOR A 70 CARACTERES
+			            'CmnaOrigen' => substr($empresa->comuna_origen,0,20), //LARGO DE COMUNA DE ORIGEN NO PUEDE SER SUPERIOR A 20 CARACTERES
+			        ],
+			        'Receptor' => [
+			            'RUTRecep' => substr($datos_empresa_factura->rut_cliente,0,strlen($datos_empresa_factura->rut_cliente) - 1)."-".substr($datos_empresa_factura->rut_cliente,-1),
+			            'RznSocRecep' => substr($datos_empresa_factura->nombre_cliente,0,100), //LARGO DE RAZON SOCIAL NO PUEDE SER SUPERIOR A 100 CARACTERES
+			            'GiroRecep' => substr($datos_empresa_factura->giro,0,40),  //LARGO DEL GIRO NO PUEDE SER SUPERIOR A 40 CARACTERES
+			            'DirRecep' => substr($datos_empresa_factura->direccion,0,70), //LARGO DE DIRECCION NO PUEDE SER SUPERIOR A 70 CARACTERES
+			            'CmnaRecep' => substr($datos_empresa_factura->nombre_comuna,0,20), //LARGO DE COMUNA NO PUEDE SER SUPERIOR A 20 CARACTERES
+			        ],
+			    ],
+				'Detalle' => $lista_detalle
+			];
+
+		}
 
 
 		//FchResol y NroResol deben cambiar con los datos reales de producción
@@ -911,6 +955,7 @@ class Facturaelectronica extends CI_Model
 		    'FchResol' => $empresa->fec_resolucion,
 		    'NroResol' => $empresa->nro_resolucion
 		];
+
 
 		$Firma = new sasco\LibreDTE\FirmaElectronica($config['firma']); //lectura de certificado digital		
 		$caf = $this->facturaelectronica->get_content_caf_folio($numfactura,$tipo_caf);
