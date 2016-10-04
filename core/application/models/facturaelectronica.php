@@ -265,9 +265,9 @@ class Facturaelectronica extends CI_Model
 
 
 	public function datos_dte_provee($iddte){
-		$this->db->select('d.id, p.nombres as proveedor, p.e_mail, d.path_dte, d.arch_rec_dte, d.arch_res_dte, d.arch_env_rec, date_format(d.fecha_documento,"%d/%m/%Y") as fecha_documento , date_format(d.created_at,"%d/%m/%Y") as fecha_creacion ',false)
+		$this->db->select('d.id, c.nombres as proveedor, c.e_mail, d.path_dte, d.arch_rec_dte, d.arch_res_dte, d.arch_env_rec, date_format(d.fecha_documento,"%d/%m/%Y") as fecha_documento , date_format(d.created_at,"%d/%m/%Y") as fecha_creacion ',false)
 		  ->from('dte_proveedores d')
-		  ->join('proveedores p','d.idproveedor = p.id')
+		  ->join('clientes c','d.idproveedor = c.id')
 		  ->where('d.id',$iddte)
 		  ->order_by('d.id','desc');
 		$query = $this->db->get();

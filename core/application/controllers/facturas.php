@@ -23,10 +23,10 @@ class Facturas extends CI_Controller {
 		$tabla_contribuyentes = $this->facturaelectronica->busca_parametro_fe('tabla_contribuyentes');
 
 
-		$this->db->select('d.id, p.nombres as proveedor, ifnull(ca.mail,p.e_mail) as e_mail, d.path_dte, d.arch_rec_dte, d.arch_res_dte, d.arch_env_rec, date_format(d.fecha_documento,"%d/%m/%Y") as fecha_documento , date_format(d.created_at,"%d/%m/%Y") as fecha_creacion ',false)
+		$this->db->select('d.id, c.nombres as proveedor, ifnull(ca.mail,c.e_mail) as e_mail, d.path_dte, d.arch_rec_dte, d.arch_res_dte, d.arch_env_rec, date_format(d.fecha_documento,"%d/%m/%Y") as fecha_documento , date_format(d.created_at,"%d/%m/%Y") as fecha_creacion ',false)
 		  ->from('dte_proveedores d')
-		  ->join('proveedores p','d.idproveedor = p.id')
-		  ->join($tabla_contribuyentes . ' ca','p.rut = concat(ca.rut,ca.dv)','left')
+		  ->join('clientes c','d.idproveedor = c.id')
+		  ->join($tabla_contribuyentes . ' ca','c.rut = concat(ca.rut,ca.dv)','left')
 		  ->order_by('d.id','desc');
 		$query = $this->db->get();
 		$dte_provee = $query->result();
@@ -127,10 +127,10 @@ class Facturas extends CI_Controller {
 
 
 	public function get_proveedor($idproveedor = null){
-		$proveedor_data = $this->db->select('p.id, p.rut, p.nombres, p.direccion, p.fono, p.e_mail')
-						  ->from('proveedores as p');
+		$proveedor_data = $this->db->select('c.id, c.rut, c.nombres, c.direccion, c.fono, c.e_mail')
+						  ->from('clientes as c');
 
-		$proveedor_data = is_null($idproveedor) ? $proveedor_data : $proveedor_data->where('p.id',$idproveedor);  		                  
+		$proveedor_data = is_null($idproveedor) ? $proveedor_data : $proveedor_data->where('c.id',$idproveedor);  		                  
 		$query = $this->db->get();
 		$datos = is_null($idproveedor) ? $query->result() : $query->row();		
 		return $datos;
