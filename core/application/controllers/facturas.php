@@ -71,10 +71,11 @@ class Facturas extends CI_Controller {
 	}	
 
 	public function get_proveedores_mail(){
-		$this->db->select('p.id, p.nombres as proveedor')
-		  ->from('proveedores p')
+		$this->db->select('c.id, c.nombres as proveedor')
+		  ->from('clientes c')
+		   ->where("c.tipo in (2,3)")
 		 // ->where("e_mail <> ''  and e_mail like '%@%'")
-		  ->order_by('p.nombres asc');
+		  ->order_by('c.nombres asc');
 		$query = $this->db->get();
 		$provee = $query->result();
 		echo json_encode($provee);	
