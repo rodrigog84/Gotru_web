@@ -1418,6 +1418,10 @@ public function cargacontribuyentes(){
 
 	public function folio_documento_electronico($tipo_doc){
 
+
+		$this->db->trans_start();
+
+
 		$tipo_caf = 0;
 		if($tipo_doc == 101){
 			$tipo_caf = 33;
@@ -1469,6 +1473,7 @@ public function cargacontribuyentes(){
 		}
 
        	$resp['folio'] = $nuevo_folio;
+       	$this->db->trans_complete();
    		echo json_encode($resp);
 	 }
 
