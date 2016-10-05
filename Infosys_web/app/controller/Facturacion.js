@@ -1004,9 +1004,8 @@ cargar_listado_contribuyentes: function(){
     grabarfactura: function() {
 
         var viewIngresa = this.getFacturasingresar();
-        //var bolDisabled = true;
-        //var bolEnable = true;          
-        // viewIngresa.down('#grabarId').setDisabled(bolDisabled);
+        var bolEnable = true;
+        viewIngresa.down('#grabarfactura').setDisabled(bolEnable);
         var tipo_documento = viewIngresa.down('#tipoDocumentoId');
         var idcliente = viewIngresa.down('#id_cliente').getValue();
         var idtipo= viewIngresa.down('#tipoDocumentoId').getValue();

@@ -635,6 +635,8 @@ Ext.define('Infosys_web.view.ventas.Facturas', {
                             xtype: 'button',
                             iconCls: 'icon-save',
                             scale: 'large',
+                            itemId: 'grabarfactura',
+                            disabled : false,
                             action: 'grabarfactura',
                             text: 'Grabar / Emitir'
                         },
