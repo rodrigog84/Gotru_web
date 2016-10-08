@@ -9,12 +9,14 @@ Ext.define('Infosys_web.controller.Clientes', {
             'clientes.Clientes',
             'clientes.Selector',
             'Contacto_clientes',
-            'clientes.Activo'
+            'clientes.Activo',
+            'Sectores'
              ],
 
     models: ['Cliente',
             'Sucursales_clientes',
-            'Contacto_clientes'],
+            'Contacto_clientes',
+            'Sectores'],
 
     views: ['clientes.Principal',
             'clientes.BusquedaClientes',
@@ -640,6 +642,7 @@ Ext.define('Infosys_web.controller.Clientes', {
         var giro = view.down('#giroId').getValue();
         var fono = view.down('#fonoId').getValue();
         var mail = view.down('#e_mailId').getValue();
+        var sector = view.down('#sectoresId').getValue();
         var vendedor = view.down('#tipoVendedorId').getValue();
         var descuento = view.down('#descuentoId').getValue();
         var tipopago = view.down('#tipopagoId').getValue();
@@ -650,6 +653,9 @@ Ext.define('Infosys_web.controller.Clientes', {
         var cobrador = view.down('#cobradorId').getValue();
         var repartidor = view.down('#repartidorId').getValue();
         var tiponegocio = view.down('#tiponegocioId').getValue();
+        var tipocliente = view.down('#tipoClienteId').getValue();
+
+        
 
         var fechaincorporacion = view.down('#fecha_incripcionId').getValue();
         var fechaactualiza = view.down('#fecha_ult_actualizId').getValue();
@@ -669,6 +675,7 @@ Ext.define('Infosys_web.controller.Clientes', {
                 giro : giro,
                 fono : fono,
                 mail : mail,
+                sector: sector,
                 vendedor : vendedor,
                 descuento: descuento,
                 tipopago: tipopago,
@@ -680,7 +687,8 @@ Ext.define('Infosys_web.controller.Clientes', {
                 idlista: idlista,
                 idcobrador : cobrador,
                 idrepartidor : repartidor,
-                idtiponegocio : tiponegocio
+                idtiponegocio : tiponegocio,
+                tipocliente : tipocliente
                 
             },
              success: function(response){

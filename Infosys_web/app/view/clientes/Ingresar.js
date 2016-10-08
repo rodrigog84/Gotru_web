@@ -7,7 +7,7 @@ Ext.define('Infosys_web.view.clientes.Ingresar', {
     title : 'Editar/Crear Clientes',
     layout: 'fit',
     autoShow: true,
-    width: 1240,
+    width: 1340,
     modal: true,
     iconCls: 'icon-sheet',
 
@@ -185,6 +185,7 @@ Ext.define('Infosys_web.view.clientes.Ingresar', {
                         width: 160,
                         itemId: 'descuentoId',
                         fieldLabel: 'Descuento',
+                        minValue: 0,
                         allowBlank: false
                     },{xtype: 'splitter'},{
                         xtype: 'combo',
@@ -254,7 +255,7 @@ Ext.define('Infosys_web.view.clientes.Ingresar', {
                     },{xtype: 'splitter'},{
                         xtype: 'combo',
                         itemId: 'listadoId',
-                        labelWidth: 90,
+                        labelWidth: 60,
                         width: 250,
                         fieldLabel: 'Listado Precios',
                         forceSelection : true,
@@ -264,6 +265,20 @@ Ext.define('Infosys_web.view.clientes.Ingresar', {
                         displayField : 'nombre',
                         emptyText : "Seleccione",
                         store : 'Precios',
+                        allowBlank: false
+                    },{xtype: 'splitter'},{
+                        xtype: 'combo',
+                        itemId: 'sectoresId',
+                        labelWidth: 40,
+                        width: 220,
+                        fieldLabel: 'Sector',
+                        forceSelection : true,
+                        editable : false,
+                        name : 'id_sector',
+                        valueField : 'id',
+                        displayField : 'descripcion',
+                        emptyText : "Seleccione",
+                        store : 'Sectores',
                         allowBlank: false
                     },]
                     },{
@@ -312,6 +327,20 @@ Ext.define('Infosys_web.view.clientes.Ingresar', {
                         displayField : 'descripcion',
                         emptyText : "Seleccione",
                         store : 'Tiponegocio',
+                        allowBlank: false
+                    },{xtype: 'splitter'},{
+                        xtype: 'combo',
+                        labelWidth: 50,
+                        width: 250,
+                        itemId: 'tipoClienteId',
+                        fieldLabel: 'Tipo',
+                        forceSelection : true,
+                        editable : false,
+                        name : 'tipo',
+                        valueField : 'id',
+                        displayField : 'nombre',
+                        emptyText : "Seleccione",
+                        store : 'clientes.Clientes',
                         allowBlank: false
                     }]
                     }

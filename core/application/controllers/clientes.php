@@ -146,13 +146,14 @@ class Clientes extends CI_Controller {
             'fecha_ult_actualiz' => date('Y-m-d'),
             'estado' => $data->estado,
           	'id_pago' => $data->id_pago,
+          	'id_sector' => $data->id_sector,
           	'cupo_disponible' => $data->cupo_disponible,
           	'imp_adicional' => $data->imp_adicional,
           	'id_lista' => $data->id_lista,
           	'id_repartidor' => $data->id_repartidor,
           	'id_cobrador' => $data->id_cobrador,
           	'id_tiponegocio' => $data->id_tiponegocio,
-          	'tipo' => 1
+          	'tipo' => $data->tipo         	
               
 		);
 
@@ -179,6 +180,7 @@ class Clientes extends CI_Controller {
 		$giro = $this->input->post('giro');
 		$fono = $this->input->post('fono');
 		$mail = $this->input->post('mail');
+		$idsector = $this->input->post('sector');
 		$vendedor = $this->input->post('vendedor');
 		$descuento = $this->input->post('descuento');
 		$tipopago = $this->input->post('tipopago');
@@ -192,7 +194,7 @@ class Clientes extends CI_Controller {
 		$idcobrador = $this->input->post('idcobrador');
 		$idrepartidor = $this->input->post('idrepartidor');
 		$idtiponegocio = $this->input->post('idtiponegocio');
-		//$tipocliente = $this->input->post('tipocliente');	
+		$tipocliente = $this->input->post('tipocliente');	
 		
 		$data = array(
 			'nombres' => strtoupper($nombres),
@@ -209,13 +211,14 @@ class Clientes extends CI_Controller {
             'fecha_ult_actualiz' => date('Y-m-d'),
             'estado' => $estado,
           	'id_pago' => $tipopago,
+          	'id_sector' => $idsector,
           	'cupo_disponible' => $disponible,
           	'imp_adicional' => $impuesto,
           	'id_lista' => $idlista,
           	'id_repartidor' => $idrepartidor,
           	'id_cobrador' => $idcobrador,
           	'id_tiponegocio' => $idtiponegocio,
-          	'tipo' => 1
+          	'tipo' => $tipocliente
               
 	    );
 	    

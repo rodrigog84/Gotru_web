@@ -377,6 +377,12 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                         disabled: true,
                         iconCls: '',
                         action: 'mTiponegocio'
+                },{
+                        text: 'Sectores',
+                        itemId: 'vyf_tg_sectores',
+                        disabled: true,
+                        iconCls: '',
+                        action: 'mSectores'
                 }]
               
 
