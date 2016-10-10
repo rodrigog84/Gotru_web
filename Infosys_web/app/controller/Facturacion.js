@@ -243,8 +243,7 @@ Ext.define('Infosys_web.controller.Facturacion', {
             },
             'buscarproductos button[action=seleccionarproductos]': {
                 click: this.seleccionarproductos
-            },
-            
+            },            
             'buscarproductos button[action=buscar]': {
                 click: this.buscarp
             },
@@ -1292,6 +1291,7 @@ cargar_listado_contribuyentes: function(){
 
          var viewIngresa = this.getFacturasprincipal();
          var idbodega = viewIngresa.down('#bodegaId').getValue();
+         var tipdoc="101";
          if(!idbodega){
             Ext.Msg.alert('Alerta', 'Debe Elegir Bodega');
             return;    
@@ -1300,6 +1300,8 @@ cargar_listado_contribuyentes: function(){
              
          }
          view.down('#bodegaId').setValue(idbodega);
+         view.down('#tipoDocumentoId').setValue(tipdoc);
+         this.selectItemdocuemento();
 
      
     },
