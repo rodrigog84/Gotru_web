@@ -6,8 +6,8 @@ Ext.define('Infosys_web.view.Pago_caja.Principal' ,{
     
     iconCls: 'icon-grid',
 
-    title : 'Pago en Caja',
-    store: 'Factura5',
+    title : 'Genera venta',
+    store: 'Boleta',
     height: 500,
     viewConfig: {
         forceFit: true
@@ -55,14 +55,6 @@ Ext.define('Infosys_web.view.Pago_caja.Principal' ,{
         align: 'center'
         
     },{
-        header: "Fecha Venc.",
-        flex: 1,
-        dataIndex: 'fecha_venc',
-        type: 'date',
-        renderer: Ext.util.Format.dateRenderer('d/m/Y'),
-        align: 'center'
-        
-    },{
         header: "Rut",
         flex: 1,
         dataIndex: 'rut_cliente',
@@ -77,37 +69,6 @@ Ext.define('Infosys_web.view.Pago_caja.Principal' ,{
         flex: 1,
         dataIndex: 'nom_vendedor',
         hidden: true
-    },{
-        header: "Neto",
-        flex: 1,
-        dataIndex: 'sub_total',
-        hidden: true,
-        align: 'right',
-        renderer: function(valor){return Ext.util.Format.number(parseInt(valor),"0,00")}     
-    },{
-        header: "Descuento",
-        flex: 1,
-        dataIndex: 'descuento',
-        hidden: true,
-        align: 'right',
-        renderer: function(valor){return Ext.util.Format.number(parseInt(valor),"0,00")}
-     
-    },{
-        header: "Afecto",
-        flex: 1,
-        dataIndex: 'neto',
-        hidden: true,
-        align: 'right',
-        renderer: function(valor){return Ext.util.Format.number(parseInt(valor),"0,00")}
-     
-    },{
-        header: "I.V.A",
-        flex: 1,
-        dataIndex: 'iva',
-         hidden: true,
-         align: 'right',
-        renderer: function(valor){return Ext.util.Format.number(parseInt(valor),"0,00")}
-     
     },{
         header: "Total",
         flex: 1,
@@ -128,7 +89,7 @@ Ext.define('Infosys_web.view.Pago_caja.Principal' ,{
                 xtype: 'button',
                 iconCls: 'icon-add',
                 action: 'generarpago',
-                text : 'Cancela Venta'
+                text : 'Genera Venta'
             },{
                 width: 80,
                 labelWidth: 20,
@@ -237,19 +198,17 @@ Ext.define('Infosys_web.view.Pago_caja.Principal' ,{
                 fieldLabel: '<b>Fecha</b>',
                 itemId: 'fechaaperturaId',
                 name: 'fecha_apertura'
+            },{
+                xtype: 'datefield',
+                fieldCls: 'required',
+                labelWidth: 60,
+                labelAlign: 'top',
+                width: 100,
+                fieldLabel: '<b>Recaudacion</b>',
+                itemId: 'recaudaId',
+                name: 'id_recauda',
+                hidden: true
             },'->',{
-                width: 140,
-                labelWidth: 55,
-                xtype: 'textfield',
-                itemId: 'nombresId',
-                fieldLabel: 'Ticket'
-            },{
-                xtype: 'button',
-                width: 80,
-                iconCls: 'icon-search',
-                action: 'generaticket',
-                text : 'PAGAR'
-            },{
                 xtype: 'button',
                 iconCls: 'icon-delete',
                 action: 'cerrarcajaventa',
@@ -258,7 +217,7 @@ Ext.define('Infosys_web.view.Pago_caja.Principal' ,{
         },{
             xtype: 'pagingtoolbar',
             dock:'bottom',
-            store: 'Factura5',
+            store: 'Boleta',
             displayInfo: true
         }];
         

@@ -200,6 +200,41 @@ class Correlativos extends CI_Controller {
 	   }		
 
 	}
+
+	public function generabol(){
+
+		$resp = array();
+		$factura = $this->input->get('valida');
+		$tipo = 1;
+		$query = $this->db->query('SELECT * FROM correlativos WHERE id ="'.$factura.'"');
+
+		if($query->num_rows()>0){
+	   		$row = $query->first_row();
+	   		$resp['cliente'] = $row;
+	   		$corr = (($row->correlativo)+1); 
+	   		$id = ($row->id);
+
+	   		$data3 = array(
+	         'correlativo' => $corr
+		    );
+
+		    $this->db->where('id', $id);		  
+		    $this->db->update('correlativos', $data3);
+		    
+		    $row->correlativo = $corr;		
+
+		    $resp['success'] = true;
+			echo json_encode($resp);		
+
+			
+
+	   }else{
+	   	    $resp['success'] = false;
+	   	    echo json_encode($resp);
+	        return false;
+	   }		
+
+	}
 	
 	public function generancred(){
 

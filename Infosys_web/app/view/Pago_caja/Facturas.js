@@ -1,6 +1,6 @@
 Ext.define('Infosys_web.view.Pago_caja.Facturas', {
     extend: 'Ext.window.Window',
-    alias : 'widget.facturasvizualizar',
+    alias : 'widget.boletaingresar',
 
     requires: [
         'Ext.form.FieldContainer',
@@ -19,26 +19,37 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
     ],
 
     autoShow: true,
-    height: 540,
-    width: 1200,
+    height: 640,
+    width: 1300,
     layout: 'fit',
-    title: 'Facturacion',
+    title: 'Pago Caja',
 
     initComponent: function() {
         var me = this;
+        var formaPago = Ext.create('Ext.data.Store', {
+        fields: ['id', 'nombre'],
+        data : [
+            {"id":1, "nombre":"CONTADO"},
+            {"id":2, "nombre":"PAGO CHEQUE "},
+            {"id":4, "nombre":"TARJETA DE DEBITO"},
+            {"id":7, "nombre":"TARJETA DE CREDITO"}
+        ]
+        }); 
+        var stItms = Ext.getStore('productos.Items');
+        stItms.removeAll();
         Ext.applyIf(me, {
             items: [
                 {
-                    xtype: 'container',
-                    margin: 8,
-                    layout: {
-                        type: 'vbox',
-                        align: 'stretch'
-                    },
+                xtype: 'container',
+                margin: 8,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
                     items: [
                         {
                             xtype: 'container',
-                            height: 160,
+                            height: 140,
                             layout: {
                                 type: 'vbox',
                                 align: 'stretch'
@@ -48,48 +59,23 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
                                     xtype: 'fieldcontainer',
                                     height: 37,
                                     labelWidth: 120,
-                                    width: 62,
+                                    width: 462,
                                     fieldLabel: '',
                                     layout: {
                                         type: 'hbox',
                                         align: 'stretch'
                                     },
-                                    items: [  {
+                                    items: [{
                                             xtype: 'textfield',
                                             fieldCls: 'required',
                                             maxHeight: 25,
-                                            width: 200,
+                                            width: 180,
+                                            labelWidth: 85,
                                             allowBlank: false,
-                                            name: 'tip_documento',
-                                            itemId: 'tipodocumentoId',
+                                            name: 'nom_documento',
+                                            itemId: 'nomdocumentoId',
                                             fieldLabel: '<b>DOCUMENTO</b>',
                                             readOnly: true
-
-
-                                        },{
-                                            xtype: 'textfield',
-                                            fieldCls: 'required',
-                                            maxHeight: 25,
-                                            width: 100,
-                                            name: 'preventa',
-                                            itemId: 'preventaId',
-                                            fieldLabel: '<b>Preventa</b>',
-                                            hidden: true
-
-
-                                        },{
-                                            xtype: 'textfield',
-                                            fieldCls: 'required',
-                                            maxHeight: 25,
-                                            width: 100,
-                                            name: 'permite',
-                                            value: "NO",
-                                            itemId: 'permiteId',
-                                            fieldLabel: '<b>permite</b>',
-                                            hidden: true
-                                        },{
-                                            xtype: 'displayfield',
-                                            width: 142                                          
                                         },{
                                             xtype: 'textfield',
                                             fieldCls: 'required',
@@ -97,15 +83,42 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
                                             width: 250,
                                             labelWidth: 150,
                                             allowBlank: false,
-                                            name: 'num_factura',
-                                            itemId: 'numfacturaId',
-                                            fieldLabel: '<b>NUMERO DOCUMENTO</b>',
+                                            name: 'tip_docum',
+                                            itemId: 'tipodocumentoId',
+                                            fieldLabel: '<b>id_tipodocumento</b>',
+                                            hidden: true
+                                        },{
+                                            xtype: 'displayfield',
+                                            width: 40                                          
+                                        },{
+                                            xtype: 'textfield',
+                                            fieldCls: 'required',
+                                            maxHeight: 25,
+                                            width: 250,
+                                            labelWidth: 150,
+                                            allowBlank: false,
+                                            name: 'num_boleta',
+                                            itemId: 'numboletaId',
+                                            fieldLabel: '<b>NUMERO</b>',
                                             readOnly: true
 
 
                                         },{
+                                            xtype: 'textfield',
+                                            fieldCls: 'required',
+                                            maxHeight: 25,
+                                            width: 250,
+                                            labelWidth: 150,
+                                            allowBlank: false,
+                                            name: 'id_recauda',
+                                            itemId: 'recaudaId',
+                                            fieldLabel: '<b>RECAUDA</b>',
+                                            hidden: true
+
+
+                                        },{
                                             xtype: 'displayfield',
-                                            width: 45
+                                            width: 145
                                            
                                         },{
                                             xtype: 'datefield',
@@ -114,24 +127,13 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
                                             labelWidth: 50,
                                             width: 170,
                                             fieldLabel: '<b>FECHA</b>',
-                                            itemId: 'fechafacturaId',
+                                            itemId: 'fechaboletaId',
                                             name: 'fecha_factura',
                                             value: new Date()
                                         },{
                                             xtype: 'displayfield',
                                             width: 50
                                            
-                                        },{
-                                            xtype: 'datefield',
-                                            fieldCls: 'required',
-                                            maxHeight: 25,
-                                             labelWidth: 50,
-                                            width: 150,
-                                            fieldLabel: '<b>VENC.</b>',
-                                            itemId: 'fechavencId',
-                                            name: 'fecha_venc',
-                                            readOnly: true
-
                                         }
                                     ]
                                 },
@@ -147,15 +149,29 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
                                     items: [
                                         {
                                             xtype: 'textfield',
-                                            fieldCls: 'required',
-                                            msgTarget: 'side',
-                                            maxHeight: 25,
-                                            width: 220,
-                                            fieldLabel: '<b>id</b>',
                                             itemId: 'id_cliente',
                                             name : 'id',
-                                            readOnly: true,
-                                            hidden: true                                        
+                                            hidden: true
+                                        },{
+                                            xtype: 'textfield',
+                                            itemId: 'listaId',
+                                            name : 'id',
+                                            hidden: true
+                                        },{
+                                            xtype: 'textfield',
+                                            itemId: 'bodegaId',
+                                            name : 'id',
+                                            hidden: true
+                                        },{
+                                            xtype: 'textfield',
+                                            itemId: 'cajeroId',
+                                            name : 'id_cajero',
+                                            hidden: true
+                                        },{
+                                            xtype: 'textfield',
+                                            itemId: 'cajaId',
+                                            name : 'id_caja',
+                                            hidden: true
                                         },{
                                             xtype: 'textfield',
                                             fieldCls: 'required',
@@ -164,144 +180,160 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
                                             width: 220,
                                             fieldLabel: '<b>RUT</b>',
                                             itemId: 'rutId',
-                                            name : 'rut',
-                                            readOnly: true                                         
-                                        }, {xtype: 'splitter'},
+                                            name : 'rut'                                           
+                                        },{
+                                            xtype: 'displayfield',
+                                            width: 20
+                                           
+                                        },
                                         {
+                                            xtype: 'button',
+                                            text: 'Buscar',
+                                            maxHeight: 25,
+                                            width: 80,
+                                            action: 'validarut',
+                                            itemId: 'buscarBtn'
+                                        },{
+                                            xtype: 'displayfield',
+                                            width: 50
+                                           
+                                        },{
                                             xtype: 'textfield',
                                             fieldCls: 'required',
                                             fieldLabel: '<b>RAZON SOCIAL</b>',
                                             maxHeight: 25,
-                                            labelWidth: 120,
-                                            width: 845,
+                                            labelWidth: 80,
+                                            width: 885,
                                             itemId: 'nombre_id',
                                             name : 'nombre',
                                             readOnly: true
                                             
                                         }
                                     ]
-                                }, {
-                                    xtype: 'fieldcontainer',
-                                    height: 30,
-                                    width: 462,
-                                    fieldLabel: '',
-                                    layout: {
-                                        type: 'hbox',
-                                        align: 'stretch'
-                                    },
-                                    items: [
-                                         {
-                                            xtype: 'textfield',
-                                            fieldLabel: '<b>ID</b>',
-                                            fieldCls: 'required',
-                                            maxHeight: 25,
-                                            width: 580,
-                                            itemId: 'id_sucursalID',
-                                            name : 'id_sucursal',
-                                            value: 0,
-                                            hidden: true
-                                        },{
-                                            xtype: 'textareafield',
-                                            itemId: 'obsId',
-                                            name : 'idobserva',
-                                            fieldLabel: 'Id Observacion',
-                                            hidden: true
-                                        },{
-                                            xtype: 'textareafield',
-                                            itemId: 'observaId',
-                                            name : 'observacion',
-                                            fieldLabel: 'Observacion',
-                                            hidden: true
-                                        },{
-                                            xtype: 'textfield',
-                                            fieldLabel: '<b>DIRECCION</b>',
-                                            fieldCls: 'required',
-                                            maxHeight: 25,
-                                            width: 580,
-                                            itemId: 'direccionId',
-                                            name : 'direccion',
-                                            readOnly: true
-                                        },{xtype: 'splitter'},{
-                                            xtype: 'button',
-                                            text: 'Sucursal',
-                                            itemId: 'sucursalId',
-                                            maxHeight: 25,
-                                            width: 70,
-                                            allowBlank: true,
-                                            action: 'buscarsucursalfactura'
-                                        },{xtype: 'splitter'},{
-                                            xtype: 'textfield',
-                                            fieldCls: 'required',
-                                            fieldLabel: '<b>GIRO</b>',
-                                            labelWidth: 40,
-                                            maxHeight: 25,
-                                            width: 495,
-                                            itemId: 'giroId',
-                                            readOnly: true,
-                                            name : 'giro'
-                                          
-                                        }
-                                    ]
                                 },{
-                                    xtype: 'fieldcontainer',
-                                    height: 30,
-                                    width: 462,
-                                    fieldLabel: '',
-                                    layout: {
-                                        type: 'hbox',
-                                        align: 'stretch'
-                                    },
-                                    items: [
-                                       {
-                                            xtype: 'textfield',
-                                            fieldCls: 'required',
-                                            itemId: 'tipoCiudadId',
-                                            name : 'nombre_ciudad',
-                                            maxHeight: 25,
-                                            width: 310,
-                                            readOnly: true,
-                                            fieldLabel: '<b>CIUDAD</b>'
-                                        },{
-                                            xtype: 'displayfield',
-                                            flex: 1,
-                                            maxWidth: 25,
-                                            labelWidth: 50
-                                        },{
-                                            xtype: 'textfield',
-                                            fieldCls: 'required',
-                                            itemId: 'tipoComunaId',
-                                            name : 'nombre_comuna',
-                                            readOnly: true,
-                                            maxHeight: 25,
-                                            width: 310,
-                                            fieldLabel: '<b>COMUNA</b>'
-                                        },{
-                                            xtype: 'displayfield',
-                                            flex: 1,
-                                            maxWidth: 25,
-                                            labelWidth: 50
-                                        },{
-                                            xtype: 'textfield',
-                                            fieldCls: 'required',
-                                            itemId: 'idvendedorId',
-                                            name : 'id_vendedor',
-                                            readOnly: true,
-                                            maxHeight: 25,
-                                            width: 310,
-                                            fieldLabel: '<b>ID</b>',
-                                            hidden: true
-                                        },{
-                                            xtype: 'textfield',
-                                            fieldCls: 'required',
-                                            itemId: 'vendedorId',
-                                            name : 'nom_vendedor',
-                                            readOnly: true,
-                                            maxHeight: 25,
-                                            width: 310,
-                                            fieldLabel: '<b>VENDEDOR</b>'
-                                        }
-                                    ]
-                },
+                    xtype: 'fieldset',
+                    title: 'Items Documento',
+                    fieldDefaults: {
+                        labelWidth: 70,
+                        align: 'center'                        
+                    },
+                    items: [
+                    {
+                        xtype: 'container',
+                        layout: {
+                            type: 'vbox'
+                        },
+                        defaults: {
+                            flex: 1
+                        },
+                        items: [
+
+                        {
+                            xtype: 'fieldcontainer',
+                            layout: 'hbox',
+                            align: 'center',     
+                            items: [{
+                                xtype: 'textfield',
+                                width: 140,
+                                labelWidth: 40,
+                                fieldLabel: 'Codigo',
+                                itemId: 'codigoId',
+                                style: 'font-weight: bold;'
+                            },{xtype: 'splitter'},{
+                                xtype: 'textfield',
+                                align: 'center',
+                                labelWidth: 55,
+                                itemId: 'nombreproductoId',
+                                fieldLabel: 'Producto',
+                                name: 'nomproducto',                                
+                                readOnly: true
+                            },{
+                                xtype: 'textfield',
+                                align: 'center',
+                                labelWidth: 60,
+                                itemId: 'productoId',
+                                fieldLabel: 'Producto',
+                                name: 'Productos',                                
+                                hidden: true
+                            },
+                            {xtype: 'splitter'},
+                            {
+                                xtype: 'button',
+                                text: 'Buscar Producto',
+                                maxHeight: 25,
+                                width: 120,
+                                allowBlank: true,
+                                action: 'buscarproductos',
+                                itemId: 'buscarproc'
+                            },
+                            {xtype: 'splitter'},
+                            {
+                                xtype: 'numberfield',
+                                width: 180,
+                                labelWidth: 40,
+                                fieldLabel: 'Precio',
+                                itemId: 'precioId',
+                                style: 'font-weight: bold;',
+                                decimalPrecision:3
+                            },{xtype: 'splitter'},
+                            {
+                                xtype: 'textfield',
+                                width: 120,
+                                labelWidth: 40,
+                                minValue: 0,
+                                fieldLabel: 'Stock',
+                                readOnly: true,
+                                itemId: 'cantidadOriginalId',
+                                style: 'font-weight: bold;'
+
+                            },
+                            {xtype: 'splitter'},
+                            {
+                                xtype: 'numberfield',
+                                width: 160,
+                                labelWidth: 60,
+                                minValue: 0,
+                                value: 1,
+                                fieldLabel: 'Cantidad',
+                                itemId: 'cantidadId',
+                                decimalPrecision:3
+                            },{
+                                xtype: 'numberfield',
+                                width: 120,
+                                labelWidth: 60,
+                                minValue: 0,
+                                value: 0,
+                                fieldLabel: 'Descuento Pro',
+                                itemId: 'totdescuentoId',
+                                hidden: true
+                            },
+                            {xtype: 'splitter'},
+                            {
+                            xtype: 'combo',
+                            width: 190,
+                            queryMode: 'local',
+                            itemId: 'DescuentoproId',
+                            fieldLabel: 'Descto %',
+                            store: 'Tabladescuento',
+                            emptyText : "Seleccione",
+                            valueField: 'id',
+                            displayField: 'nombre'
+                            },
+                            {xtype: 'splitter'},
+                            {
+                                xtype: 'button',
+                                text: 'Agregar',
+                                iconCls: 'icon-plus',
+                                width: 80,
+                                allowBlank: true,
+                                action: 'agregarItem'
+                            }]
+                        }
+
+                        ]
+                    }]
+
+                     }
 
                             ]
                         },{
@@ -309,137 +341,135 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
                             itemId: 'itemsgridId',
                             title: 'Detalle',
                             labelWidth: 50,
-                            store: 'Preventa_detalle',
-                            height: 190,
+                            store: 'productos.Items',
+                            tbar: [{
+                                iconCls: 'icon-delete',
+                                text: 'Eliminar',
+                                action: 'eliminaritem'
+                            },
+                            {
+                                iconCls: 'icon-delete',
+                                text: 'Editar',
+                                action: 'editaritem'
+                            }
+                            ],
+                            height: 295,
                             columns: [
-                                    { text: 'Producto',  dataIndex: 'nom_producto', width: 250 },
-                                    { text: 'Precio Unitario',  dataIndex: 'valor_unit', flex:1, renderer: function(valor){return Ext.util.Format.number(parseInt(valor),"0,000")} },
-                                    { text: 'Cantidad',  dataIndex: 'cantidad', width: 100 },
-                                    { text: 'Descuento',  dataIndex: 'desc', flex:1, renderer: function(valor){return Ext.util.Format.number(parseInt(valor),"0,000")} },
-                                    { text: 'Neto',  dataIndex: 'neto', flex:1,renderer: function(valor){return Ext.util.Format.number(parseInt(valor),"0,000")} },
-                                    { text: 'Iva',  dataIndex: 'iva', flex:1,renderer: function(valor){return Ext.util.Format.number(parseInt(valor),"0,000")} },
-                                    { text: 'Total',  dataIndex: 'total', flex:1, renderer: function(valor){return Ext.util.Format.number(parseInt(valor),"0,000")} }
+                                { text: 'Id producto',  dataIndex: 'id_producto', width: 250, hidden : true },
+                                { text: 'Id descuento',  dataIndex: 'id_descuento', width: 250, hidden : true },
+                                { text: 'codigo',  dataIndex: 'codigo', width: 250, hidden : true },
+                                { text: 'Producto',  dataIndex: 'nombre', width: 250 },
+                                { text: 'Bodega',  dataIndex: 'id_bodega', width: 250, hidden:true},
+                                { text: 'Precio Unitario',  dataIndex: 'precio', align: 'right',flex:1, decimalPrecision:3},
+                                { text: 'Cantidad',  dataIndex: 'cantidad', align: 'right',width: 150, decimalPrecision:3},
+                                { text: 'Descuento',  dataIndex: 'dcto', align: 'right',width: 100, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
+                                { text: 'Neto',  dataIndex: 'neto', align: 'right',flex:1,renderer: function(valor){return Ext.util.Format.number((valor),"0,000")}, hidden: true },
+                                { text: 'Iva',  dataIndex: 'iva', align: 'right',flex:1,renderer: function(valor){return Ext.util.Format.number((valor),"0,000")}, hidden: true },
+                                { text: 'Total',  dataIndex: 'total', align: 'right',flex:1, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} }
                                 ]
                             },{
                         xtype: 'fieldset',
                         title: 'Total Documento',
                         fieldDefaults: {
-                        labelWidth: 120
+                        labelWidth: 420
                         },
                         items: [
                             {
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
                         items: [{
-                            xtype: 'textfield',
-                            fieldCls: 'required',
-                            width: 200,
-                            name : 'neto',
-                            itemId: 'finaltotalnetoId',
-                            readOnly: true,
-                            fieldLabel: '<b>VALOR NETO</b>',
+                            xtype: 'combo',
                             labelAlign: 'top',
-                            renderer: function(valor){return Ext.util.Format.number(parseInt(total),"0.000")}
-
+                            width: 180,
+                            matchFieldWidth: false,
+                            listConfig: {
+                                width: 210
+                            },
+                            itemId: 'condpagoId',
+                            fieldLabel: '<b>FORMA PAGO</b>',
+                            fieldCls: 'required',
+                            store: formaPago,
+                            name: 'cond_pago',
+                            valueField: 'id',
+                            displayField: 'nombre'                           
                         },{
-                            xtype: 'numberfield',
-                            fieldCls: 'required',
-                            width: 200,
-                            name : 'neton',
-                            itemId: 'finaltotalnetonId',
-                            readOnly: true,
-                            fieldLabel: '<b>VALOR NETO</b>',
-                            labelAlign: 'top',
-                            hidden: true
-                        },
-                        {xtype: 'splitter'},
-                        {
-                            xtype: 'textfield',
-                            width: 200,
-                            value: 0,
-                            name : 'descuento',
-                            itemId: 'finaldescuentoId',
-                            fieldLabel: '<b>DESCUENTO %</b>',
-                            labelAlign: 'top',
-                            readOnly: true,
-                            renderer: function(valor){return Ext.util.Format.number(parseInt(iva),"0.000")}
-                        },{
-                            xtype: 'numberfield',
-                            width: 200,
-                            value: 0,
-                            name : 'descuenton',
-                            itemId: 'finaldescuentonId',
-                            fieldLabel: '<b>DESCUENTO %</b>',
-                            labelAlign: 'top',
-                            hidden: true
-                        },
-                        {xtype: 'splitter'},
-                        {
                             xtype: 'textfield',
                             fieldCls: 'required',
-                            width: 200,
-                            name : 'afecto',
-                            itemId: 'finalafectoId',
-                            readOnly: true,
-                            fieldLabel: '<b>AFECTO</b>',
-                            labelAlign: 'top',
-                            renderer: function(valor){return Ext.util.Format.number(parseInt(iva),"0.000")}
-                        },{
-                            xtype: 'numberfield',
-                            fieldCls: 'required',
-                            width: 200,
-                            name : 'afecton',
-                            itemId: 'finalafectonId',
-                            readOnly: true,
-                            fieldLabel: '<b>AFECTO</b>',
-                            labelAlign: 'top',
-                            hidden: true
-                        },{xtype: 'splitter'},
-                        {
-                            xtype: 'textfield',
-                            width: 200,
-                            fieldCls: 'required',
-                            name : 'iva',
-                            itemId: 'finaltotalivaId',
-                            readOnly: true,
-                            fieldLabel: '<b>IVA</b>',
-                            labelAlign: 'top',
-                            renderer: function(valor){return Ext.util.Format.number(parseInt(iva),"0.000")} 
-                        },{
-                            xtype: 'numberfield',
-                            width: 200,
-                            fieldCls: 'required',
-                            name : 'ivan',
-                            itemId: 'finaltotalivanId',
-                            readOnly: true,
-                            fieldLabel: '<b>IVA</b>',
-                            labelAlign: 'top',
-                            hidden: true
-                        },{xtype: 'splitter'},{
-                            xtype: 'textfield',
-                            fieldCls: 'required',
-                            width: 300,
+                            width: 100,
                             name : 'total',
                             itemId: 'finaltotalId',
                             readOnly: true,
-                            fieldLabel: '<b>TOTAL DOCUMENTO</b>',
+                            fieldLabel: '<b>TOTAL</b>',
+                            labelAlign: 'top'
+                        },{xtype: 'splitter'},{
+                            xtype: 'numberfield',
+                            fieldCls: 'required',
+                            width: 100,
+                            name : 'cancela',
+                            itemId: 'valorcancelaId',
+                            fieldLabel: '<b>CANCELA</b>',
+                            labelAlign: 'top'
+                        },{xtype: 'splitter'},{
+                            xtype: 'numberfield',
+                            fieldCls: 'required',
+                            width: 100,
+                            name : 'vuelto',
+                            itemId: 'valorvueltoId',
+                            fieldLabel: '<b>VUELTO</b>',
+                            disabled : false,
+                            labelAlign: 'top'
+                        },{xtype: 'splitter'},
+                        {
+                            xtype: 'numberfield',
+                            fieldCls: 'required',
+                            width: 180,
+                            minValue: 0,
+                            name : 'afecto',
+                            itemId: 'numchequeId',
+                            fieldLabel: '<b>NUMCHEQUE</b>',
+                            value: 0,
                             labelAlign: 'top',
-                            renderer: function(valor){return Ext.util.Format.number(parseInt(iva),"0.000")}
+                            disabled : true  
+                        },{xtype: 'splitter'},{
+                            xtype: 'datefield',
+                            labelAlign: 'top',
+                            fieldCls: 'required',
+                            maxHeight: 35,
+                            labelWidth: 50,
+                            width: 170,
+                            fieldLabel: '<b>FECHA</b>',
+                            itemId: 'fechachequeId',
+                            name: 'fecha_cheque',
+                            value: new Date()
+                        },{xtype: 'splitter'},{
+                            xtype: 'combo',
+                            labelAlign: 'top',
+                            width: 210,
+                            matchFieldWidth: false,
+                            listConfig: {
+                                width: 210
+                            },
+                            itemId: 'bancoId',
+                            fieldLabel: '<b>BANCO</b>',
+                            fieldCls: 'required',
+                            store: 'Banco',
+                            name: 'banco',
+                            valueField: 'id',
+                            displayField: 'nombre',
+                            disabled : true  
+                           
+                        },{
+                            xtype: 'textfield',
+                            fieldCls: 'required',
+                            width: 180,
+                            name : 'num_boleta',
+                            itemId: 'numboleta2Id',
+                            fieldLabel: '<b>No.BOLETA</b>',
+                            labelAlign: 'top',
+                            align: 'right'
                         },{
                             xtype: 'numberfield',
                             itemId: 'finaltotalpostId',
-                            hidden: true
-                        },{
-                            xtype: 'numberfield',
-                            itemId: 'finaltotalUnformat',
-                            hidden: true
-                        },{
-                            xtype: 'numberfield',
-                            itemId: 'tipocondpagoId',
-                            hidden: true
-                        },{
-                            xtype: 'numberfield',
-                            itemId: 'numchequeId',
                             hidden: true
                         }]
                     }
@@ -461,22 +491,15 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
                     items: ['->',
                         {
                             xtype: 'button',
-                            //iconCls: 'icono',
+                            iconCls: 'icon-save',
                             scale: 'large',
-                            action: 'observaciones',
-                            text: 'OBSERVACIONES'
-                        },{
-                            xtype: 'button',
-                            //iconCls: 'icono',
-                            scale: 'large',
-                            action: 'grabarfactura',
-                            text: 'IMPRIMIR'
-                        },{
-                            xtype: 'button',
-                            //iconCls: 'icono',
-                            scale: 'large',
-                            action: 'salir',
-                            text: 'CERRAR'
+                            itemId: 'grababoletaId',
+                            disabled : false,
+                            action: 'grabarboleta',
+                            text: 'Grabar'
+                        },
+                        {
+                            xtype: 'tbseparator'
                         }
                     ]
                 }
@@ -484,7 +507,7 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
         });
 
         me.callParent(arguments);
-        //me.down('#productoId').getStore().load();
+        
     }
 
 });
