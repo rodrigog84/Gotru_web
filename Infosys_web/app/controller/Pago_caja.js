@@ -205,6 +205,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         viewedit.down('#nomcajaId').setValue(idcaja.nombre);
         viewedit.down("#cajaId").setValue(idcaja.id);
         viewedit.down('#nomcajeroId').setValue(idcajero.nombre);
+        viewedit.down('#recaudaId').setValue(recauda);
                 
         viewedit.down("#cajeroId").setValue(idcajero.id);
         viewedit.down('#efectivonId').setValue(efectivo);
@@ -214,9 +215,9 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         viewedit.down('#otrosmontosnId').setValue(otros);
         viewedit.down('#otrosmontosId').setValue(Ext.util.Format.number(otros, '0,00'));
         viewedit.down('#fechaaperturaId').setValue(fecha);
-        var stPreventa = this.getPreventaStore();
-        stPreventa.proxy.extraParams = {fecha : fecha}
-        stPreventa.load();
+        //var stPreventa = this.getPreventaStore();
+        //stPreventa.proxy.extraParams = {fecha : fecha}
+        //stPreventa.load();
         
         Ext.Ajax.request({
             
@@ -224,7 +225,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
             params: {
                 cajero: caje,
                 caja: caj,
-                fecha: fecha,
+                fecha: Ext.Date.format(fecha,'Y-m-d'),
                 efectivo: efectivo,
                 cheques: cheques,
                 otros: otros 
@@ -398,7 +399,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
             var row = grid.getSelectionModel().getSelection()[0];
             viewIngresa.down('#productoId').setValue(row.data.id_producto);
             viewIngresa.down('#nombreproductoId').setValue(row.data.nombre);
-            viewIngresa.down('#codigoId').setValue(row.data.codigo);
+            viewIngresa.down('#codigoId').setValue(row.data.codigo_barra);
             viewIngresa.down('#precioId').setValue(row.data.valor_lista);
             viewIngresa.down('#cantidadOriginalId').setValue(row.data.stock);
             viewIngresa.down("#cantidadId").focus();
@@ -433,7 +434,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         }else{
 
             Ext.Ajax.request({
-            url: preurl + 'productosfact/buscacodigo',
+            url: preurl + 'productosfact/buscacodigoboleta',
             params: {
                 id: 1,
                 codigo : codigo,
@@ -447,7 +448,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
                         var cliente = resp.cliente;                        
                         viewIngresa.down('#productoId').setValue(cliente.id_producto);
                         viewIngresa.down('#nombreproductoId').setValue(cliente.nombre);
-                        viewIngresa.down('#codigoId').setValue(cliente.codigo);
+                        viewIngresa.down('#codigoId').setValue(cliente.codigo_barra);
                         viewIngresa.down('#precioId').setValue(cliente.valor_lista);
                         viewIngresa.down('#cantidadOriginalId').setValue(cliente.stock);
                         viewIngresa.down("#cantidadId").focus();                                             
@@ -704,6 +705,27 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         var cheques =  viewedit.down('#totchequesnId').getValue();
         var otros =  viewedit.down('#otrosmontosnId').getValue();
         var recauda =  viewedit.down('#recaudaId').getValue();
+
+        var valorapagar = parseInt(view.down('#finaltotalpostId').getValue());
+        var valorpagado = parseInt(view.down('#valorcancelaId').getValue());
+        
+
+        if (valorapagar>valorpagado){
+
+            var bolEnable = false;
+            view.down('#grababoletaId').setDisabled(bolEnable);
+            Ext.Msg.alert('Valor Pagado Es Menor a Total Boleta');
+                    return;
+        };
+
+
+        if (!valorcancela){
+
+            var bolEnable = false;
+            view.down('#grababoletaId').setDisabled(bolEnable);        
+            Ext.Msg.alert('Alerta', 'Debe Cancelar Documento');
+            return;
+        }
                
         if (record.nombre == "CONTADO") {
                    
@@ -895,7 +917,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
     selectItemcancela : function() {
         
         var view =this.getBoletaingresar();
-        var valorapagar = parseInt(view.down('#finaltotalId').getValue());
+        var valorapagar = parseInt(view.down('#finaltotalpostId').getValue());
         var valorpagado = parseInt(view.down('#valorcancelaId').getValue());
         var condpago = view.down('#condpagoId');
         var stCombo = condpago.getStore();
@@ -912,13 +934,19 @@ Ext.define('Infosys_web.controller.Pago_caja', {
 
         }
 
-        if (valorapagar=valorpagado){
+        if (valorapagar==valorpagado){
 
             calculo = 0;
             view.down('#valorvueltoId').setValue(calculo);
                    
 
-        }
+        };
+
+        if (valorapagar>valorpagado){
+
+            Ext.Msg.alert('Valor Pagado Es Menor a Total Boleta');
+                    return;
+        };
 
         }
 
@@ -1083,6 +1111,9 @@ Ext.define('Infosys_web.controller.Pago_caja', {
     
     generarpago: function(){
 
+            var viewedit = this.getPagocajaprincipal();
+            var recauda = viewedit.down('#recaudaId').getValue();
+
             var view = Ext.create('Infosys_web.view.Pago_caja.Facturas').show();                   
             var nombre = "2";
             var tipdocumento = "2";
@@ -1103,7 +1134,8 @@ Ext.define('Infosys_web.controller.Pago_caja', {
                     var correlanue = cliente.correlativo;
                     view.down("#numboletaId").setValue(correlanue);  
                     view.down("#nomdocumentoId").setValue(cliente.nombre); 
-                    view.down("#tipodocumentoId").setValue(tipdocumento);                    
+                    view.down("#tipodocumentoId").setValue(tipdocumento);
+                    view.down("#recaudaId").setValue(recauda);                    
                     
                 }else{
                     Ext.Msg.alert('Correlativo YA Existe');

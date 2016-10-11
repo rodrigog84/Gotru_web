@@ -114,8 +114,6 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
                                             itemId: 'recaudaId',
                                             fieldLabel: '<b>RECAUDA</b>',
                                             hidden: true
-
-
                                         },{
                                             xtype: 'displayfield',
                                             width: 145
@@ -237,6 +235,7 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
                                 width: 140,
                                 labelWidth: 40,
                                 fieldLabel: 'Codigo',
+                                name: 'codigo_barra',
                                 itemId: 'codigoId',
                                 style: 'font-weight: bold;'
                             },{xtype: 'splitter'},{

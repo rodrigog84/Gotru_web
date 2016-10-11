@@ -8,6 +8,67 @@ class Productosfact extends CI_Controller {
 		$this->load->database();
 	}
 
+	public function buscacodigoboleta(){
+
+		$resp = array();
+		$nombres = $this->input->post('codigo');
+		$idlista = $this->input->post('idlista');
+		$idbodega = $this->input->post('idlista');
+
+
+		$query2 = $this->db->query('SELECT acc.*, c.nombre as nom_ubi_prod, ca.nombre as nom_uni_medida, m.nombre as nom_marca, fa.nombre as nom_familia, bo.nombre as nom_bodega, ag.nombre as nom_agrupacion, sb.nombre as nom_subfamilia FROM productos acc
+			left join mae_ubica c on (acc.id_ubi_prod = c.id)
+			left join marcas m on (acc.id_marca = m.id)
+			left join mae_medida ca on (acc.id_uni_medida = ca.id)
+			left join familias fa on (acc.id_familia = fa.id)
+			left join agrupacion ag on (acc.id_agrupacion = ag.id)
+			left join subfamilias sb on (acc.id_subfamilia = sb.id)
+			left join bodegas bo on (acc.id_bodega = bo.id)
+			WHERE acc.codigo_barra = "'.$nombres.'"');
+
+		if($query2->num_rows()>0){
+	   			$row = $query2->first_row();
+			   	$id_producto=$row->id;
+			   	$query = $this->db->query('SELECT acc.*, ca.nombre as nom_medida, p.stock as stock, p.codigo as codigo, p.nombre as nombre, p.codigo_barra as codigo_barra
+				FROM detalle_lista_precios acc
+				left join mae_medida ca on (acc.id_medida = ca.id)
+				left join productos p on (acc.id_producto = p.id)		
+				WHERE acc.id_lista = "'.$idlista.'" and acc.id_producto = "'.$id_producto.'" ');
+
+				if($query->num_rows()>0){
+			   			$row = $query->first_row();
+			   			$query2 = $this->db->query('SELECT acc.*, c.nombre as nom_bodega FROM existencia acc
+					left join bodegas c on (acc.id_bodega = c.id)
+					WHERE acc.id_producto = "'.$id_producto.'" and acc.id_bodega = "'.$idbodega.'" ');
+		            foreach ($query2->result() as $row2)
+					{
+						$stock = $row2->stock;
+						$nombodega = $row2->nom_bodega;
+					}
+
+					$row->stock=$stock;
+					$row->nom_bodega=$nombodega;
+
+					$data[] = $row;
+					   	$resp['cliente'] = $row;
+				        $resp['success'] = true;
+			   	}else{
+
+			   		 $resp['success'] = false;
+
+			   	}
+	   	}else{
+
+	   		 $resp['success'] = false;
+
+	   		
+	   	};	
+
+	   	
+        echo json_encode($resp);
+
+	}
+
 	public function buscacodigo(){
 
 		$resp = array();

@@ -97,7 +97,7 @@ Ext.define('Infosys_web.view.Pago_caja.Principal' ,{
                 itemId: 'recaudaId',
                 fieldLabel: 'Recauda',
                 readOnly: true,
-                hidden :true
+                hidden: true
             },{
                 width: 80,
                 labelWidth: 20,
@@ -198,16 +198,6 @@ Ext.define('Infosys_web.view.Pago_caja.Principal' ,{
                 fieldLabel: '<b>Fecha</b>',
                 itemId: 'fechaaperturaId',
                 name: 'fecha_apertura'
-            },{
-                xtype: 'datefield',
-                fieldCls: 'required',
-                labelWidth: 60,
-                labelAlign: 'top',
-                width: 100,
-                fieldLabel: '<b>Recaudacion</b>',
-                itemId: 'recaudaId',
-                name: 'id_recauda',
-                hidden: true
             },'->',{
                 xtype: 'button',
                 iconCls: 'icon-delete',
