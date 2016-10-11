@@ -73,15 +73,23 @@ class Recaudacion extends CI_Controller {
 		$tipodocumento=2;
 		$ftotal=$totaldocumento;
 
-		if (!$banco){
-			
+		if (!$banco){			
 			$banco=0;
 		};
-		if (!$numcheque){
-			
+		if (!$numcheque){			
 			$numcheque=0;
 		};
 
+		if (!$contado){			
+			$contado=0;
+		};
+
+		if (!$cheques){			
+			$cheques=0;
+		};
+		if (!$otros){			
+			$otros=0;
+		};
 
 		if($idrecauda){
 			$cajas = array(
