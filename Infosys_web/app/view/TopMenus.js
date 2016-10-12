@@ -542,10 +542,14 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                         disabled: true,
                         itemId: 'vyf_eds_reportes',
                         iconCls: '',
-                             menu: [{
+                        menu: [{
                             text: 'Libro Ventas',
                             iconCls: '',
                             action: 'mejemplo'
+                        },{
+                            text: 'Estadisticas Ventas',
+                            iconCls: '',
+                            action: 'mestadisticas'
                         }]
                 },]
 
