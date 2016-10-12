@@ -26,13 +26,16 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
 
     initComponent: function() {
         var me = this;
-        var tipoInforme = Ext.create('Ext.data.Store', {
+        var infoano = Ext.create('Ext.data.Store', {
         fields: ['id', 'nombre'],
         data : [
-            {"id":1, "nombre":"CIUDAD"},
-            {"id":2, "nombre":"COMUNA"},
-            {"id":3, "nombre":"SECTOR"},
-            {"id":4, "nombre":"VENDEDORES"}
+            {"id":1, "nombre":"2016"},
+            {"id":2, "nombre":"2017"},
+            {"id":3, "nombre":"2018"},
+            {"id":4, "nombre":"2019"},
+            {"id":5, "nombre":"2020"},
+            {"id":6, "nombre":"2021"},
+            {"id":7, "nombre":"2022"}
         ]
         }); 
         Ext.applyIf(me, {
@@ -64,83 +67,104 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                     },
                                     items: [
                                         {
-                                            xtype: 'textfield',
-                                            itemId: 'id_cliente',
-                                            name : 'id',
-                                            hidden: true
-                                        },{
-                                            xtype: 'textfield',
-                                            fieldCls: 'required',
-                                            msgTarget: 'side',
-                                            maxHeight: 25,
-                                            labelWidth: 40,
-                                            width: 150,
-                                            fieldLabel: '<b>RUT</b>',
-                                            itemId: 'rutId',
-                                            name : 'rut'                                           
-                                        },{
-                                            xtype: 'displayfield',
-                                            width: 20
-                                           
-                                        },
-                                        {
-                                            xtype: 'button',
-                                            text: 'Buscar',
-                                            maxHeight: 25,
-                                            width: 80,
-                                            action: 'validarut',
-                                            itemId: 'buscarBtn'
+                                            xtype: 'combo',
+                                            itemId: 'anoId',
+                                            fieldLabel: 'AÑO',
+                                            name: 'ano',
+                                            store: infoano,
+                                            labelWidth: 30,
+                                            width: 120,
+                                            value: 1,
+                                            queryMode: 'local',
+                                            forceSelection: true,
+                                            displayField: 'nombre',
+                                            valueField: 'id',
+                                            maxHeight: 25
+                                            
                                         },{
                                             xtype: 'displayfield',
                                             width: 10
                                            
                                         },{
-                                            xtype: 'textfield',
-                                            fieldCls: 'required',
-                                            fieldLabel: '<b>RAZON SOCIAL</b>',
+                                            xtype: 'combo',
+                                            itemId: 'tipoCiudadId',
+                                            fieldLabel: 'Ciudad',
+                                            labelWidth: 45,
+                                            width: 245,
+                                            name: 'id_ciudad',
+                                            store: 'TipoCiudades',
+                                            queryMode: 'local',
+                                            forceSelection: true,
+                                            displayField: 'nombre',
+                                            valueField: 'id',
                                             maxHeight: 25,
-                                            labelWidth: 80,
-                                            width: 555,
-                                            itemId: 'nombre_id',
-                                            name : 'nombre',
-                                            readOnly: true
+                                             listConfig: {
+                                                minWidth: 450
+                                            }
                                             
                                         },{
                                             xtype: 'displayfield',
-                                            width: 20
-                                           
-                                        },{
-                                            xtype: 'textfield',
-                                            fieldCls: 'required',
-                                            msgTarget: 'side',
-                                            labelWidth: 40,
-                                            maxHeight: 25,
-                                            width: 100,
-                                            fieldLabel: '<b>AÑO</b>',
-                                            itemId: 'anoId',
-                                            name : 'rut'                                           
-                                        },{
-                                            xtype: 'displayfield',
-                                            width: 20
+                                            width: 10
                                            
                                         },{
                                             xtype: 'combo',
-                                            store : tipoInforme,
-                                            labelWidth: 60,
-                                            itemId: 'tipoonformeId',
-                                            width: 310,
-                                            fieldCls: 'required',
+                                            itemId: 'tipoComunaId',
+                                            fieldLabel: 'Comuna',
+                                            name: 'id_comuna',
+                                            labelWidth: 50,
+                                            width: 250,
+                                            store: 'TipoComunas',
+                                            queryMode: 'local',
+                                            forceSelection: true,
+                                            displayField: 'nombre',
+                                            valueField: 'id',
                                             maxHeight: 25,
-                                            fieldLabel: '<b>INFORME</b>',
-                                            forceSelection : true,
-                                            name : 'id',
-                                            valueField : 'id',
-                                            displayField : 'nombre',
-                                            emptyText : "Seleccione",
+                                            listConfig: {
+                                                minWidth: 450
+                                            }
                                             
-                                            //hidden: true
-                                            //disabled : true, 
-                                        }
+                                        },{
+                                            xtype: 'displayfield',
+                                            width: 10
+                                           
+                                        },{
+                                            xtype: 'combo',
+                                            itemId: 'sectoresId',
+                                            labelWidth: 40,
+                                            width: 280,
+                                            fieldLabel: 'Sector',
+                                            forceSelection : true,
+                                            editable : false,
+                                            name : 'id_sector',
+                                            maxHeight: 25,
+                                            valueField : 'id',
+                                            displayField : 'descripcion',
+                                            emptyText : "Seleccione",
+                                            store : 'Sectores',
+                                            allowBlank: false
+                                        },{
+                                            xtype: 'displayfield',
+                                            width: 10
+                                           
+                                        },{
+                                        xtype: 'combo',
+                                        itemId: 'tipoVendedorId',
+                                        fieldLabel: 'Vendedor',
+                                        width: 260,
+                                        maxHeight: 25,
+                                        labelWidth: 60,
+                                        name: 'id_vendedor',
+                                        store: 'Vendedores',
+                                        queryMode: 'local',
+                                        forceSelection: true,
+                                        displayField: 'nombre',
+                                        valueField: 'id',
+                                        /*listConfig: {
+                                            minWidth: 450
+                                        },
+                                        width: 140*/
+                                        
+                                    }
                                     ]
                                 },{
                                     xtype: 'fieldset',
