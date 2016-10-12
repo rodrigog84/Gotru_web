@@ -332,19 +332,20 @@ class Facturaelectronica extends CI_Model
 			    $pdf->setGiroCliente($factura->giro); 
 			    $pdf->setGiroEmisor($empresa->giro); 
 			    $pdf->setResolucion(['FchResol'=>$Caratula['FchResol'], 'NroResol'=>$Caratula['NroResol']]);
-			    if(!is_null($cedible)){
+			    /*if(!is_null($cedible)){
 			    	$pdf->setCedible(true);
-			    }
+			    }*/
 			    $pdf->agregar($DTE->getDatos(), $DTE->getTED());
-			    /*if($factura->tipo_caf == 33 || $factura->tipo_caf == 34 || $factura->tipo_caf == 52){
+			    if($factura->tipo_caf == 33 || $factura->tipo_caf == 34 || $factura->tipo_caf == 52){
 				    $pdf->setCedible(true);
 				    $pdf->agregar($DTE->getDatos(), $DTE->getTED());			    	
-			    }*/
+			    }
 
 
 			    //$pdf->Output('facturacion_electronica/pdf/'.$factura->path_dte.'dte_'.$Caratula['RutEmisor'].'_'.$DTE->getID().'.pdf', 'FI');
 			    $archivo = 'dte_'.$Caratula['RutEmisor'].'_'.$DTE->getID();
-			    $nombre_archivo = is_null($cedible) ? $archivo.".pdf" : $archivo."_CED.pdf";
+			    //$nombre_archivo = is_null($cedible) ? $archivo.".pdf" : $archivo."_CED.pdf";
+			    $nombre_archivo = $archivo.".pdf";
 			    //$tipo_generacion = is_null($cedible) ? 'FI' : 'F';
 			    $tipo_generacion = 'FI';
 			    $pdf->Output($path_pdf.$nombre_archivo, $tipo_generacion);
