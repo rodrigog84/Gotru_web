@@ -38,6 +38,20 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
             {"id":7, "nombre":"2022"}
         ]
         }); 
+        var informe = Ext.create('Ext.data.Store', {
+        fields: ['id', 'nombre'],
+        data : [
+            {"id":1, "nombre":"CLIENTE"},
+            {"id":2, "nombre":"CIUDAD"},
+            {"id":3, "nombre":"COMUNA"},
+            {"id":4, "nombre":"SECTOR"},
+            {"id":5, "nombre":"VENDEDORES"},
+            {"id":6, "nombre":"TIPO NEGOCIO"},
+            {"id":7, "nombre":"SUCURSALES"},
+            {"id":8, "nombre":"COBRADORES"},
+            {"id":9, "nombre":"REPARTIDORES"}
+        ]
+        }); 
         Ext.applyIf(me, {
             items: [
                 {
@@ -87,12 +101,12 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                            
                                         },{
                                             xtype: 'combo',
-                                            itemId: 'tipoCiudadId',
-                                            fieldLabel: 'Ciudad',
-                                            labelWidth: 45,
-                                            width: 245,
-                                            name: 'id_ciudad',
-                                            store: 'TipoCiudades',
+                                            itemId: 'selectId',
+                                            fieldLabel: 'SELECCION',
+                                            labelWidth: 80,
+                                            width: 285,
+                                            name: 'id_seleccion',
+                                            store: informe,
                                             queryMode: 'local',
                                             forceSelection: true,
                                             displayField: 'nombre',
@@ -109,8 +123,8 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                         },{
                                             xtype: 'combo',
                                             itemId: 'tipoComunaId',
-                                            fieldLabel: 'Comuna',
-                                            name: 'id_comuna',
+                                            fieldLabel: '',
+                                            name: 'id',
                                             labelWidth: 50,
                                             width: 250,
                                             store: 'TipoComunas',
@@ -123,48 +137,7 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                                 minWidth: 450
                                             }
                                             
-                                        },{
-                                            xtype: 'displayfield',
-                                            width: 10
-                                           
-                                        },{
-                                            xtype: 'combo',
-                                            itemId: 'sectoresId',
-                                            labelWidth: 40,
-                                            width: 280,
-                                            fieldLabel: 'Sector',
-                                            forceSelection : true,
-                                            editable : false,
-                                            name : 'id_sector',
-                                            maxHeight: 25,
-                                            valueField : 'id',
-                                            displayField : 'descripcion',
-                                            emptyText : "Seleccione",
-                                            store : 'Sectores',
-                                            allowBlank: false
-                                        },{
-                                            xtype: 'displayfield',
-                                            width: 10
-                                           
-                                        },{
-                                        xtype: 'combo',
-                                        itemId: 'tipoVendedorId',
-                                        fieldLabel: 'Vendedor',
-                                        width: 260,
-                                        maxHeight: 25,
-                                        labelWidth: 60,
-                                        name: 'id_vendedor',
-                                        store: 'Vendedores',
-                                        queryMode: 'local',
-                                        forceSelection: true,
-                                        displayField: 'nombre',
-                                        valueField: 'id',
-                                        /*listConfig: {
-                                            minWidth: 450
-                                        },
-                                        width: 140*/
-                                        
-                                    }
+                                        }
                                     ]
                                 },{
                                     xtype: 'fieldset',
