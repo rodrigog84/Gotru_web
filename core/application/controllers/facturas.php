@@ -618,7 +618,33 @@ exit;*/
 	 }
 
 
+	 public function estadisticas(){
 
+	 	$query = $this->db->query("select month(fecha_factura) as mes, sum(neto) as suma from factura_clientes
+						 where year(fecha_factura) = '2016'
+						 group by month(fecha_factura)
+						 order by month(fecha_factura)");
+	 	$resultado = $query->result();
+	 	$array_meses = array();
+
+	 	$array_meses["mes1"] = 0;
+	 	$array_meses["mes2"] = 0;
+	 	$array_meses["mes3"] = 0;
+	 	$array_meses["mes4"] = 0;
+	 	$array_meses["mes5"] = 0;
+	 	$array_meses["mes6"] = 0;
+	 	$array_meses["mes7"] = 0;
+	 	$array_meses["mes8"] = 0;
+	 	$array_meses["mes9"] = 0;
+	 	$array_meses["mes10"] = 0;
+	 	$array_meses["mes11"] = 0;
+	 	$array_meses["mes12"] = 0;
+	 	foreach ($resultado as $key => $value) {
+	 		$array_meses["mes".$value->mes] = number_format($value->suma,0,".",".");
+	 	}
+	 	echo json_encode($array_meses);				
+
+	 }
 
 
 	public function ver_dte($idfactura,$tipo = 'sii'){

@@ -137,6 +137,41 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                                 minWidth: 450
                                             }
                                             
+                                        },{
+                                            xtype: 'displayfield',
+                                            width: 20
+                                           
+                                        },
+                                        {
+                                            xtype: 'button',
+                                            text: 'Buscar',
+                                            maxHeight: 25,
+                                            width: 80,
+                                            itemId: 'buscarBtn',
+                                            handler: function(){
+                                                    
+                                                    response_statics = Ext.Ajax.request({
+                                                    async: false,
+                                                    url: preurl + 'facturas/estadisticas'});
+                                                    obj_statics = Ext.decode(response_statics.responseText);
+                                                    
+                                                    me.down('#enero1Id').setValue(obj_statics.mes1);
+                                                    me.down('#febrero1Id').setValue(obj_statics.mes2);
+                                                    me.down('#marzo1Id').setValue(obj_statics.mes3);
+                                                    me.down('#abril1Id').setValue(obj_statics.mes4);
+                                                    me.down('#mayo1Id').setValue(obj_statics.mes5);
+                                                    me.down('#junio1Id').setValue(obj_statics.mes6);
+                                                    me.down('#julio1Id').setValue(obj_statics.mes7);
+                                                    me.down('#agosto1Id').setValue(obj_statics.mes8);
+                                                    me.down('#septiembre1Id').setValue(obj_statics.mes9);
+                                                    me.down('#octubre1Id').setValue(obj_statics.mes10);
+                                                    me.down('#noviembre1Id').setValue(obj_statics.mes11);
+                                                    me.down('#diciembre1Id').setValue(obj_statics.mes12);
+
+
+                                                    //Ext.Msg.alert('Atención', obj_email.message);
+                                                    //Ext.Msg.alert('Atención', "Email enviado. Favor verificar casilla de correos");
+                                            }                                             
                                         }
                                     ]
                                 },{
