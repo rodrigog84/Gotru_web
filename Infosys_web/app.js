@@ -3,8 +3,8 @@ Ext.util.Format.thousandSeparator = '.';
 
 //var gbl_site = 'http://192.168.0.31/Gotru_web/';
 
-//var gbl_site = 'http://angus.agricultorestalca.cl/Gotru_web/';
-var gbl_site = 'http://localhost/Gotru_web/';
+var gbl_site = 'http://angus.agricultorestalca.cl/Gotru_web/';
+//var gbl_site = 'http://localhost/Gotru_web/';
 
 var preurl = gbl_site + 'core/index.php/';
 var preurl_img = gbl_site + 'core/archivos/';
@@ -24,7 +24,7 @@ Ext.application({
                   "Recaudacion", "Notacredito","Caja", "Guiasdespacho",
                   "Comisiones","Notadebito","Tipodocumentocompras", "Precios",
                   "Facturaglosa","Repartidor","Cobradores","Tiponegocio",
-                  "Pedidos","Sectores"],
+                  "Pedidos","Sectores","Estadisticas"],
 	   
     views: [
         'Infosys_web.view.WLogin',

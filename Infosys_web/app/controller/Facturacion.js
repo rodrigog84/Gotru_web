@@ -43,8 +43,7 @@ Ext.define('Infosys_web.controller.Facturacion', {
              'facturaelectronica.ContribuyentesAutorizados',
              'facturaelectronica.CargaListaContribuyentes',
              'facturaelectronica.HistLibroCompraVenta',
-             'facturaelectronica.Emails',
-             'estadisticas.Estadisticas'],
+             'facturaelectronica.Emails'],
 
     //referencias, es un alias interno para el controller
     //podemos dejar el alias de la vista en el ref y en el selector
@@ -133,10 +132,6 @@ Ext.define('Infosys_web.controller.Facturacion', {
                 click: this.mfactura
             },
            
-            'topmenus menuitem[action=mestadisticas]': {
-                click: this.mestadisticas
-            },
-
             'topmenus menuitem[action=mejemplo]': {
                 click: this.mejemplo
             },
@@ -304,10 +299,6 @@ Ext.define('Infosys_web.controller.Facturacion', {
                 //specialkey: this.buscarproductos
             //}
         });
-    },
-
-    mestadisticas: function(){
-        Ext.create('Infosys_web.view.estadisticas.Estadisticas').show();
     },
 
     exporttxt: function(){
