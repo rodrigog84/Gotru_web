@@ -3,6 +3,7 @@ Ext.define('Infosys_web.store.Pedidos.Selector', {
 	fields: ['id', 'nombre'],
     data : [
         {"id":"1", "nombre":"FIJO"},
-        {"id":"2", "nombre":"RETENIDO"}          
+        {"id":"2", "nombre":"RETENIDO"},
+        {"id":"3", "nombre":"NORMAL"}          
     ]
 });

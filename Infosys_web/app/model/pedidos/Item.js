@@ -8,10 +8,10 @@ Ext.define('Infosys_web.model.pedidos.Item', {
         {name: 'id_descuento'},
         {name: 'nom_producto'},
         {name: 'fecha', type:'date',dateFormat:"Y-m-d"},
-        {name: 'precio'},
-        {name: 'cantidad'},
+        {name: 'precio', decimalPrecision:3},
+        {name: 'cantidad', decimalPrecision:3},
         {name: 'descuento'},
-        {name: 'neto'},
+        {name: 'neto', decimalPrecision:3},
         {name: 'iva'},
         {name: 'total'}
         

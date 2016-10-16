@@ -190,8 +190,8 @@ class Productosfact extends CI_Controller {
 				$nombodega = $row2->nom_bodega;
 			}
 
-			$row->stock=$stock;
-			$row->nom_bodega=$nombodega;
+			//$row->stock=$stock;
+			//$row->nom_bodega=$nombodega;
 
 			$data[] = $row;
 		}

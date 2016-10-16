@@ -29,12 +29,16 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
         flex: 1,
         dataIndex: 'id_tipopedido',
         renderer: function(value){
-            if (value == "1") {
+            if (value == 1) {
                 return 'FIJO';
-             }
-            if (value == "2") {
+             };
+            if (value == 2) {
              //return '<img src="http://localhost:999/rutaimg.jpg" />'
                return 'RETENIDO';   
+            };
+            if (value == 3) {
+             //return '<img src="http://localhost:999/rutaimg.jpg" />'
+               return 'NORMAL';   
             }
            
            

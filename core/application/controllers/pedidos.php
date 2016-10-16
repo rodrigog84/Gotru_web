@@ -516,7 +516,7 @@ class Pedidos extends CI_Controller {
 		<body>
 		<table width="987px" height="602" border="0">
 		  <tr>
-		   <td width="197px"><img src="http://192.168.0.31/Gotru_web/Infosys_web/resources/images/logo_empresa.png" width="150" height="136" /></td>
+		   <td width="197px"><img src="http://localhost/Gotru_web/Infosys_web/resources/images/logo_empresa.png" width="150" height="136" /></td>
 		    <td width="493px" style="font-size: 14px;text-align:center;vertical-align:text-top"	>
 		    <p>GOTRU ALIMENTOS SPA.</p>
 		    <p>RUT:78.549.450-4</p>

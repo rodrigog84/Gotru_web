@@ -185,12 +185,12 @@ Ext.define('Infosys_web.controller.Pedidos', {
             view.down('#descuentovalorId').setDisabled(bolEnable);
         };
         
-        var neto = ((cantidad * precio) - descuento);
-        var tot = ((cantidad * precio) - descuento);
-        var neto = (parseInt(neto / 1.19));
+        var tot = (Math.round(cantidad * precio) - descuento);
+        var neto = (Math.round(tot / 1.19));
         var exists = 0;
-        var iva = (tot - neto );
-        var total = ((neto + iva ));
+        var iva = (tot - neto);
+        var total = (neto + iva );
+
 
         
         if(!producto){            
@@ -491,13 +491,11 @@ Ext.define('Infosys_web.controller.Pedidos', {
             view.down('#descuentovalorId').setDisabled(bolEnable);
         };
         
-        var neto = ((cantidad * precio) - descuento);
-        var tot = ((cantidad * precio) - descuento);
-        var neto = (parseInt(neto / 1.19));
+        var tot = (Math.round(cantidad * precio) - descuento);
+        var neto = (tot / 1.19);
         var exists = 0;
-        var iva = (tot - neto );
-        var total = ((neto + iva ));
-
+        var iva = (tot - neto);
+        var total = (neto + iva );
         
         if(!producto){            
             Ext.Msg.alert('Alerta', 'Debe Seleccionar un Producto');
