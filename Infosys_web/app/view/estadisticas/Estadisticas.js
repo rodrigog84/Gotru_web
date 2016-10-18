@@ -26,7 +26,7 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
 
     initComponent: function() {
         var me = this;
-        var infoano = Ext.create('Ext.data.Store', {
+        /*var infoano = Ext.create('Ext.data.Store', {
         fields: ['id', 'nombre'],
         data : [
             {"id":1, "nombre":"2016"},
@@ -37,7 +37,21 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
             {"id":6, "nombre":"2021"},
             {"id":7, "nombre":"2022"}
         ]
-        }); 
+        }); */
+
+         var infoano = Ext.create('Ext.data.Store', {
+            fields: ['anno'],
+            proxy: {
+              type: 'ajax',
+                url : preurl +'facturas/get_annos',
+                reader: {
+                    type: 'json',
+                    root: 'data'
+                }
+            },
+            autoLoad: true
+        });         
+
         var informe = Ext.create('Ext.data.Store', {
         fields: ['id', 'nombre'],
         data : [
@@ -88,11 +102,12 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                             store: infoano,
                                             labelWidth: 30,
                                             width: 120,
-                                            value: 1,
+                                            //value: new Date("2015"),
+                                            value: 2016,
                                             queryMode: 'local',
                                             forceSelection: true,
-                                            displayField: 'nombre',
-                                            valueField: 'id',
+                                            displayField: 'anno',
+                                            valueField: 'anno',
                                             maxHeight: 25
                                             
                                         },{
@@ -152,22 +167,47 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                                     
                                                     response_statics = Ext.Ajax.request({
                                                     async: false,
-                                                    url: preurl + 'facturas/estadisticas'});
+                                                    url: preurl + 'estadisticas/ventas'});
                                                     obj_statics = Ext.decode(response_statics.responseText);
-                                                    
-                                                    me.down('#enero1Id').setValue(obj_statics.mes1);
-                                                    me.down('#febrero1Id').setValue(obj_statics.mes2);
-                                                    me.down('#marzo1Id').setValue(obj_statics.mes3);
-                                                    me.down('#abril1Id').setValue(obj_statics.mes4);
-                                                    me.down('#mayo1Id').setValue(obj_statics.mes5);
-                                                    me.down('#junio1Id').setValue(obj_statics.mes6);
-                                                    me.down('#julio1Id').setValue(obj_statics.mes7);
-                                                    me.down('#agosto1Id').setValue(obj_statics.mes8);
-                                                    me.down('#septiembre1Id').setValue(obj_statics.mes9);
-                                                    me.down('#octubre1Id').setValue(obj_statics.mes10);
-                                                    me.down('#noviembre1Id').setValue(obj_statics.mes11);
-                                                    me.down('#diciembre1Id').setValue(obj_statics.mes12);
 
+                                                    me.down('#enero1Id').setValue(obj_statics.vmes1);
+                                                    me.down('#febrero1Id').setValue(obj_statics.vmes2);
+                                                    me.down('#marzo1Id').setValue(obj_statics.vmes3);
+                                                    me.down('#abril1Id').setValue(obj_statics.vmes4);
+                                                    me.down('#mayo1Id').setValue(obj_statics.vmes5);
+                                                    me.down('#junio1Id').setValue(obj_statics.vmes6);
+                                                    me.down('#julio1Id').setValue(obj_statics.vmes7);
+                                                    me.down('#agosto1Id').setValue(obj_statics.vmes8);
+                                                    me.down('#septiembre1Id').setValue(obj_statics.vmes9);
+                                                    me.down('#octubre1Id').setValue(obj_statics.vmes10);
+                                                    me.down('#noviembre1Id').setValue(obj_statics.vmes11);
+                                                    me.down('#diciembre1Id').setValue(obj_statics.vmes12);
+
+                                                    me.down('#enero2Id').setValue(obj_statics.cmes1);
+                                                    me.down('#febrero2Id').setValue(obj_statics.cmes2);
+                                                    me.down('#marzo2Id').setValue(obj_statics.cmes3);
+                                                    me.down('#abril2Id').setValue(obj_statics.cmes4);
+                                                    me.down('#mayo2Id').setValue(obj_statics.cmes5);
+                                                    me.down('#junio2Id').setValue(obj_statics.cmes6);
+                                                    me.down('#julio2Id').setValue(obj_statics.cmes7);
+                                                    me.down('#agosto2Id').setValue(obj_statics.cmes8);
+                                                    me.down('#septiembre2Id').setValue(obj_statics.cmes9);
+                                                    me.down('#octubre2Id').setValue(obj_statics.cmes10);
+                                                    me.down('#noviembre2Id').setValue(obj_statics.cmes11);
+                                                    me.down('#diciembre2Id').setValue(obj_statics.cmes12);                                                    
+
+                                                    me.down('#enero3Id').setValue(obj_statics.dmes1);
+                                                    me.down('#febrero3Id').setValue(obj_statics.dmes2);
+                                                    me.down('#marzo3Id').setValue(obj_statics.dmes3);
+                                                    me.down('#abril3Id').setValue(obj_statics.dmes4);
+                                                    me.down('#mayo3Id').setValue(obj_statics.dmes5);
+                                                    me.down('#junio3Id').setValue(obj_statics.dmes6);
+                                                    me.down('#julio3Id').setValue(obj_statics.dmes7);
+                                                    me.down('#agosto3Id').setValue(obj_statics.dmes8);
+                                                    me.down('#septiembre3Id').setValue(obj_statics.dmes9);
+                                                    me.down('#octubre3Id').setValue(obj_statics.dmes10);
+                                                    me.down('#noviembre3Id').setValue(obj_statics.dmes11);
+                                                    me.down('#diciembre3Id').setValue(obj_statics.dmes12);                                                    
 
                                                     //Ext.Msg.alert('Atención', obj_email.message);
                                                     //Ext.Msg.alert('Atención', "Email enviado. Favor verificar casilla de correos");
@@ -216,7 +256,7 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                         xtype: 'displayfield',
                                         align: 'center',
                                         width: 150,
-                                        fieldLabel: '<b>VENTAS NETAS</b>',
+                                        fieldLabel: '<b>COSTO</b>',
                                     },{
                                         xtype: 'displayfield',
                                         align: 'center',
@@ -225,7 +265,7 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                         xtype: 'displayfield',
                                         align: 'center',
                                         width: 150,
-                                        fieldLabel: '<b>VENTAS TOTALES</b>',
+                                        fieldLabel: '<b>DIFERENCIA</b>',
                                     }]
                                     }]
                                     }]
@@ -998,7 +1038,7 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                             width: 250,
                                             labelWidth: 150,
                                             name: '',
-                                            itemId: 'diciembre2d',
+                                            itemId: 'diciembre2Id',
                                             fieldLabel: '',
                                             readOnly: true
 
