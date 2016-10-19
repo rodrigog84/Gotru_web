@@ -21,7 +21,29 @@ Ext.define('Infosys_web.view.estadisticas.BuscarClientes' ,{
         store: 'Clientes',
         autoHeight: true,
         viewConfig: {
-            forceFit: true
+            forceFit: true,
+            /*listeners: {
+                itemdblclick: function(dataview, r, item, index, e) {
+                    console.log(dataview);
+                    console.log(r);
+                    console.log(item);
+                    console.log(index);
+                    console.log(e);
+                    var win =this.up('buscarclientesestadisticas')
+                    record.set({cliente: parseInt(r.get('id'))})
+                    Ext.Ajax.request({
+                       url: preurl + 'cuentacorriente/getCuentaCorriente/' + r.get('id') ,
+                       success: function(response, opts) {
+                          var obj = Ext.decode(response.responseText);
+                          record.set({saldo: obj.data[0].saldo});  
+                       },
+                       failure: function(response, opts) {
+                          console.log('server-side failure with status code ' + response.status);
+                       }
+                    })
+                    win.close()
+                }
+            } */           
 
         },
     columns: [{
@@ -38,61 +60,6 @@ Ext.define('Infosys_web.view.estadisticas.BuscarClientes' ,{
         flex: 1,
         itemId: 'rutId',
         dataIndex: 'rut'
-    },{
-        header: "Direccion",
-         width: 390,
-        dataIndex: 'direccion',
-        hidden: true
-    },{
-        header: "Giro",
-        flex: 1,
-        dataIndex: 'giro',
-        hidden: true
-    },{
-        header: "Ciudad",
-        flex: 1,
-        dataIndex: 'nombre_ciudad',
-        hidden: true
-    },{
-        header: "Comuna",
-        flex: 1,
-        dataIndex: 'nombre_comuna',
-        hidden: true
-    },{
-        header: "Telefono",
-        flex: 1,
-        dataIndex: 'fono',
-        hidden: true
-    },{
-        header: "E-Mail",
-        flex: 1,
-        dataIndex: 'e_mail',
-         hidden: true
-    },{
-        header: "Descuento %",
-        flex: 1,
-        dataIndex: 'descuento',
-        hidden: true
-    },{
-        header: "Vendedor",
-        flex: 1,
-        dataIndex: 'nombre_vendedor',
-        hidden: true
-    },{
-        header: "Condicion Pago",
-        flex: 1,
-        dataIndex: 'nom_id_pago',
-        hidden: true
-    },{
-        header: "Cupo Disponible",
-        flex: 1,
-        dataIndex: 'cupo_disponible',
-        hidden: true
-    },{
-        header: "Impuesto Adicional",
-        flex: 1,
-        dataIndex: 'imp_adicional',
-        hidden: true
     }],
         };
         this.dockedItems = [{
@@ -124,7 +91,7 @@ Ext.define('Infosys_web.view.estadisticas.BuscarClientes' ,{
         },{
             xtype: 'button',
             margin: 5,
-            action: 'seleccionarcliente',
+            action: 'seleccionarclienteest',
             dock: 'bottom',
             text : 'Seleccionar'
         },

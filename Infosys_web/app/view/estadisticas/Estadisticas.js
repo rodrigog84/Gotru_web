@@ -26,18 +26,6 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
 
     initComponent: function() {
         var me = this;
-        /*var infoano = Ext.create('Ext.data.Store', {
-        fields: ['id', 'nombre'],
-        data : [
-            {"id":1, "nombre":"2016"},
-            {"id":2, "nombre":"2017"},
-            {"id":3, "nombre":"2018"},
-            {"id":4, "nombre":"2019"},
-            {"id":5, "nombre":"2020"},
-            {"id":6, "nombre":"2021"},
-            {"id":7, "nombre":"2022"}
-        ]
-        }); */
 
          var infoano = Ext.create('Ext.data.Store', {
             fields: ['anno'],
@@ -103,7 +91,7 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                             labelWidth: 30,
                                             width: 120,
                                             //value: new Date("2015"),
-                                            value: 2016,
+                                            //value: '2016',
                                             queryMode: 'local',
                                             forceSelection: true,
                                             displayField: 'anno',
@@ -136,6 +124,23 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                             width: 10
                                            
                                         },{
+                                            xtype: 'textfield',
+                                            itemId: 'valorselector',
+                                            fieldLabel: '',
+                                            name: 'id',
+                                            labelWidth: 50,
+                                            width: 250,
+                                            //store: 'TipoComunas',
+                                            //queryMode: 'local',
+                                            //forceSelection: true,
+                                            //displayField: 'nombre',
+                                            valueField: 'id',
+                                            maxHeight: 25,
+                                            listConfig: {
+                                                minWidth: 450
+                                            }
+                                            
+                                        },/*{
                                             xtype: 'combo',
                                             itemId: 'tipoComunaId',
                                             fieldLabel: '',
@@ -153,6 +158,23 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                             }
                                             
                                         },{
+                                            xtype: 'combo',
+                                            itemId: 'tipoComunaId',
+                                            fieldLabel: '',
+                                            name: 'id',
+                                            labelWidth: 50,
+                                            width: 250,
+                                            store: 'TipoComunas',
+                                            queryMode: 'local',
+                                            forceSelection: true,
+                                            displayField: 'nombre',
+                                            valueField: 'id',
+                                            maxHeight: 25,
+                                            listConfig: {
+                                                minWidth: 450
+                                            }
+                                            
+                                        },*/{
                                             xtype: 'displayfield',
                                             width: 20
                                            

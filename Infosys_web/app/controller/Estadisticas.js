@@ -3,7 +3,7 @@ Ext.define('Infosys_web.controller.Estadisticas', {
 
     //asociamos vistas, models y stores al controller
 
-    stores: [],
+    stores: ['Clientes'],
 
     models: [],
 
@@ -38,7 +38,7 @@ Ext.define('Infosys_web.controller.Estadisticas', {
                 click: this.mestadisticas
             },
 
-            'buscarclientesestadisticas button[action=seleccionarcliente]': {
+            'buscarclientesestadisticas button[action=seleccionarclienteest]': {
                 click: this.seleccionarcliente
             },
             'buscarclientesestadisticas button[action=buscar]': {
@@ -54,11 +54,16 @@ Ext.define('Infosys_web.controller.Estadisticas', {
     seleccionarcliente: function(){
 
         var view = this.getBuscarclientesestadisticas();
-        var viewIngresa = this.getFacturasingresar();
+        //var viewIngresa = this.getFacturasingresar();
         var grid  = view.down('grid');
         if (grid.getSelectionModel().hasSelection()) {
+            var row = grid.getSelectionModel().getSelection()[0];
+            console.log(row.data.nombres);
+            view.down('#valorselector').setValue(row.data.nombres);
+        }else{
             Ext.Msg.alert('Alerta', 'Selecciona un registro.');
             return;
+
         }
        
     },
@@ -92,7 +97,10 @@ Ext.define('Infosys_web.controller.Estadisticas', {
         var id = (record.id);
 
         if(id==1){
-            var edit = Ext.create('Infosys_web.view.ventas.BuscarClientes');
+            //var st = this.getClientesStore();
+            //st.load();
+            var edit = Ext.create('Infosys_web.view.estadisticas.BuscarClientes');
+
         };
         
     },
