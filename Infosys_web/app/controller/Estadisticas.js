@@ -54,12 +54,12 @@ Ext.define('Infosys_web.controller.Estadisticas', {
     seleccionarcliente: function(){
 
         var view = this.getBuscarclientesestadisticas();
-        //var viewIngresa = this.getFacturasingresar();
+        var viewIngresa = this.getEstadisticasventas();
         var grid  = view.down('grid');
         if (grid.getSelectionModel().hasSelection()) {
             var row = grid.getSelectionModel().getSelection()[0];
             console.log(row.data.nombres);
-            view.down('#valorselector').setValue(row.data.nombres);
+            viewIngresa.down('#valorselector').setValue(row.data.nombres);
         }else{
             Ext.Msg.alert('Alerta', 'Selecciona un registro.');
             return;
