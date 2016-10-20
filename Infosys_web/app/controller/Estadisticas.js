@@ -58,8 +58,10 @@ Ext.define('Infosys_web.controller.Estadisticas', {
         var grid  = view.down('grid');
         if (grid.getSelectionModel().hasSelection()) {
             var row = grid.getSelectionModel().getSelection()[0];
-            console.log(row.data.nombres);
             viewIngresa.down('#valorselector').setValue(row.data.nombres);
+            viewIngresa.down('#idselector').setValue(row.data.id);
+            viewIngresa.down('#tiposelector').setValue("cliente");
+            view.close();
         }else{
             Ext.Msg.alert('Alerta', 'Selecciona un registro.');
             return;
@@ -97,10 +99,7 @@ Ext.define('Infosys_web.controller.Estadisticas', {
         var id = (record.id);
 
         if(id==1){
-            //var st = this.getClientesStore();
-            //st.load();
             var edit = Ext.create('Infosys_web.view.estadisticas.BuscarClientes');
-
         };
         
     },

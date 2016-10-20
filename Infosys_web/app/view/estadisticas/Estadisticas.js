@@ -127,19 +127,33 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                             xtype: 'textfield',
                                             itemId: 'valorselector',
                                             fieldLabel: '',
-                                            name: 'id',
+                                            name: 'valorselector',
                                             labelWidth: 50,
                                             width: 250,
-                                            //store: 'TipoComunas',
-                                            //queryMode: 'local',
-                                            //forceSelection: true,
-                                            //displayField: 'nombre',
                                             valueField: 'id',
                                             maxHeight: 25,
                                             listConfig: {
                                                 minWidth: 450
                                             }
                                             
+                                        },{
+                                            xtype: 'textfield',
+                                            itemId: 'idselector',
+                                            fieldLabel: '',
+                                            name: 'idselector',
+                                            labelWidth: 50,
+                                            width: 250,
+                                            maxHeight: 25,
+                                            hidden: true
+                                        },{
+                                            xtype: 'textfield',
+                                            itemId: 'tiposelector',
+                                            fieldLabel: '',
+                                            name: 'tiposelector',
+                                            labelWidth: 50,
+                                            width: 250,
+                                            maxHeight: 25,
+                                            hidden : true                                            
                                         },/*{
                                             xtype: 'combo',
                                             itemId: 'tipoComunaId',
@@ -187,49 +201,61 @@ Ext.define('Infosys_web.view.estadisticas.Estadisticas', {
                                             itemId: 'buscarBtn',
                                             handler: function(){
                                                     
-                                                    response_statics = Ext.Ajax.request({
+                                                    Ext.Ajax.request({
                                                     async: false,
-                                                    url: preurl + 'estadisticas/ventas'});
-                                                    obj_statics = Ext.decode(response_statics.responseText);
+                                                    url: preurl + 'estadisticas/ventas',
+                                                    params: {
+                                                        idselector: me.down('#idselector').getValue(),
+                                                        tiposelector: me.down('#tiposelector').getValue()
+                                                    },
+                                                   success: function(response_statics, opts) {
+                                                        obj_statics = Ext.decode(response_statics.responseText);
 
-                                                    me.down('#enero1Id').setValue(obj_statics.vmes1);
-                                                    me.down('#febrero1Id').setValue(obj_statics.vmes2);
-                                                    me.down('#marzo1Id').setValue(obj_statics.vmes3);
-                                                    me.down('#abril1Id').setValue(obj_statics.vmes4);
-                                                    me.down('#mayo1Id').setValue(obj_statics.vmes5);
-                                                    me.down('#junio1Id').setValue(obj_statics.vmes6);
-                                                    me.down('#julio1Id').setValue(obj_statics.vmes7);
-                                                    me.down('#agosto1Id').setValue(obj_statics.vmes8);
-                                                    me.down('#septiembre1Id').setValue(obj_statics.vmes9);
-                                                    me.down('#octubre1Id').setValue(obj_statics.vmes10);
-                                                    me.down('#noviembre1Id').setValue(obj_statics.vmes11);
-                                                    me.down('#diciembre1Id').setValue(obj_statics.vmes12);
+                                                        me.down('#enero1Id').setValue(obj_statics.vmes1);
+                                                        me.down('#febrero1Id').setValue(obj_statics.vmes2);
+                                                        me.down('#marzo1Id').setValue(obj_statics.vmes3);
+                                                        me.down('#abril1Id').setValue(obj_statics.vmes4);
+                                                        me.down('#mayo1Id').setValue(obj_statics.vmes5);
+                                                        me.down('#junio1Id').setValue(obj_statics.vmes6);
+                                                        me.down('#julio1Id').setValue(obj_statics.vmes7);
+                                                        me.down('#agosto1Id').setValue(obj_statics.vmes8);
+                                                        me.down('#septiembre1Id').setValue(obj_statics.vmes9);
+                                                        me.down('#octubre1Id').setValue(obj_statics.vmes10);
+                                                        me.down('#noviembre1Id').setValue(obj_statics.vmes11);
+                                                        me.down('#diciembre1Id').setValue(obj_statics.vmes12);
 
-                                                    me.down('#enero2Id').setValue(obj_statics.cmes1);
-                                                    me.down('#febrero2Id').setValue(obj_statics.cmes2);
-                                                    me.down('#marzo2Id').setValue(obj_statics.cmes3);
-                                                    me.down('#abril2Id').setValue(obj_statics.cmes4);
-                                                    me.down('#mayo2Id').setValue(obj_statics.cmes5);
-                                                    me.down('#junio2Id').setValue(obj_statics.cmes6);
-                                                    me.down('#julio2Id').setValue(obj_statics.cmes7);
-                                                    me.down('#agosto2Id').setValue(obj_statics.cmes8);
-                                                    me.down('#septiembre2Id').setValue(obj_statics.cmes9);
-                                                    me.down('#octubre2Id').setValue(obj_statics.cmes10);
-                                                    me.down('#noviembre2Id').setValue(obj_statics.cmes11);
-                                                    me.down('#diciembre2Id').setValue(obj_statics.cmes12);                                                    
+                                                        me.down('#enero2Id').setValue(obj_statics.cmes1);
+                                                        me.down('#febrero2Id').setValue(obj_statics.cmes2);
+                                                        me.down('#marzo2Id').setValue(obj_statics.cmes3);
+                                                        me.down('#abril2Id').setValue(obj_statics.cmes4);
+                                                        me.down('#mayo2Id').setValue(obj_statics.cmes5);
+                                                        me.down('#junio2Id').setValue(obj_statics.cmes6);
+                                                        me.down('#julio2Id').setValue(obj_statics.cmes7);
+                                                        me.down('#agosto2Id').setValue(obj_statics.cmes8);
+                                                        me.down('#septiembre2Id').setValue(obj_statics.cmes9);
+                                                        me.down('#octubre2Id').setValue(obj_statics.cmes10);
+                                                        me.down('#noviembre2Id').setValue(obj_statics.cmes11);
+                                                        me.down('#diciembre2Id').setValue(obj_statics.cmes12);                                                    
 
-                                                    me.down('#enero3Id').setValue(obj_statics.dmes1);
-                                                    me.down('#febrero3Id').setValue(obj_statics.dmes2);
-                                                    me.down('#marzo3Id').setValue(obj_statics.dmes3);
-                                                    me.down('#abril3Id').setValue(obj_statics.dmes4);
-                                                    me.down('#mayo3Id').setValue(obj_statics.dmes5);
-                                                    me.down('#junio3Id').setValue(obj_statics.dmes6);
-                                                    me.down('#julio3Id').setValue(obj_statics.dmes7);
-                                                    me.down('#agosto3Id').setValue(obj_statics.dmes8);
-                                                    me.down('#septiembre3Id').setValue(obj_statics.dmes9);
-                                                    me.down('#octubre3Id').setValue(obj_statics.dmes10);
-                                                    me.down('#noviembre3Id').setValue(obj_statics.dmes11);
-                                                    me.down('#diciembre3Id').setValue(obj_statics.dmes12);                                                    
+                                                        me.down('#enero3Id').setValue(obj_statics.dmes1);
+                                                        me.down('#febrero3Id').setValue(obj_statics.dmes2);
+                                                        me.down('#marzo3Id').setValue(obj_statics.dmes3);
+                                                        me.down('#abril3Id').setValue(obj_statics.dmes4);
+                                                        me.down('#mayo3Id').setValue(obj_statics.dmes5);
+                                                        me.down('#junio3Id').setValue(obj_statics.dmes6);
+                                                        me.down('#julio3Id').setValue(obj_statics.dmes7);
+                                                        me.down('#agosto3Id').setValue(obj_statics.dmes8);
+                                                        me.down('#septiembre3Id').setValue(obj_statics.dmes9);
+                                                        me.down('#octubre3Id').setValue(obj_statics.dmes10);
+                                                        me.down('#noviembre3Id').setValue(obj_statics.dmes11);
+                                                        me.down('#diciembre3Id').setValue(obj_statics.dmes12);    
+                                                   },
+                                                   failure: function(response, opts) {
+                                                      console.log('server-side failure with status code ' + response.status);
+                                                   }
+                                                });
+
+                                                
 
                                                     //Ext.Msg.alert('Atención', obj_email.message);
                                                     //Ext.Msg.alert('Atención', "Email enviado. Favor verificar casilla de correos");

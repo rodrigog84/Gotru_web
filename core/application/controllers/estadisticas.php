@@ -15,10 +15,52 @@ class Estadisticas extends CI_Controller {
 
 	 public function ventas(){
 
-	 	$query = $this->db->query("select month(fecha_factura) as mes, sum(neto) as suma from factura_clientes
-						 where year(fecha_factura) = '2016'
-						 group by month(fecha_factura)
-						 order by month(fecha_factura)");
+
+	 	$anno = '2016';
+	 	$idselector = $this->input->post('idselector');
+	 	$tiposelector = $this->input->post('tiposelector');
+
+	 	if($tiposelector == 'cliente'){
+
+	 		$sql1 = "select month(fecha_factura) as mes, sum(neto) as suma from factura_clientes
+							 where year(fecha_factura) = '" . $anno . "' and id_cliente = '" . $idselector . "'
+							 group by month(fecha_factura)
+							 order by month(fecha_factura)";
+
+			$sql2 = "select month(fecha_factura) as mes, sum(precio_costo) as suma from(
+											select id, sum(precio_costo) as precio_costo, fecha_factura	from					 
+											(select fc.id, fc.num_factura, fc.fecha_factura, p.id as idproducto, dfc.cantidad, p.p_costo, (dfc.cantidad*p.p_costo) as precio_costo from factura_clientes fc
+											inner join detalle_factura_cliente dfc on fc.id = dfc.id_factura
+											inner join productos p on dfc.id_producto = p.id
+											where year(fc.fecha_factura) = '" . $anno ."'  and id_cliente = '" . $idselector . "') as tmp
+											group by id) as tmp
+											group by month(fecha_factura)
+											order by month(fecha_factura)";	
+
+	 	}else{
+
+	 		$sql1 = "select month(fecha_factura) as mes, sum(neto) as suma from factura_clientes
+							 where year(fecha_factura) = '" . $anno . "'
+							 group by month(fecha_factura)
+							 order by month(fecha_factura)";
+
+
+			$sql2 = "select month(fecha_factura) as mes, sum(precio_costo) as suma from(
+											select id, sum(precio_costo) as precio_costo, fecha_factura	from					 
+											(select fc.id, fc.num_factura, fc.fecha_factura, p.id as idproducto, dfc.cantidad, p.p_costo, (dfc.cantidad*p.p_costo) as precio_costo from factura_clientes fc
+											inner join detalle_factura_cliente dfc on fc.id = dfc.id_factura
+											inner join productos p on dfc.id_producto = p.id
+											where year(fc.fecha_factura) = '" . $anno ."') as tmp
+											group by id) as tmp
+											group by month(fecha_factura)
+											order by month(fecha_factura)";							 
+
+
+	 	}
+
+
+		 $query = $this->db->query($sql1);
+
 	 	$resultado = $query->result();
 	 	$array_meses = array();
 
@@ -39,15 +81,7 @@ class Estadisticas extends CI_Controller {
 	 	}
 
 
-	 	$query = $this->db->query("select month(fecha_factura) as mes, sum(precio_costo) as suma from(
-								select id, sum(precio_costo) as precio_costo, fecha_factura	from					 
-								(select fc.id, fc.num_factura, fc.fecha_factura, p.id as idproducto, dfc.cantidad, p.p_costo, (dfc.cantidad*p.p_costo) as precio_costo from factura_clientes fc
-								inner join detalle_factura_cliente dfc on fc.id = dfc.id_factura
-								inner join productos p on dfc.id_producto = p.id
-								where year(fc.fecha_factura) = '2016') as tmp
-								group by id) as tmp
-								group by month(fecha_factura)
-								order by month(fecha_factura)");
+	 	$query = $this->db->query($sql2);
 	 	$resultado = $query->result();
 
 	 	$array_meses["cmes1"] = 0;
