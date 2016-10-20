@@ -118,16 +118,16 @@ Ext.define('Infosys_web.view.facturaelectronica.LibroCompraVenta' ,{
                                 var form = this.up('form').getForm();
                                 if(form.isValid()){
                                     form.submit({
-                                        url: preurl + 'facturas/genera_libro',
+                                        url: preurl + 'facturas/programa_genera_libro',
                                         //standardSubmit: true,//true, <---------
                                         waitMsg: 'Generando XML Libro...',
                                         success: function(fp, o) {
                                             Ext.Msg.alert('Atención', o.result.message);
 
-                                            if(o.result.valido){
+                                           /* if(o.result.valido){
                                                 // muestra archivo generado
                                                 window.open(gbl_site + 'core/facturacion_electronica/libros/' + o.result.nombre_archivo,'_blank');
-                                            }
+                                            }*/
                                             // borra archivo generado
                                             /*Ext.Ajax.request({
                                             async: false,

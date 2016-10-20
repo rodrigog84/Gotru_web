@@ -70,6 +70,24 @@ class Facturas extends CI_Controller {
         echo json_encode($resp);
 	}	
 
+
+	public function get_libros_pendientes(){
+
+		$this->load->model('facturaelectronica');
+		$datos_contribuyentes = $this->facturaelectronica->log_libros(NULL,NULL,'P');
+
+		$data = array();
+		$i = 1;
+		foreach($datos_contribuyentes['data'] as $data_contribuyentes){
+			$data_contribuyentes->mes = month2string($data_contribuyentes->mes);
+			$data_contribuyentes->nro = $i;
+			$data[] = $data_contribuyentes;
+			$i++;
+		}
+
+        echo json_encode($data);
+	}		
+
 	public function get_proveedores_mail(){
 		$this->db->select('c.id, c.nombres as proveedor')
 		  ->from('clientes c')
@@ -149,8 +167,7 @@ class Facturas extends CI_Controller {
 	}
 
 
-
-	public function genera_libro(){
+	public function programa_genera_libro(){
 
 		// respuesta en texto plano
 		header('Content-type: text/plain; charset=ISO-8859-1');
@@ -159,6 +176,62 @@ class Facturas extends CI_Controller {
 		$mes = $this->input->post('mes');
 		$anno = $this->input->post('anno');
 
+		$this->load->model('facturaelectronica');
+		$existe = $this->facturaelectronica->valida_existe_libro($mes,$anno,$tipo_libro);
+
+		// LIBRO YA FUE EMITIDO
+		if($existe){
+
+			$result['success'] = true;
+			$result['valido'] = false;
+			$result['message'] = $tipo_libro == "COMPRA" ? "Libro de Compras ya existe o será generado a la brevedad" : "Libro de Ventas ya existe o será generado a la brevedad";
+			echo json_encode($result);
+			exit;
+		}
+
+
+		if($tipo_libro == 'VENTA'){
+			$lista_facturas = $this->facturaelectronica->datos_dte_periodo($mes,$anno);
+		}else{ // COMPRAS
+			$lista_facturas = $this->facturaelectronica->datos_dte_proveedores_periodo($mes,$anno);
+		}
+
+
+		//NO TIENE MOVIMIENTOS
+		if(count($lista_facturas) == 0){
+
+			$result['success'] = true;
+			$result['valido'] = false;
+			$result['message'] = "No existen movimientos";
+			echo json_encode($result);
+			exit;
+		}
+
+		$existe = $this->facturaelectronica->put_log_libros($mes,$anno,$tipo_libro,'');
+
+		$result['success'] = true;
+		$result['valido'] = true;
+		$result['message'] = $tipo_libro == "COMPRA" ? "Libro de Compras se generará a la brevedad" : "Libro de Ventas se generará a la brevedad";
+		//$result['nombre_archivo'] = $nombre_archivo;
+
+		echo json_encode($result);
+
+	}	
+
+
+	public function genera_libro(){
+
+		// respuesta en texto plano
+		set_time_limit(0);
+		header('Content-type: text/plain; charset=ISO-8859-1');
+
+		$tipo_libro = $this->input->post('tipo_libro') == 'compras' ? 'COMPRA' : 'VENTA';
+		$mes = $this->input->post('mes');
+		$anno = $this->input->post('anno');
+
+		$tipo_libro = "VENTA";
+		$mes = "09";
+		$anno = "2016";
 		$this->load->model('facturaelectronica');
 
 		$existe = $this->facturaelectronica->valida_existe_libro($mes,$anno,$tipo_libro);
@@ -233,14 +306,17 @@ class Facturas extends CI_Controller {
 
 
 		// generar cada DTE y agregar su resumen al detalle del libro
-		foreach ($lista_facturas as $factura) {
-			$EnvioDte = new \sasco\LibreDTE\Sii\EnvioDte();
-			$EnvioDte->loadXML($factura->dte);
-			$Documentos = $EnvioDte->getDocumentos();
-			$Documento = $Documentos[0];
-		    $LibroCompraVenta->agregar($Documento->getResumen(), false); // agregar detalle sin normalizar
-		}
 
+		foreach ($lista_facturas as $factura) {
+			if($factura->dte != ''){ # SOLO CONSIDERA CAMPO DTE.  
+				$EnvioDte = new \sasco\LibreDTE\Sii\EnvioDte();
+				$EnvioDte->loadXML($factura->dte);
+				$Documentos = $EnvioDte->getDocumentos();
+				$Documento = $Documentos[0];
+			    $LibroCompraVenta->agregar($Documento->getResumen(), false); // agregar detalle sin normalizar
+		    }
+		}
+		
 		// enviar libro de ventas y mostrar resultado del envío: track id o bien =false si hubo error
 		$LibroCompraVenta->setCaratula($caratula);
 		$LibroCompraVenta->setFirma($Firma);
