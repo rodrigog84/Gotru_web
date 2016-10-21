@@ -107,7 +107,7 @@ class Facturaelectronica extends CI_Model
 	 public function log_libros($start = null,$limit = null,$estado = null){
 
 	 	$countAll = $this->db->count_all_results('log_libros');
-		$data = $this->db->select('id, mes, anno, tipo_libro, archivo, date_format(fecha_solicita,"%d/%m/%Y %H:%i:%s") as fecha_solicita, date_format(fecha_procesa,"%d/%m/%Y") as fecha_creacion',false)
+		$data = $this->db->select('id, mes, anno, tipo_libro, archivo, date_format(fecha_solicita,"%d/%m/%Y %H:%i:%s") as fecha_solicita, date_format(fecha_procesa,"%d/%m/%Y %H:%i:%s") as fecha_creacion, estado',false)
 		  ->from('log_libros')
 		  ->order_by('anno','desc')
 		  ->order_by('mes','desc');
@@ -160,6 +160,27 @@ class Facturaelectronica extends CI_Model
 		  ->where('tipo_libro',$tipo);
 		$query = $this->db->get();
 		return count($query->result()) > 0 ? true : false;
+	}
+
+
+
+
+
+	public function genera_libro($id_libro,$tipo,$archivo){
+		$array_update = array(
+					'estado' => 'G',
+					'fecha_procesa' => date("Y-m-d H:i:s"),
+					'archivo' => $archivo
+					);
+
+	    $this->db->where('id', $id_libro);
+		$this->db->update('log_libros',$array_update); 
+
+
+
+
+		//$this->db->insert('log_libros',$array_insert); 
+		return true;
 	}
 
 

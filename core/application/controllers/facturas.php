@@ -57,10 +57,13 @@ class Facturas extends CI_Controller {
 		$datos_contribuyentes = $this->facturaelectronica->log_libros($start,$limit);
 
 		$data = array();
+		$nro = 1;
 		foreach($datos_contribuyentes['data'] as $data_contribuyentes){
 			$data_contribuyentes->mes = month2string($data_contribuyentes->mes);
 			$data[] = $data_contribuyentes;
-
+			$data_contribuyentes->estado = $data_contribuyentes->estado == 'P' ? 'Pendiente' : 'Generado';
+			$data_contribuyentes->nro = $nro;
+			$nro++;
 		}
 
         $resp['success'] = true;
@@ -168,9 +171,6 @@ class Facturas extends CI_Controller {
 
 
 	public function programa_genera_libro(){
-
-		// respuesta en texto plano
-		header('Content-type: text/plain; charset=ISO-8859-1');
 
 		$tipo_libro = $this->input->post('tipo_libro') == 'compras' ? 'COMPRA' : 'VENTA';
 		$mes = $this->input->post('mes');
