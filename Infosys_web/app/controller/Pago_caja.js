@@ -1165,7 +1165,8 @@ Ext.define('Infosys_web.controller.Pago_caja', {
 
             }            
                 }); 
-            //this.validarut();          
+            //this.validarut();
+            view.down("#codigoId").focus();          
     },
 
     cerrarcajaventa: function(){
