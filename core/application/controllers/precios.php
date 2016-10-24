@@ -37,6 +37,7 @@ class Precios extends CI_Controller {
 	public function actualiza(){
 
 		$resp = array();
+		set_time_limit(0);
 		$idlista = $this->input->post('idlista');
 		$margen = $this->input->post('margen');
 
@@ -165,6 +166,8 @@ class Precios extends CI_Controller {
 	public function update(){
 
 		$resp = array();
+		set_time_limit(0);
+
 
 		$fecha = $this->input->post('fecha');
 		$numero = $this->input->post('numero');
@@ -201,6 +204,7 @@ class Precios extends CI_Controller {
 
 		$this->db->insert('detalle_lista_precios', $detalleprecios); 
 		};
+
 
 		$resp['success'] = true;
 		$resp['lista']=$uno;

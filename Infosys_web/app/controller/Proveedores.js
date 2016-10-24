@@ -209,7 +209,7 @@ Ext.define('Infosys_web.controller.Proveedores', {
         var email = viewIngresa.down('#emailId').getValue();
         var contacto = viewIngresa.down('#contactoId').getValue();
         var fono = viewIngresa.down('#fonoId').getValue();
-
+        
         Ext.Ajax.request({
             url: preurl + 'sucursales_clientes/save',
             params: {

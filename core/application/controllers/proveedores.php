@@ -111,7 +111,8 @@ public function validaRut(){
 		$data = array(
 	        'nombres' => strtoupper($data->nombres),
 	        'id_giro' => $data->id_giro,
-	        'fono' => $data->fono,			
+	        'fono' => $data->fono,
+	        'celular' => $data->celular,			
 	        'direccion' => strtoupper($data->direccion),
 	        'id_ciudad' => $data->id_ciudad,
 	        'id_comuna' => $data->id_comuna,
@@ -145,6 +146,7 @@ public function validaRut(){
 		$comuna = $this->input->post('comuna');		
 		$giro = $this->input->post('giro');
 		$fono = $this->input->post('fono');
+		$celular = $this->input->post('celular');
 		$fechaincorporacion = $this->input->post('fechaincorporacion');
 		$fechaactualiza = $this->input->post('fechaactualiza');
 		$estado = $this->input->post('estado');
@@ -159,7 +161,8 @@ public function validaRut(){
 		$data = array(
 			'nombres' => strtoupper($nombres),
 	        'id_giro' => $giro,
-	        'fono' => $fono,			
+	        'fono' => $fono,
+	        'celular' => $celular,			
 	        'direccion' => strtoupper($direccion),
 	        'e_mail' => $mail,
 	        'id_ciudad' => $ciudad,

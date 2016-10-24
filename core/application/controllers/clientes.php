@@ -134,7 +134,8 @@ class Clientes extends CI_Controller {
 	        'nombres' => strtoupper($data->nombres),
 	        'sigla' => strtoupper($data->sigla),
 	        'id_giro' => $data->id_giro,
-	        'fono' => $data->fono,			
+	        'fono' => $data->fono,
+	        'celular' => $data->celular,			
 	        'direccion' => strtoupper($data->direccion),
 	        'id_ciudad' => $data->id_ciudad,
 	        'id_comuna' => $data->id_comuna,
@@ -179,6 +180,7 @@ class Clientes extends CI_Controller {
 		$comuna = $this->input->post('comuna');		
 		$giro = $this->input->post('giro');
 		$fono = $this->input->post('fono');
+		$celular = $this->input->post('celular');
 		$mail = $this->input->post('mail');
 		$idsector = $this->input->post('sector');
 		$vendedor = $this->input->post('vendedor');
@@ -200,7 +202,8 @@ class Clientes extends CI_Controller {
 			'nombres' => strtoupper($nombres),
 			'sigla' => strtoupper($sigla),
 	        'id_giro' => $giro,
-	        'fono' => $fono,			
+	        'fono' => $fono,
+	        'celular' => $celular,			
 	        'direccion' => strtoupper($direccion),
 	        'id_ciudad' => $ciudad,
 	        'id_comuna' => $comuna,
