@@ -37,6 +37,7 @@ Ext.define('Infosys_web.controller.Facturacion', {
              'facturaelectronica.RegistroEmpresa',
              'facturaelectronica.verEstadoDte',
              'facturaelectronica.verEstadoEnvio',
+             'facturaelectronica.verEstadoEnvioLibro',
              'facturaelectronica.DteProveedorPrincipal',
              'facturaelectronica.CargaDteProveedor',
              'facturaelectronica.LibroCompraVenta',
@@ -410,7 +411,9 @@ cargar_listado_contribuyentes: function(){
         }else if(t == 5){
              url = preurl + 'facturas/ver_dte/'+r.data.id+'/cliente',
              window.open(url,'_blank');   
-         }           
+         }else if(t == 6){
+            Ext.create('Infosys_web.view.facturaelectronica.verEstadoEnvioLibro', {idlibro: r.data.id});                          
+        }           
     },
 
 

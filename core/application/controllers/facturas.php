@@ -117,6 +117,20 @@ class Facturas extends CI_Controller {
 	}	
 
 
+
+	public function put_trackid_libro(){
+		$trackid = $this->input->post('trackid');
+		$idlibro = $this->input->post('idlibro');
+		$this->load->model('facturaelectronica');
+		$this->facturaelectronica->put_trackid_libro($idlibro,$trackid);
+
+		$result['success'] = true;
+		$result['message'] = "Identificador de Envío actualizado correctamente";
+		echo json_encode($result);		
+
+	}
+
+
 	public function envio_mail_dte(){
 		$idfactura = $this->input->post('idfactura');
 		$this->load->model('facturaelectronica');
@@ -419,6 +433,73 @@ exit;*/
 	}
 
 
+
+	public function envio_libro_sii(){
+		$idlibro = $this->input->post('idlibro');
+		$this->load->model('facturaelectronica');
+		$libro = $this->facturaelectronica->get_libro_by_id($idlibro);
+		$config = $this->facturaelectronica->genera_config();
+		include $this->facturaelectronica->ruta_libredte();
+
+		$token = \sasco\LibreDTE\Sii\Autenticacion::getToken($config['firma']);
+		if (!$token) {
+		    foreach (\sasco\LibreDTE\Log::readAll() as $error){
+		    	$result['error'] = true;
+
+		    }
+		    $result['message'] = "Error de conexión con SII";		   
+		   	echo json_encode($result);
+		    exit;
+		}
+
+	
+		$Firma = new \sasco\LibreDTE\FirmaElectronica($config['firma']); //lectura de certificado digital
+		$rut = $Firma->getId(); 
+		$rut_consultante = explode("-",$rut);
+		$RutEnvia = $rut_consultante[0]."-".$rut_consultante[1];
+
+		$xml = $libro->xml_libro;
+
+		$empresa = $this->facturaelectronica->get_empresa();
+		$RutEmisor = $empresa->rut."-".$empresa->dv; 
+
+		// enviar DTE
+		$result_envio = \sasco\LibreDTE\Sii::enviar($RutEnvia, $RutEmisor, $xml, $token);
+
+		// si hubo algún error al enviar al servidor mostrar
+		if ($result_envio===false) {
+		    foreach (\sasco\LibreDTE\Log::readAll() as $error){
+		        $result['error'] = true;
+		    }
+		    $result['message'] = "Error de envío de DTE";		   
+		   	echo json_encode($result);
+		    exit;
+		}
+
+		// Mostrar resultado del envío
+		if ($result_envio->STATUS!='0') {
+		    foreach (\sasco\LibreDTE\Log::readAll() as $error){
+				$result['error'] = true;
+		    }
+		    $result['message'] = "Error de envío de DTE";		   
+		   	echo json_encode($result);
+		    exit;
+		}
+
+
+		$track_id = 0;
+		$track_id = (int)$result_envio->TRACKID;
+	    $this->db->where('id', $libro->id);
+		$this->db->update('log_libros',array('trackid' => $track_id)); 
+
+
+		$result['success'] = true;
+		$result['message'] = $track_id != 0 ? "Libro enviado correctamente" : "Error en env&iacute;o de Libro";
+		$result['trackid'] = $track_id;
+		echo json_encode($result);
+	}
+
+
 	public function envio_sii(){
 		$idfactura = $this->input->post('idfactura');
 		$this->load->model('facturaelectronica');
@@ -537,6 +618,54 @@ exit;*/
 	}	
 
 
+
+	public function estado_envio_libro($idlibro){
+		$this->load->model('facturaelectronica');
+		$libro = $this->facturaelectronica->get_libro_by_id($idlibro);
+
+		$config = $this->facturaelectronica->genera_config();
+		include $this->facturaelectronica->ruta_libredte();
+		$empresa = $this->facturaelectronica->get_empresa();
+
+		$result = array();
+		$result['error'] = false;
+		$result['codigo'] = "";
+		$result['glosa'] = "";
+
+		$token = \sasco\LibreDTE\Sii\Autenticacion::getToken($config['firma']);
+		if (!$token) {
+		    foreach (\sasco\LibreDTE\Log::readAll() as $error){
+		    	$result['error'] = true;
+
+		    }
+		    $result['message'] = "Error de conexión con SII";		   
+		   	echo json_encode($result);
+		    exit;
+		}
+
+		// consultar estado enviado
+		$rut = $empresa->rut;
+		$dv = $empresa->dv;
+		$trackID = $libro->trackid; // se obtiene al enviar un dte  $track_id = $EnvioDTE->enviar();
+		$estado = \sasco\LibreDTE\Sii::request('QueryEstUp', 'getEstUp', [$rut, $dv, $trackID, $token]);
+		// si el estado se pudo recuperar se muestra estado y glosa
+		if ($estado!==false) {
+	    	$result['error'] = false;
+	    	$result['codigo'] = (string)$estado->xpath('/SII:RESPUESTA/SII:RESP_HDR/ESTADO')[0];			
+	    	$result['glosa'] = (string)$estado->xpath('/SII:RESPUESTA/SII:RESP_HDR/ESTADO')[0] != -11 ? (string)$estado->xpath('/SII:RESPUESTA/SII:RESP_HDR/GLOSA')[0] : "Trackid Err&oacute;neo";			
+	    	echo json_encode($result);
+	    	exit;
+		}
+
+		// mostrar error si hubo
+		foreach (\sasco\LibreDTE\Log::readAll() as $error){
+	    	$result['error'] = true;
+	    	$result['message'] = "Error de conexión con SII";
+		}
+		echo json_encode($result);
+		exit;
+	}	
+
 	public function estado_dte($idfactura){
 		$this->load->model('facturaelectronica');
 		$datos_dte = $this->facturaelectronica->datos_dte($idfactura);
@@ -619,6 +748,15 @@ exit;*/
 		$datos = $this->facturaelectronica->datos_dte($idfactura);
 		$empresa_factura = $this->facturaelectronica->get_empresa_factura($idfactura);
 		$datos->e_mail = $empresa_factura->e_mail;
+		echo json_encode($datos);
+	}		
+
+
+	public function datos_libro_json($idlibro){
+		$this->load->model('facturaelectronica');
+		$data = array();
+		$datos = $this->facturaelectronica->get_libro_by_id($idlibro);
+		$datos->mes = month2string($datos->mes);
 		echo json_encode($datos);
 	}		
 

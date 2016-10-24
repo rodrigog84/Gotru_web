@@ -132,7 +132,7 @@ class Procesos extends CI_Controller {
 			fwrite($f_nombre_archivo,$xml_libro);
 			fclose($f_nombre_archivo);
 
-			$existe = $this->facturaelectronica->genera_libro($id_libro,$tipo_libro,$nombre_archivo);
+			$existe = $this->facturaelectronica->genera_libro($id_libro,$tipo_libro,$nombre_archivo,$xml_libro);
 
 			$result['success'] = true;
 			$result['valido'] = true;

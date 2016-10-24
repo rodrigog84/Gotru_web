@@ -86,7 +86,14 @@ class Facturaelectronica extends CI_Model
 		  $this->db->where('idfactura',$idfactura);
 		  $this->db->update('folios_caf',array('trackid' => $trackid));
 		return 1;
-	 }		 
+	 }	
+
+
+	 public function put_trackid_libro($idlibro,$trackid){
+		  $this->db->where('id',$idlibro);
+		  $this->db->update('log_libros',array('trackid' => $trackid));
+		return 1;
+	 }		 	 
 
 	 public function contribuyentes_autorizados($start = null,$limit = null){
 
@@ -166,11 +173,12 @@ class Facturaelectronica extends CI_Model
 
 
 
-	public function genera_libro($id_libro,$tipo,$archivo){
+	public function genera_libro($id_libro,$tipo,$archivo,$xml_libro){
 		$array_update = array(
 					'estado' => 'G',
 					'fecha_procesa' => date("Y-m-d H:i:s"),
-					'archivo' => $archivo
+					'archivo' => $archivo,
+					'xml_libro' => $xml_libro
 					);
 
 	    $this->db->where('id', $id_libro);
@@ -190,6 +198,7 @@ class Facturaelectronica extends CI_Model
 						'mes' => $mes,
 						'anno' => $anno,
 						'tipo_libro' => $tipo,
+						'trackid' => 0,
 						'fecha_solicita' => date("Y-m-d H:i:s"),
 						'archivo' => $archivo
 						);
@@ -267,7 +276,7 @@ class Facturaelectronica extends CI_Model
 
 
 	public function get_libro_by_id($idlibro){
-		$this->db->select('id, mes, anno, tipo_libro, archivo, created_at ')
+		$this->db->select('id, mes, anno, tipo_libro, archivo, date_format(fecha_solicita,"%d/%m/%Y %H:%i:%s") as fecha_solicita, date_format(fecha_procesa,"%d/%m/%Y %H:%i:%s") as fecha_creacion, estado, trackid, xml_libro, created_at',false)
 		  ->from('log_libros')
 		  ->where('id',$idlibro);
 		$query = $this->db->get();

@@ -75,6 +75,30 @@ Ext.define('Infosys_web.view.facturaelectronica.HistLibroCompraVenta' ,{
                     }
                 }                  
             }]
+    },{
+            header: "Env&iacute;o SII",
+            xtype:'actioncolumn',
+            width:70,
+            align: 'center',
+            items: [{
+                iconCls: 'icon-upload',  // Use a URL in the icon config
+                tooltip: 'Ver Estado Env&iacute;o',
+                handler: function(grid, rowIndex, colIndex) {
+                    var rec = grid.getStore().getAt(rowIndex);
+                    //salert("Edit " + rec.get('firstname'));
+                    var vista = this.up('histlibrocompraventa');
+                    vista.fireEvent('verEstadoDte',rec,6)
+                },
+                isDisabled: function(view, rowIndex, colIndex, item, record) {
+                    // Returns true if 'editable' is false (, null, or undefined)
+                    if(record.get('estado') == 'Pendiente'){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }                
+            }]     
+        
     }],
     
     initComponent: function() {
