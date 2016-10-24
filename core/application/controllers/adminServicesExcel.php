@@ -9,7 +9,14 @@ class AdminServicesExcel extends CI_Controller {
 
         header("Content-disposition: attachment; filename=facturacion.txt");
 
-                  
+        $fecha = $this->input->get('fecha');
+        list($dia, $mes, $anio) = explode("/",$fecha);
+        $fecha3 = $anio ."-". $mes ."-". $dia;
+        $fecha2 = $this->input->get('fecha2');
+        list($dia, $mes, $anio) = explode("/",$fecha2);
+        $fecha4 = $anio ."-". $mes ."-". $dia;
+
+                          
         $data = array();
         $query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, t.descripcion as nomdocumento, con.nombre as nomcondventa, c.id_pago as codigo_con_pago, cob.id as id_cobrador, rep.id as id_repartidor, tip.codigo as cod_tipo_negocio FROM factura_clientes acc
         left join clientes c on (acc.id_cliente = c.id)
@@ -18,7 +25,9 @@ class AdminServicesExcel extends CI_Controller {
         left join repartidor rep on (c.id_repartidor = rep.id)
         left join cobradores cob on (c.id_cobrador = cob.id)
         left join tiponegocio tip on (c.id_tiponegocio = tip.id)        
-        left join vendedores v on (acc.id_vendedor = v.id)'        
+        left join vendedores v on (acc.id_vendedor = v.id)
+        WHERE acc.fecha_factura between "'.$fecha3.'"  AND "'.$fecha4.'"
+        ' 
         );
 
         echo "NUM_DOCUMENTO";

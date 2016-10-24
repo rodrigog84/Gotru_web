@@ -29,6 +29,7 @@ Ext.define('Infosys_web.controller.Facturacion', {
              'ventas.Principalfactura',
              'ventas.BuscarSucursales',
              'ventas.Exportar',
+             'ventas.Exportartxt',
              'ventas.Observaciones',
              'notacredito.Principal',
              'facturaelectronica.CargaCertificadoDigital',
@@ -112,7 +113,13 @@ Ext.define('Infosys_web.controller.Facturacion', {
     },{
         ref: 'estadisticasventas',
         selector: 'estadisticasventas'
-    },
+    },{
+        ref: 'formularioexportartxt',
+        selector: 'formularioexportartxt'
+    }
+
+
+    
 
 
 
@@ -296,6 +303,9 @@ Ext.define('Infosys_web.controller.Facturacion', {
             'facturasingresar #tipoDescuentoId': {
                 change: this.changedctofinal
             },
+            'formularioexportartxt button[action=exporttxtfechas]': {
+                click: this.exporttxtfechas
+            },
             //'facturasingresar #codigoId': {
                 //specialkey: this.buscarproductos
             //}
@@ -303,10 +313,33 @@ Ext.define('Infosys_web.controller.Facturacion', {
     },
 
     exporttxt: function(){
+
+         Ext.create('Infosys_web.view.ventas.Exportartxt').show();
                               
-        window.open(preurl + 'adminServicesExcel/exportarTXT');
+        //window.open(preurl + 'adminServicesExcel/exportarTXT');
        
-    },  
+    },
+
+    exporttxtfechas : function(){
+
+        var view =this.getFormularioexportartxt()
+        var viewnew =this.getFacturasprincipal()
+        var fecha = view.down('#fechaId').getSubmitValue();
+        var opcion = viewnew.down('#tipoSeleccionId').getValue()
+        var nombre = viewnew.down('#nombreId').getSubmitValue();
+        var fecha2 = view.down('#fecha2Id').getSubmitValue();
+                
+        if (fecha > fecha2) {
+        
+               Ext.Msg.alert('Alerta', 'Fechas Incorrectas');
+            return;          
+
+        };
+
+        window.open(preurl + 'adminServicesExcel/exportarTXT?cols='+'&fecha='+fecha+'&fecha2='+fecha2);
+            view.close();
+    },
+
 
     
 
@@ -742,8 +775,7 @@ cargar_listado_contribuyentes: function(){
         var fecha2 = view.down('#fecha2Id').getSubmitValue();
         var opcion = view.down('#tipoId').getSubmitValue();
 
-        console.log(opcion)
-
+        
         if (fecha > fecha2) {
         
                Ext.Msg.alert('Alerta', 'Fechas Incorrectas');
