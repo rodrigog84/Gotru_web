@@ -183,8 +183,8 @@ Ext.define('Infosys_web.view.precios.Editar', {
                                             itemId: 'buscarproc',
                                             maxHeight: 25,
                                             width: 120,
-                                            allowBlank: true,
-                                            action: 'buscarproductos2'
+                                            action: 'buscarproductos2',
+                                            disabled : false
                                         },
                                         {xtype: 'splitter'},{
                                             xtype: 'combo',
@@ -226,8 +226,9 @@ Ext.define('Infosys_web.view.precios.Editar', {
                                             text: 'Agregar',
                                             iconCls: 'icon-plus',
                                             width: 105,
-                                            allowBlank: true,
-                                            action: 'agregarItem2'
+                                            action: 'agregarItem2',
+                                            itemId: 'agregarId',
+                                            disabled : false,
                                         }]
                                     }
 

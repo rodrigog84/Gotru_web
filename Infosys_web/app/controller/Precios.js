@@ -6,8 +6,7 @@ Ext.define('Infosys_web.controller.Precios', {
     stores: ['Precios',
              'precios.Items',
              'Precios2',
-             'productos.Selector2',
-             'Productosbusca'          
+             'productos.Selector2'           
              ],
 
     models: ['Precios',
@@ -54,6 +53,7 @@ Ext.define('Infosys_web.controller.Precios', {
         ref: 'buscarproductosprecios2',
         selector: 'buscarproductosprecios2'
     }
+
   
     ],
     
@@ -94,12 +94,6 @@ Ext.define('Infosys_web.controller.Precios', {
             'buscarproductosprecios button[action=seleccionarproductos]': {
                 click: this.seleccionarproductos
             },
-            'buscarproductosprecios button[action=buscarproprecios]': {
-                click: this.buscarproprecios
-            },
-            'buscarproductosprecios2 button[action=buscarproprecios2]': {
-                click: this.buscarproprecios2
-            },
             'buscarproductosprecios2 button[action=seleccionarproductos2]': {
                 click: this.seleccionarproductos2
             },
@@ -133,63 +127,17 @@ Ext.define('Infosys_web.controller.Precios', {
         });
     },
 
-    buscarproprecios: function(){
-          
-        var viewIngresa = this.getBuscarproductosprecios();        
-        var nombre = view.down('#nombreId').getValue();
-        var idlista = view.down('#listaId').getValue();
-        var opcion = view.down('#tipoSeleccionId').getValue();                
-        
-        var st = this.getProductosfStore()
-        st.proxy.extraParams = {nombre: nombre,
-                                opcion: opcion,
-                                lista: idlista}
-        st.load();
-        
-    },
-
-    buscarproprecios2: function(){
-          
-        var viewIngresa = this.getBuscarproductosprecios2();        
-        var nombre = viewIngresa.down('#nombreId').getValue();
-        var idlista = viewIngresa.down('#listaId').getValue();
-        var opcion = viewIngresa.down('#tipoSeleccionId').getValue();       
-        var st = this.getProductosbuscaStore()
-        st.proxy.extraParams = {nombre: nombre,
-                                opcion: opcion,
-                                lista: idlista}
-        st.load();
-        
-    },
-
-    buscarproductos: function(){
-
-        var view = this.getPrecioseditar();
-        console.log("llegamos")
-        var viewedit = Ext.create('Infosys_web.view.precios.BuscarProductos').show();
-        var idlista = view.down('#idId').getValue();
-        viewedit.down('#listaId').setValue(idlista);            
-
-    },
-
-    buscarproprecios: function(){
-
-        var view = this.getBuscarproductosprecios();
-       
-        st.proxy.extraParams = {nombre : nombre,
-                                opcion : opcion}
-        st.load();
-    },
-
     recalcularprecios: function(){
 
         var viewIngresa = this.getPrecioseditar();
         var bolEnable = true;
-        viewIngresa.down('#actualizapId').setDisabled(bolEnable);
         viewIngresa.down('#grabarprecios').setDisabled(bolEnable);
+        viewIngresa.down('#actualizapId').setDisabled(bolEnable);
+        viewIngresa.down('#buscarproc').setDisabled(bolEnable);   
+        viewIngresa.down('#agregarId').setDisabled(bolEnable);
         var margen = viewIngresa.down('#margenId').getValue();
         var idlista = viewIngresa.down('#idId').getValue();
-        var stp = this.getPreciosStore();    
+        var stp = this.getPreciosStore();
         
         
         Ext.Ajax.request({
@@ -309,6 +257,7 @@ Ext.define('Infosys_web.controller.Precios', {
 
         var view = this.getEliminar();
         var st = this.getPreciosStore();
+         
         Ext.Ajax.request({
             url: preurl + 'precios/actualiza',
             waitMsg: 'Actualizando...',
@@ -347,8 +296,6 @@ Ext.define('Infosys_web.controller.Precios', {
     grabareditar: function() {
 
         var viewIngresa = this.getPrecioseditar();
-        var bolEnable = true;
-        viewIngresa.down('#grabarprecios').setDisabled(bolEnable);
         var numero = viewIngresa.down('#numeroId').getValue();
         var nombre = viewIngresa.down('#nombreId').getValue();        
         var fecha = viewIngresa.down('#fechaId').getValue();
@@ -386,8 +333,6 @@ Ext.define('Infosys_web.controller.Precios', {
     grabaringreso: function() {
 
         var viewIngresa = this.getPreciosingresar();
-        var bolEnable = true;
-        viewIngresa.down('#grabarprecios').setDisabled(bolEnable);
         var numero = viewIngresa.down('#numeroId').getValue();
         var nombre = viewIngresa.down('#nombreId').getValue();        
         var fecha = viewIngresa.down('#fechaId').getValue();
@@ -458,19 +403,14 @@ Ext.define('Infosys_web.controller.Precios', {
         }
     },
 
-    
+    buscarproductos: function(){
+
+        Ext.create('Infosys_web.view.precios.BuscarProductos').show();
+    },
 
     buscarproductos2: function(){
 
-        var view = this.getPrecioseditar();
-        var viewedit = Ext.create('Infosys_web.view.precios.BuscarProductos2').show();
-        var idlista = view.down('#idId').getValue();
-        viewedit.down('#listaId').setValue(idlista);
-        var stItem = this.getProductosbuscaStore();
-        stItem.proxy.extraParams = {lista: idlista}
-        stItem.load();
-
-       
+        Ext.create('Infosys_web.view.precios.BuscarProductos2').show();
     },
 
     eliminaritem: function() {
