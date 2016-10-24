@@ -57,6 +57,11 @@ Ext.define('Infosys_web.view.clientes.Principal' ,{
         dataIndex: 'fono',
          hidden: true
     },{
+        header: "Celular",
+        flex: 1,
+        dataIndex: 'celular',
+         hidden: true
+    },{
         header: "E-Mail",
         flex: 1,
         dataIndex: 'e_mail',

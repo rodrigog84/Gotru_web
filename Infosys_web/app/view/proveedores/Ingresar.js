@@ -129,6 +129,11 @@ Ext.define('Infosys_web.view.proveedores.Ingresar', {
                         fieldLabel: 'Telefono'
                     },{
                         xtype: 'textfield',
+                        name : 'celular',
+                        itemId: 'celularId',
+                        fieldLabel: 'Celular'
+                    },{
+                        xtype: 'textfield',
                         name : 'e_mail',
                         itemId: 'e_mailId',
                         fieldLabel: 'E-Mail'

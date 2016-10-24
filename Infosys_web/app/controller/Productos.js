@@ -340,10 +340,12 @@ Ext.define('Infosys_web.controller.Productos', {
         var iddescuento = view.down('#DescuentoproId').getValue();
         var bolEnable = true;
         
-        var neto = ((cantidad * precio) - descuento);
-        var total  = ((neto * 1.19));
+        var tot = ((cantidad * precio) - descuento);
+        var neto = (Math.round(tot / 1.19));
         var exists = 0;
-        var iva = (total - neto);
+        var iva = (tot - neto);
+        var neto = (tot - iva);
+        var total = (neto + iva );
         
         if(!producto){
             

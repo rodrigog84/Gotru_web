@@ -109,7 +109,7 @@ Ext.define('Infosys_web.view.precios.Editar', {
                                             fieldCls: 'required',
                                             maxHeight: 25,
                                             width: 160,
-                                            labelWidth: 60,
+                                            labelWidth: 85,
                                             allowBlank: false,
                                             name: 'margen',
                                             itemId: 'margenId',
@@ -122,8 +122,10 @@ Ext.define('Infosys_web.view.precios.Editar', {
                                             itemId: 'buscarproc',
                                             maxHeight: 25,
                                             width: 120,
-                                            allowBlank: true,
-                                            action: 'actualizarproductos'
+                                            //allowBlank: true,
+                                            action: 'actualizarproductos',
+                                            itemId: 'actualizapId',
+                                            disabled : false,
                                         }
                                     ]
                                 },{
@@ -284,7 +286,9 @@ Ext.define('Infosys_web.view.precios.Editar', {
                             iconCls: 'icon-save',
                             scale: 'large',
                             action: 'grabareditar',
-                            text: 'Grabar'
+                            text: 'Grabar',
+                            itemId: 'grabarprecios',
+                            disabled : false,
                         }
                     ]
                 }

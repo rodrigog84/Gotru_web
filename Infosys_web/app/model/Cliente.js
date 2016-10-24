@@ -6,6 +6,7 @@ Ext.define('Infosys_web.model.Cliente', {
         {name: 'nombres'},
         {name: 'sigla'},
         {name: 'fono'},
+        {name: 'celular'},
         {name: 'direccion'},
         {name: 'id_giro'},
         {name: 'giro'},

@@ -5,6 +5,7 @@ Ext.define('Infosys_web.model.Proveedores.Item', {
         {name: 'id'},
         {name: 'nombres'},
         {name: 'fono'},
+        {name: 'celular'},
         {name: 'direccion'},
         {name: 'id_giro'},
         {name: 'giro'},

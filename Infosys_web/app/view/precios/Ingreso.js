@@ -98,7 +98,7 @@ Ext.define('Infosys_web.view.precios.Ingreso', {
                                             fieldCls: 'required',
                                             maxHeight: 25,
                                             width: 160,
-                                            labelWidth: 60,
+                                            labelWidth: 80,
                                             allowBlank: false,
                                             name: 'margen',
                                             itemId: 'margenId',
@@ -255,6 +255,8 @@ Ext.define('Infosys_web.view.precios.Ingreso', {
                             iconCls: 'icon-save',
                             scale: 'large',
                             action: 'grabaringreso',
+                            itemId: 'grabarprecios',
+                            disabled : false,
                             text: 'Grabar'
                         }
                     ]

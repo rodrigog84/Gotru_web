@@ -579,7 +579,9 @@ Ext.define('Infosys_web.controller.Pago_caja', {
                 //view.close()
             }
 
-        });    
+        });
+        
+        view.down("#codigoId").focus();   
 
     },
 
@@ -1113,11 +1115,23 @@ Ext.define('Infosys_web.controller.Pago_caja', {
 
             var viewedit = this.getPagocajaprincipal();
             var recauda = viewedit.down('#recaudaId').getValue();
+            var idcaja = viewedit.down('#cajaId').getValue();
+            var nomcaja = viewedit.down('#nomcajaId').getValue();
+            var contado = viewedit.down('#efectivonId').getValue();
+            var cheques = viewedit.down('#totchequesnId').getValue();
+            var otros = viewedit.down('#otrosmontosnId').getValue();
+            var idcajero = viewedit.down('#cajeroId').getValue();
+            var nomcajero = viewedit.down('#nomcajeroId').getValue();     
 
             var view = Ext.create('Infosys_web.view.Pago_caja.Facturas').show();                   
             var nombre = "2";
             var tipdocumento = "2";
-            view.down("#rutId").focus();
+            var rut = "19";
+            var nombrec = "Clientes Varios";
+            var lista = 1;
+            var idbodega = 1;
+            var id = 1;
+            view.down("#codigoId").focus();
 
             Ext.Ajax.request({
 
@@ -1135,7 +1149,14 @@ Ext.define('Infosys_web.controller.Pago_caja', {
                     view.down("#numboletaId").setValue(correlanue);  
                     view.down("#nomdocumentoId").setValue(cliente.nombre); 
                     view.down("#tipodocumentoId").setValue(tipdocumento);
-                    view.down("#recaudaId").setValue(recauda);                    
+                    view.down("#recaudaId").setValue(recauda);
+                    view.down("#id_cliente").setValue(id)
+                    view.down("#rutId").setValue(rut);
+                    view.down("#nombre_id").setValue(nombrec);
+                    view.down('#bodegaId').setValue(idbodega)
+                    view.down('#listaId').setValue(lista)
+                    view.down('#cajeroId').setValue(idcajero)
+                    view.down('#cajaId').setValue(idcaja)                           
                     
                 }else{
                     Ext.Msg.alert('Correlativo YA Existe');
@@ -1143,7 +1164,8 @@ Ext.define('Infosys_web.controller.Pago_caja', {
                 }
 
             }            
-                });       
+                }); 
+            //this.validarut();          
     },
 
     cerrarcajaventa: function(){

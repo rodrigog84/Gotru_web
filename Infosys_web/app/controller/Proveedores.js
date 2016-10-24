@@ -499,6 +499,7 @@ Ext.define('Infosys_web.controller.Proveedores', {
         var comuna = view.down('#tipoComunaId').getValue();
         var giro = view.down('#giroId').getValue();
         var fono = view.down('#fonoId').getValue();
+        var celular = view.down('#celularId').getValue();
         var mail = view.down('#e_mailId').getValue();
         var fechaactualiza = view.down('#fecha_ult_actualizId').getValue();
         var estado = view.down('#tipoEstadoId').getValue();
@@ -515,6 +516,7 @@ Ext.define('Infosys_web.controller.Proveedores', {
                 comuna: comuna,
                 giro : giro,
                 fono : fono,
+                celular: celular,
                 mail : mail,
                 fechaactualiza : fechaactualiza,
                 estado : estado
@@ -555,6 +557,7 @@ Ext.define('Infosys_web.controller.Proveedores', {
         var comuna = view.down('#tipoComunaId').getValue();
         var giro = view.down('#giroId').getValue();
         var fono = view.down('#fonoId').getValue();
+        var celular = view.down('#celularId').getValue();
         var mail = view.down('#e_mailId').getValue();
         var fechaactualiza = view.down('#fecha_ult_actualizId').getValue();
         var estado = view.down('#tipoEstadoId').getValue();
@@ -572,6 +575,7 @@ Ext.define('Infosys_web.controller.Proveedores', {
                 comuna: comuna,
                 giro : giro,
                 fono : fono,
+                celular: celular,
                 mail : mail,
                 fechaactualiza : fechaactualiza,
                 estado : estado,

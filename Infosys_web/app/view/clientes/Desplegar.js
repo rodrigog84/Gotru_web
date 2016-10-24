@@ -150,6 +150,13 @@ Ext.define('Infosys_web.view.clientes.Desplegar', {
                        
                     },{xtype: 'splitter'},{
                         xtype: 'textfield',
+                        name : 'celular',
+                        itemId: 'celularId',
+                        width: 210,
+                        fieldLabel: 'Celular',
+                        allowBlank: true
+                    },{xtype: 'splitter'},{
+                        xtype: 'textfield',
                         name : 'e_mail',
                         width: 350,
                         itemId: 'e_mailId',

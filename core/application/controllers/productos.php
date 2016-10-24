@@ -135,7 +135,7 @@ class Productos extends CI_Controller {
 			{
 
 				$idlistap = $row->id;
-				$valorventa = ($valor_venta + ($valor_venta * $row->porcentaje)/100);
+				$valorventa = ($valor_venta - ($valor_venta * $row->porcentaje)/100);
 
 				$data2 = array(
 			
@@ -144,11 +144,10 @@ class Productos extends CI_Controller {
 		       
 		    	);
 
+		    	$valorventa = 0;
 
 			$this->db->where('id', $idlistap);		
-			$this->db->update('detalle_lista_precios', $data2); 
-
-				
+			$this->db->update('detalle_lista_precios', $data2);				
 
 			}
 

@@ -246,8 +246,8 @@ Ext.define('Infosys_web.view.ventas.Facturas', {
                                             itemId: 'giroId',
                                             readOnly: true,
                                             disabled : true,                                           
-                                            name : 'giro'
-                                          
+                                            name : 'giro',
+                                            hidden: true                                        
                                         },{
                                             xtype: 'textfield',
                                             fieldCls: 'required',
@@ -448,7 +448,7 @@ Ext.define('Infosys_web.view.ventas.Facturas', {
                                 width: 160,
                                 labelWidth: 60,
                                 minValue: 0,
-                                value: 1,
+                                //value: 1,
                                 fieldLabel: 'Cantidad',
                                 itemId: 'cantidadId',
                                 decimalPrecision:3

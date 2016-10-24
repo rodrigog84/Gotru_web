@@ -184,9 +184,12 @@ Ext.define('Infosys_web.controller.Precios', {
     recalcularprecios: function(){
 
         var viewIngresa = this.getPrecioseditar();
+        var bolEnable = true;
+        viewIngresa.down('#actualizapId').setDisabled(bolEnable);
+        viewIngresa.down('#grabarprecios').setDisabled(bolEnable);
         var margen = viewIngresa.down('#margenId').getValue();
         var idlista = viewIngresa.down('#idId').getValue();
-        var stp = this.getPreciosStore();
+        var stp = this.getPreciosStore();    
         
         
         Ext.Ajax.request({
@@ -344,6 +347,8 @@ Ext.define('Infosys_web.controller.Precios', {
     grabareditar: function() {
 
         var viewIngresa = this.getPrecioseditar();
+        var bolEnable = true;
+        viewIngresa.down('#grabarprecios').setDisabled(bolEnable);
         var numero = viewIngresa.down('#numeroId').getValue();
         var nombre = viewIngresa.down('#nombreId').getValue();        
         var fecha = viewIngresa.down('#fechaId').getValue();
@@ -381,6 +386,8 @@ Ext.define('Infosys_web.controller.Precios', {
     grabaringreso: function() {
 
         var viewIngresa = this.getPreciosingresar();
+        var bolEnable = true;
+        viewIngresa.down('#grabarprecios').setDisabled(bolEnable);
         var numero = viewIngresa.down('#numeroId').getValue();
         var nombre = viewIngresa.down('#nombreId').getValue();        
         var fecha = viewIngresa.down('#fechaId').getValue();

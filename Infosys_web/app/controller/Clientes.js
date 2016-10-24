@@ -641,6 +641,7 @@ Ext.define('Infosys_web.controller.Clientes', {
         var comuna = view.down('#tipoComunaId').getValue();
         var giro = view.down('#giroId').getValue();
         var fono = view.down('#fonoId').getValue();
+        var celular = view.down('#celularId').getValue();
         var mail = view.down('#e_mailId').getValue();
         var sector = view.down('#sectoresId').getValue();
         var vendedor = view.down('#tipoVendedorId').getValue();
@@ -674,6 +675,7 @@ Ext.define('Infosys_web.controller.Clientes', {
                 comuna: comuna,
                 giro : giro,
                 fono : fono,
+                celular: celular,
                 mail : mail,
                 sector: sector,
                 vendedor : vendedor,

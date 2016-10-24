@@ -395,19 +395,7 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                         iconCls: '',
                         //itemId: 'vyf_im_flotes',
                         //disabled: true,
-                        menu: [{
-                            text: 'Ingreso Pedidos',
-                            iconCls: '',
-                            action: 'mPedidos'
-                        },{
-                            text: 'Pedidos Fijos',
-                            iconCls: '',
-                            action: 'mPedidos'
-                        },{
-                            text: 'Pedidos Retenidos',
-                            iconCls: '',
-                            action: 'mPedidos'
-                        }]
+                        
                 },{
                         text: 'Ventas',
                         iconCls: '',
@@ -499,7 +487,20 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                         iconCls: '',
                         itemId: 'vyf_cp_nventa',
                         disabled: true,
-                        action: ''
+                        action: '',
+                        menu: [{
+                            text: 'Ingreso Pedidos',
+                            iconCls: '',
+                            action: 'mPedidos'
+                        },{
+                            text: 'Pedidos Fijos',
+                            iconCls: '',
+                            action: 'mPedidos'
+                        },{
+                            text: 'Pedidos Retenidos',
+                            iconCls: '',
+                            action: 'mPedidos'
+                        }]
                 },{
                         text: 'Consultas',
                         iconCls: '',

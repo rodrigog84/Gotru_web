@@ -41,6 +41,11 @@ Ext.define('Infosys_web.view.proveedores.Principal' ,{
         dataIndex: 'fono',
         hidden: true
     },{
+        header: "Celular",
+        width: 120,
+        dataIndex: 'celular',
+        hidden: true
+    },{
         header: "E-Mail",
         flex: 1,
         dataIndex: 'e_mail',
