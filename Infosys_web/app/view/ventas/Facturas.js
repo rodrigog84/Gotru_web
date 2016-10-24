@@ -246,8 +246,7 @@ Ext.define('Infosys_web.view.ventas.Facturas', {
                                             itemId: 'giroId',
                                             readOnly: true,
                                             disabled : true,                                           
-                                            name : 'giro',
-                                            hidden: true                                        
+                                            name : 'giro'                                      
                                         },{
                                             xtype: 'textfield',
                                             fieldCls: 'required',

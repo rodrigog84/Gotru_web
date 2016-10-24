@@ -912,8 +912,9 @@ cargar_listado_contribuyentes: function(){
         var view = this.getBuscarclientes()
         var st = this.getClientesStore()
         var nombre = view.down('#nombreId').getValue()
+        var opcion = view.down('#tipoSeleccionId').getValue()
         st.proxy.extraParams = {nombre : nombre,
-                                opcion : "Nombre"}
+                                opcion : opcion}
         st.load();
     },
 
@@ -1001,6 +1002,10 @@ cargar_listado_contribuyentes: function(){
             Ext.Msg.alert('Alerta', 'Selecciona un registro.');
             return;
         }
+
+        viewIngresa.down("#codigoId").focus();
+
+
        
     },    
 
@@ -1067,7 +1072,6 @@ cargar_listado_contribuyentes: function(){
             Ext.Msg.alert('Ingrese Datos del Vendedor');
             return;   
         }
-
 
         if(numfactura==0){
             //viewIngresa.down('#grabarId').setDisabled(bolEnable);
@@ -1222,6 +1226,7 @@ cargar_listado_contribuyentes: function(){
         view.down('#sucursalId').setDisabled(bolDisabled);
         view.down('#tipoVendedorId').setDisabled(bolDisabled);
         view.down('#tipocondpagoId').setDisabled(bolDisabled);
+        view.down('#rutId').focus();
         grid.getStore().removeAll();  
         var controller = this.getController('Productos');
         controller.recalcularFinal();
@@ -1306,7 +1311,7 @@ cargar_listado_contribuyentes: function(){
                         view.down("#preciosId").setValue(cliente.id_lista)
                         view.down("#direccionId").setValue(cliente.direccion)    
                         view.down("#rutId").setValue(rut)
-                        view.down("#btnproductoId").focus()  
+                        //view.down("#btnproductoId").focus()  
                                              
                     }else{
                          Ext.Msg.alert('Rut No Exite');
@@ -1326,6 +1331,8 @@ cargar_listado_contribuyentes: function(){
 
         });       
         }
+
+        view.down("#codigoId").focus();
     },
     
     mfactura: function(){
@@ -1342,6 +1349,7 @@ cargar_listado_contribuyentes: function(){
          }
          view.down('#bodegaId').setValue(idbodega);
          view.down('#tipoDocumentoId').setValue(tipdoc);
+         view.down('#rutId').focus();
          this.selectItemdocuemento();
 
      
