@@ -309,3 +309,67 @@ ALTER TABLE `log_libros`
 
 ALTER TABLE `clientes`
 	ADD COLUMN `celular` VARCHAR(12) NOT NULL AFTER `fono`;
+
+/*******************************************************************************************************/
+
+RENAME TABLE `recaudacion` TO `recaudacion2`;
+RENAME TABLE `recaudacion_detalle` TO `recaudacion_detalle2`;
+
+CREATE TABLE IF NOT EXISTS `recaudacion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_ticket` int(11) NOT NULL,
+  `id_vendedor` int(11) NOT NULL,
+  `num_comp` int(10) NOT NULL,
+  `fecha` date NOT NULL,
+  `num_doc` int(11) NOT NULL,
+  `id_cliente` int(11) NOT NULL,
+  `id_caja` int(11) NOT NULL,
+  `id_cajero` int(11) NOT NULL,
+  `total` int(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
+
+CREATE TABLE IF NOT EXISTS `recaudacion_detalle` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_recaudacion` int(11) NOT NULL,
+  `id_forma` int(11) NOT NULL,
+  `num_cheque` int(11) NOT NULL,
+  `id_banco` int(11) NOT NULL,
+  `valor_pago` int(10) NOT NULL,
+  `valor_cancelado` int(10) NOT NULL,
+  `valor_vuelto` int(10) NOT NULL,
+  `fecha_transac` date NOT NULL,
+  `fecha_comp` date NOT NULL,
+  `detalle` varchar(30) NOT NULL,
+  `estado` varchar(3) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `recaudacion_general` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_recaudacion` int(11) NOT NULL,
+  `id_forma` int(11) NOT NULL,
+  `contado` int(10) NOT NULL,
+  `chequealdia` int(10) NOT NULL,
+  `chequeafecha` int(10) NOT NULL,
+  `credito` int(10) NOT NULL,
+  `tarjetadebito` int(10) NOT NULL,
+  `tarjetacredito` int(10) NOT NULL,
+  `transferencia` int(10) NOT NULL,
+  `credito30dias` int(10) NOT NULL,
+  `credito60dias` int(10) NOT NULL,
+  `num_documento` int(10) NOT NULL,
+  `id_caja` int(11) NOT NULL,
+  `id_cajero` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `estado` varchar(3) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `sectores` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo` varchar(20) NOT NULL,
+  `descripcion` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
