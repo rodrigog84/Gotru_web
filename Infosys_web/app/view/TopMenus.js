@@ -413,7 +413,8 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                                 },{
                                     text: 'Control de Caja',
                                     iconCls: '',
-                                    action: 'mcajas'
+                                    action: 'mcajas',
+                                    hidden: true
                                 },{
                                     text: 'Recaudaciones',
                                     itemId: 'vyf_eds_recaudaciones',
@@ -537,7 +538,8 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                         text: 'Control Caja',
                         itemId: 'vyf_eds_ventas',
                         disabled: true,
-                        action: 'mcontrolcaja'
+                        action: 'mcontrolcaja',
+                        hidden: true
                        
                 },{
                         text: 'Comisiones',
@@ -546,13 +548,18 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                         iconCls: '',
                         action: 'mcomisiones'
                 },{
+                        text: 'Ventas',
+                        iconCls: '',
+                        action: ''
+                },{
                         text: 'Recaudaciones',
                         itemId: 'vyf_eds_recaudaciones',
                         disabled: true,
                         iconCls: '',
-                        action: 'mrecauda'
+                        action: 'mrecauda',
+                        hidden: true
                 },{
-                        text: 'Resportes',
+                        text: 'Resportes Legales',
                         disabled: true,
                         itemId: 'vyf_eds_reportes',
                         iconCls: '',
@@ -563,7 +570,8 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                         },{
                             text: 'Estadisticas Ventas',
                             iconCls: '',
-                            action: 'mestadisticas'
+                            action: 'mestadisticas',
+                            hidden: true
                         }]
                 },]
 
