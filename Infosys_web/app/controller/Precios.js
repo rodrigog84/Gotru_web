@@ -156,14 +156,14 @@ Ext.define('Infosys_web.controller.Precios', {
                 
                     viewIngresa.close();
                     stp.load();
-                    Ext.Msg.alert('Datos Actualizados Exitosamente');
+                    Ext.Msg.alert('Atención','Datos Actualizados Exitosamente');
                     return;
                                   
 
                  }else{
                     box.hide();
                     st.load();
-                    Ext.Msg.alert('Datos No Actualizados');
+                    Ext.Msg.alert('Atención','Datos No Actualizados');
                     return;
                      
                  };
