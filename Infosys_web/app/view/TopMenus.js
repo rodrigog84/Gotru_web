@@ -404,12 +404,16 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                             iconCls: '',
                             action: 'mejemplo'
                         },{
-                            text: 'Caja',
+                            text: 'Proceso de Caja',
                             iconCls: '',
                              menu: [{
                                     text: 'Caja',
                                     iconCls: '',
                                     action: 'mpagocaja'
+                                },{
+                                    text: 'Control de Caja',
+                                    iconCls: '',
+                                    action: ''
                                 },{
                                     text: 'Recaudaciones',
                                     itemId: 'vyf_eds_recaudaciones',
