@@ -787,83 +787,20 @@ Ext.define('Infosys_web.controller.Pago_caja', {
 
         };
 
-        if (record.nombre == "TARJETA DEBITO") {
+        if (record.nombre == "TARJETA DE DEBITO") {
 
             
             var otros = (otros) + (valortotal);
-            view.down('#validapagoId').setValue(vali);
-            if(numcheque==0){
+           
+        };                 
 
-                var bolEnable = false;
-                view.down('#grababoletaId').setDisabled(bolEnable);
-        
-        
+       
 
-                 Ext.Msg.alert('Alerta', 'Debe Ingresar Numero Documento');
-                return;
-                
-            };
-
-            if (!banco){
-
-                var bolEnable = false;
-                view.down('#grababoletaId').setDisabled(bolEnable);
-             
-
-                Ext.Msg.alert('Alerta', 'Debe Seleccionar Banco');
-                return;
-
-            }else{
-
-                var banco = view.down('#bancoId');
-                var stCombo = banco.getStore();
-                var nombrebanco = stCombo.findRecord('id', banco.getValue()).data;
-                var nombrebanco = nombrebanco.nombre;
-                var id_banco = nombrebanco.id;
-                var valortotal = (valorcancela);
-                var valort = (valorcancela);         
-            
-            }                 
-
-        };
-
-        if (record.nombre == "TARJETA CREDITO") {
+        if (record.nombre == "TARJETA DE CREDITO") {
 
             var otros = (otros) + (valortotal);
-            view.down('#validapagoId').setValue(vali);
-            if(numcheque==0){
-
-                var bolEnable = false;
-                view.down('#grababoletaId').setDisabled(bolEnable);
-        
-        
-
-                 Ext.Msg.alert('Alerta', 'Debe Ingresar Numero Documento');
-                return;
-                
-            };
-            if (!banco){
-
-                var bolEnable = false;
-                view.down('#grababoletaId').setDisabled(bolEnable);
-        
-        
-
-                Ext.Msg.alert('Alerta', 'Debe Seleccionar Banco');
-                return;
-
-            }else{
-
-                var banco = view.down('#bancoId');
-                var stCombo = banco.getStore();
-                var nombrebanco = stCombo.findRecord('id', banco.getValue()).data;
-                var nombrebanco = nombrebanco.nombre;
-                var id_banco = nombrebanco.id;
-                var valortotal = (valorcancela);
-                var valort = (valorcancela);        
             
-            }                                
-
+            
         };     
 
 
@@ -1019,15 +956,20 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         var record = stCombo.findRecord('id', condpago.getValue()).data;
         var valida = record.nombre;
 
+        console.log(valida);
+
         var bolDisabled = valida == "CONTADO" ? true : false; // campos se habilitan sólo en factura
         
         view.down('#numchequeId').setDisabled(bolDisabled);
         view.down('#bancoId').setDisabled(bolDisabled);        
 
         if (valida == "PAGO CHEQUE "){
+            calculo = 0;
+            view.down('#valorvueltoId').setDisabled(false);
+            view.down('#valorvueltoId').setValue(calculo);
+            view.down('#valorcancelaId').setValue(totdocu);
             view.down("#numchequeId").focus();
         };
-
 
         if (valida == "CREDITO") {
 
@@ -1036,8 +978,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
             view.down('#valorvueltoId').setValue(calculo);
             view.down('#valorcancelaId').setValue(totdocu);
 
-        }
-
+        };
                
         if (valida == "CONTADO"){
 
@@ -1051,52 +992,32 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         
         };
 
-        if (valida == "TARJETA CREDITO"){
+        if (valida == "TARJETA DE CREDITO"){
 
            var numcheque = 0;
            view.down("#numchequeId").setValue(numcheque);
+           view.down("#valorvueltoId").setValue(numcheque);
+           view.down("#numchequeId").setDisabled(true);
            view.down('#valorvueltoId').setDisabled(true);
+           view.down("#bancoId").setDisabled(true);
+           view.down("#valorcancelaId").setValue(totdocu);                     
+           view.down("#numboleta2Id").focus();
+        
+        };
+
+        if (valida == "TARJETA DE DEBITO"){
+           var numcheque = 0;
+           view.down("#numchequeId").setValue(numcheque);
+           view.down("#valorvueltoId").setValue(numcheque); 
+           view.down("#numchequeId").setDisabled(true);
+           view.down('#valorvueltoId').setDisabled(true);
+           view.down("#bancoId").setDisabled(true);
            view.down("#valorcancelaId").setValue(totdocu);           
-           view.down("#numchequeId").focus();
+           view.down("#numboleta2Id").focus();
         
         };
 
-        if (valida == "TARJETA DEBITO"){
-           var numcheque = 0;
-           view.down("#numchequeId").setValue(numcheque);
-           view.down('#valorvueltoId').setDisabled(true);
-           view.down("#valorcancelaId").setValue(totdocu);
-           view.down("#numchequeId").focus();
         
-        };
-
-        if (valida == "CREDITO 30 DIAS"){
-
-           var id_banco = "";
-           var numcheque = 0;
-           view.down("#bancoId").setValue(id_banco);
-           view.down("#numchequeId").setValue(numcheque);           
-           view.down('#numchequeId').setDisabled(true);
-           view.down('#valorvueltoId').setDisabled(true);
-           view.down('#bancoId').setDisabled(true);
-           view.down("#valorcancelaId").setValue(totdocu);
-           view.down("#valorcancelaId").focus();
-        
-        };
-
-        if (valida == "CREDITO 60 DIAS"){
-           var id_banco = "";
-           var numcheque = 0;
-           view.down("#bancoId").setValue(id_banco);
-           view.down("#numchequeId").setValue(numcheque);            
-           view.down('#numchequeId').setDisabled(true);
-           view.down('#valorvueltoId').setDisabled(true);
-           view.down('#bancoId').setDisabled(true);
-           view.down("#valorcancelaId").setValue(totdocu);
-           view.down("#valorcancelaId").focus();
-                
-        };
-
     },
     
     mpagocaja: function(){
