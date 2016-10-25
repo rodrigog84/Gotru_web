@@ -143,6 +143,9 @@ Ext.define('Infosys_web.controller.Pago_caja', {
             'boletaingresar #rutId': {
                 specialkey: this.special6
             },
+            'boletaingresar #DescuentoproId': {
+                change: this.changedctofinal3
+            },
             'buscarclientesboleta button[action=buscar]': {
                 click: this.buscar
             },
@@ -523,6 +526,27 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         if (e.getKey() == e.ENTER) {
             this.validarut()
         }
+    },
+
+    changedctofinal3: function(){
+        this.recalculardescuentopro();
+    },
+
+    recalculardescuentopro: function(){
+
+        var view = this.getBoletaingresar();
+        var precio = view.down('#precioId').getValue();
+        var cantidad = view.down('#cantidadId').getValue();
+        var total = ((precio * cantidad));
+        var desc = view.down('#DescuentoproId').getValue();       
+        if (desc){
+        var descuento = view.down('#DescuentoproId');
+        var stCombo = descuento.getStore();
+        var record = stCombo.findRecord('id', descuento.getValue()).data;
+        var dcto = (record.porcentaje);
+        totaldescuento = (((total * dcto)  / 100));
+        view.down('#totdescuentoId').setValue(totaldescuento);
+        };         
     },
 
    
