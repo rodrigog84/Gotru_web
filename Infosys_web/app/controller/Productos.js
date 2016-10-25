@@ -343,12 +343,18 @@ Ext.define('Infosys_web.controller.Productos', {
             Ext.Msg.alert('Alerta', 'Debe Ingresar Cantidad');
             return false;
         }        
-        var tot = ((cantidad * precio) - descuento);
-        var neto = (Math.round(tot / 1.19));
+
+        var neto = ((cantidad * precio) - descuento);
+        var total  = ((neto * 1.19));
+
+
+        //var tot = ((cantidad * precio) - descuento);
+        //var neto = (Math.round(tot / 1.19));
         var exists = 0;
-        var iva = (tot - neto);
-        var neto = (tot - iva);
-        var total = (neto + iva );
+        var iva = (total - neto);
+        //var iva = (tot - neto);
+        //var neto = (tot - iva);
+        //var total = (neto + iva );
         
         if(!producto){
             
