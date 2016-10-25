@@ -138,10 +138,11 @@ Ext.define('Infosys_web.controller.Precios', {
         var margen = viewIngresa.down('#margenId').getValue();
         var idlista = viewIngresa.down('#idId').getValue();
         var stp = this.getPreciosStore();                
-        
+        var box = Ext.MessageBox.wait('Actualizando valores...', 'Atención');
         Ext.Ajax.request({
 
             waitMsg: 'Actualizando...',
+            //async: false,
             url: preurl + 'precios/actualiza',
             params: {
                 id: 1,
@@ -149,7 +150,7 @@ Ext.define('Infosys_web.controller.Precios', {
                 idlista: idlista
             },
             success: function(response){
-
+                box.hide();
                 var resp = Ext.JSON.decode(response.responseText);
                 if (resp.success == true) {
                 
@@ -160,7 +161,7 @@ Ext.define('Infosys_web.controller.Precios', {
                                   
 
                  }else{
-
+                    box.hide();
                     st.load();
                     Ext.Msg.alert('Datos No Actualizados');
                     return;

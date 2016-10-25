@@ -36,8 +36,9 @@ class Precios extends CI_Controller {
 
 	public function actualiza(){
 
-		$resp = array();
+		$this->db->trans_start();
 		set_time_limit(0);
+		$resp = array();
 		$idlista = $this->input->post('idlista');
 		$margen = $this->input->post('margen');
 
@@ -47,9 +48,10 @@ class Precios extends CI_Controller {
 			WHERE acc.id_lista = "'.$idlista.'" '
 			);
 			
-			
+
 		if($query->num_rows()>0){
-	   		foreach ($query->result() as $row)
+			$data = $query->result();
+	   		foreach ($data as $row)
 			{
             $producto = $row->id_producto;
             $id = $row->id;
@@ -66,12 +68,11 @@ class Precios extends CI_Controller {
 	    	$this->db->where('id', $id);
 
 	    	$this->db->update('detalle_lista_precios', $datos);
-
 	    	};
-
 			$datos2 = array(
 			 'margen' => $margen
 			);
+
 
 			$this->db->where('id', $idlista);
 
@@ -83,6 +84,8 @@ class Precios extends CI_Controller {
 	   	    $resp['success'] = false;
 	   	    
 	   };
+
+	  $this->db->trans_complete();
 
 	   echo json_encode($resp);
 	   //return false;
