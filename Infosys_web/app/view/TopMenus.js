@@ -407,13 +407,13 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                             text: 'Proceso de Caja',
                             iconCls: '',
                              menu: [{
-                                    text: 'Caja',
+                                    text: 'Ventas Boleta',
                                     iconCls: '',
                                     action: 'mpagocaja'
                                 },{
                                     text: 'Control de Caja',
                                     iconCls: '',
-                                    action: ''
+                                    action: 'mcajas'
                                 },{
                                     text: 'Recaudaciones',
                                     itemId: 'vyf_eds_recaudaciones',
