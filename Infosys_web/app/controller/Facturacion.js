@@ -1274,10 +1274,13 @@ cargar_listado_contribuyentes: function(){
         var view =this.getFacturasingresar();
         var rut = view.down('#rutId').getValue();
         var numero = rut.length;
+        var nombre ="Nombre";
 
         if(numero==0){
-            var edit = Ext.create('Infosys_web.view.ventas.BuscarClientes');            
-                  
+            var edit = Ext.create('Infosys_web.view.ventas.BuscarClientes');
+            edit.down("#nombreId").focus();
+            edit.down("#tipoSeleccionId").setValue(nombre);
+                             
         }else{
        
         if(numero>9){            
@@ -1331,7 +1334,6 @@ cargar_listado_contribuyentes: function(){
 
         });       
         }
-
         view.down("#codigoId").focus();
     },
     

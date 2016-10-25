@@ -113,6 +113,7 @@ Ext.define('Infosys_web.view.ventas.BuscarClientes' ,{
                 width: 250,
                 xtype: 'textfield',
                 itemId: 'nombreId',
+                name: 'nombre',
                 fieldLabel: ''
             },{
                 xtype: 'button',
