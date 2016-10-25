@@ -14,6 +14,12 @@ Ext.define('Infosys_web.view.recaudacion.Principal' ,{
 
     },
     columns: [{
+        header: "Id",
+        flex: 1,
+        align: 'right',
+        dataIndex: 'id',
+        hidden: true               
+    },{
         header: "Id_caja",
         flex: 1,
         align: 'right',
@@ -24,8 +30,7 @@ Ext.define('Infosys_web.view.recaudacion.Principal' ,{
         header: "Caja",
         flex: 1,
         align: 'right',
-        dataIndex: 'nom_caja'
-               
+        dataIndex: 'nom_caja'               
     },{
         header: "Id_cajero",
         flex: 1,
@@ -59,6 +64,12 @@ Ext.define('Infosys_web.view.recaudacion.Principal' ,{
         type: 'date',
         renderer:Ext.util.Format.dateRenderer('d/m/Y') 
     },{
+        header: "Id",
+        flex: 1,
+        align: 'right',
+        dataIndex: 'id_cliente',
+        hidden: true
+    },{
         header: "Rut",
         flex: 1,
         align: 'right',
@@ -67,10 +78,6 @@ Ext.define('Infosys_web.view.recaudacion.Principal' ,{
         header: "Razon Social",
         width: 390,
         dataIndex: 'nom_cliente'
-    },{
-        header: "Vendedor",
-        width: 180,
-        dataIndex: 'nom_vendedor'
     },{
         header: "Neto",
         flex: 1,
@@ -102,7 +109,7 @@ Ext.define('Infosys_web.view.recaudacion.Principal' ,{
             items: [{
                 xtype: 'button',
                 iconCls: 'icon-add',
-                action: '',
+                action: 'Editapago',
                 text : 'Editar'
             },{
                 xtype: 'button',
@@ -120,6 +127,11 @@ Ext.define('Infosys_web.view.recaudacion.Principal' ,{
                 iconCls : 'icon-pdf',
                 text: 'Libro Recaudacion PDF',
                 action:'exportarlibrorecaudacion'
+            },{
+                xtype: 'button',
+                iconCls : 'icon-delete',
+                text: 'Anular',
+                action:'anular'
             },'->',{
                 width: 250,
                 xtype: 'textfield',

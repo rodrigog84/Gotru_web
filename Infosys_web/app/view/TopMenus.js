@@ -383,11 +383,9 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                         disabled: true,
                         iconCls: '',
                         action: 'mSectores'
-                }]
-              
+                }]             
 
-            },
-            {
+            },{
                 text: 'Ingreso de Movimientos',
                 iconCls: '',
                  menu: [,{
@@ -408,7 +406,18 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                         },{
                             text: 'Caja',
                             iconCls: '',
-                            action: 'mpagocaja'
+                             menu: [{
+                                    text: 'Caja',
+                                    iconCls: '',
+                                    action: 'mpagocaja'
+                                },{
+                                    text: 'Recaudaciones',
+                                    itemId: 'vyf_eds_recaudaciones',
+                                    disabled: true,
+                                    iconCls: '',
+                                    action: 'mrecauda'
+                                }]
+                           
                         },{
                             text: 'Guia Despacho',
                             iconCls: '',

@@ -380,7 +380,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         view.down('#codigoId').setValue(cero);
         view.down('#productoId').setValue(cero);
         view.down('#nombreproductoId').setValue(cero);
-        view.down('#cantidadId').setValue(cero2);
+        view.down('#cantidadId').setValue(cero);
         view.down('#precioId').setValue(cero);
         view.down('#cantidadOriginalId').setValue(cero);
         view.down('#totdescuentoId').setValue(cero1);
@@ -741,6 +741,16 @@ Ext.define('Infosys_web.controller.Pago_caja', {
 
         };
 
+        if (record.nombre == "CREDITO") {
+                   
+            var nombrebanco = "";
+            var id_banco = "";
+            var numcheque = 0;
+            var nombrebanco = "Venta al credito";
+            var valorvuelto = 0;                    
+
+        };
+
         if (record.nombre == "PAGO CHEQUE ") {
 
             if (!banco){
@@ -952,6 +962,16 @@ Ext.define('Infosys_web.controller.Pago_caja', {
 
         }
 
+        if (valida == "CREDITO") {
+
+            calculo = 0;
+            view.down('#valorvueltoId').setValue(calculo);
+            view.down('#valorcancelaId').setValue(valorapagar);
+
+
+
+        }
+
         
     },
 
@@ -994,7 +1014,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
       
         var view =this.getBoletaingresar();
         var condpago = view.down('#condpagoId');
-        var totdocu = view.down('#finaltotalId').getValue();
+        var totdocu = view.down('#finaltotalpostId').getValue();
         var stCombo = condpago.getStore();
         var record = stCombo.findRecord('id', condpago.getValue()).data;
         var valida = record.nombre;
@@ -1007,6 +1027,17 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         if (valida == "PAGO CHEQUE "){
             view.down("#numchequeId").focus();
         };
+
+
+        if (valida == "CREDITO") {
+
+            calculo = 0;
+            view.down('#valorvueltoId').setDisabled(false);
+            view.down('#valorvueltoId').setValue(calculo);
+            view.down('#valorcancelaId').setValue(totdocu);
+
+        }
+
                
         if (valida == "CONTADO"){
 
@@ -1067,7 +1098,6 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         };
 
     },
-
     
     mpagocaja: function(){
        

@@ -9,6 +9,31 @@ class Recaudacion extends CI_Controller {
 		$this->load->database();
 	}
 
+	public function validaboleta(){
+
+		$resp = array();
+		$boleta = json_decode($this->input->post('boleta'));
+        $tipo = json_decode($this->input->post('tipo'));
+
+		$query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, td.descripcion as tipo_doc	FROM factura_clientes acc
+			left join clientes c on (acc.id_cliente = c.id)
+			left join vendedores v on (acc.id_vendedor = v.id)
+			left join tipo_documento td on (acc.tipo_documento = td.id)
+			WHERE  acc.tipo_documento= "'.$tipo.'" and acc.num_factura = "'.$boleta.'"');
+
+		if($query->num_rows()>0){
+
+			$resp['success'] = true;
+        
+
+		};
+
+		echo json_encode($resp);
+
+	
+		
+	}
+
 	public function averigua(){
 
 		$resp = array();
@@ -41,11 +66,843 @@ class Recaudacion extends CI_Controller {
 
         echo json_encode($resp);
 
+	}
 
+	public function actualizar(){
+
+		 $query = $this->db->query('SELECT acc.*, t.nombre as desc_pago,
+            r.id_caja as idcaja, r.id_cajero as idcajero, n.nombre as nom_caja,
+            e.nombre as nom_cajero, r.num_comp as num_comp, b.nombre as nom_banco,
+            r.num_doc as num_doc, cor.nombre as nom_documento, cli.nombres as nom_cliente FROM recaudacion_detalle acc
+            left join cond_pago t on (acc.id_forma = t.id)
+            left join recaudacion r on (acc.id_recaudacion = r.id)
+            left join preventa pr on (r.id_ticket = pr.id)
+            left join correlativos cor on (pr.id_tip_docu = cor.id)
+            left join cajas n on (r.id_caja = n.id)
+            left join cajeros e on (r.id_cajero = e.id)
+            left join banco b on (acc.id_banco = b.id)
+            left join clientes cli on (r.id_cliente = cli.id)
+            ');
+
+		foreach ($query->result() as $v)
+		{
+			$recauda = $v->id_recaudacion;
+
+			$query5 = $this->db->query('SELECT * FROM recaudacion_general 
+			WHERE id_recaudacion = '.$recauda.'');
+			
+			if($query5->num_rows()>0){
+
+				$row = $query5->first_row();
+	   			$id = $row->id;
+				if ($condpago == 1){
+					$update_general = array(				        
+				        'contado' => $v->valor_pago				        
+					);
+				};
+				if ($condpago == 2){
+					$update_general = array(				        
+				        'chequealdia' => $v->valor_pago				        
+					);
+				};
+				if ($condpago == 8){
+					$update_general = array(				        
+				        'chequeafecha' => $v->valor_pago				        
+					);
+				};
+				if ($condpago == 11){
+					$update_general = array(				        
+				        'credito' => $v->valor_pago				        
+					);
+				};
+				if ($condpago == 7){
+					$update_general = array(				        
+				        'tarjetadebito' => $v->valor_pago				        
+					);
+				};
+				if ($condpago == 4){
+					$update_general = array(				        
+				        'tarjetacredito' => $v->valor_pago				        
+					);
+				};
+				if ($condpago == 6){
+					$update_general = array(				        
+				        'transferencia' => $v->valor_pago				        
+					);
+				};
+				if ($condpago == 3){
+					$update_general = array(				        
+				        'credito30dias' => $v->valor_pago				        
+					);
+				};
+				if ($condpago == 5){
+					$update_general = array(				        
+				        'credito60dias' => $v->valor_pago				        
+					);
+				};
+
+				$this->db->where('id', $id);		  
+	    		$this->db->update('recaudacion_general', $update_general);				
+					
+			}else{
+
+				if ($condpago == 1){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'contado' => $v->valor_pago,
+				        'id_caja' => $v->idcaja,
+						'num_documento' => $v->num_doc,
+					    'id_cajero' => $v->idcajero,
+					    'fecha' => $v->fecha_transac,
+					    'id_forma' => $condpago			        
+					);
+				};
+				if ($condpago == 2){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'chequealdia' => $v->valor_pago,
+				        'id_caja' => $v->idcaja,
+						'num_documento' => $v->num_doc,
+					    'id_cajero' => $v->idcajero,
+					    'fecha' => $v->fecha_transac,
+					    'id_forma' => $condpago				        
+					);
+				};
+				if ($condpago == 8){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'chequeafecha' => $v->valor_pago,
+				        'id_caja' => $v->idcaja,
+						'num_documento' => $v->num_doc,
+					    'id_cajero' => $v->idcajero,
+					    'fecha' => $v->fecha_transac,
+					    'id_forma' => $condpago				        
+					);
+				};
+				if ($condpago == 11){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'credito' => $v->valor_pago,
+				        'id_caja' => $v->idcaja,
+						'num_documento' => $v->num_doc,
+					    'id_cajero' => $v->idcajero,
+					    'fecha' => $v->fecha_transac,
+					    'id_forma' => $condpago				        
+					);
+				};
+				if ($condpago == 7){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'tarjetadebito' => $v->valor_pago,
+				        'id_caja' => $v->idcaja,
+						'num_documento' => $v->num_doc,
+					    'id_cajero' => $v->idcajero,
+					    'fecha' => $v->fecha_transac,
+					    'id_forma' => $condpago			        
+					);
+				};
+				if ($condpago == 4){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'tarjetacredito' => $v->valor_pago,
+				        'id_caja' => $v->idcaja,
+						'num_documento' => $v->num_doc,
+					    'id_cajero' => $v->idcajero,
+					    'fecha' => $v->fecha_transac,
+					    'id_forma' => $condpago			        
+					);
+				};
+				if ($condpago == 6){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'transferencia' => $v->valor_pago,
+				        'id_caja' => $v->idcaja,
+						'num_documento' => $v->num_doc,
+					    'id_cajero' => $v->idcajero,
+					    'fecha' => $v->fecha_transac,
+					    'id_forma' => $condpago			        
+					);
+				};
+				if ($condpago == 3){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'credito30dias' => $v->valor_pago,
+				        'id_caja' => $v->idcaja,
+						'num_documento' => $v->num_doc,
+					    'id_cajero' => $v->idcajero,
+					    'fecha' => $v->fecha_transac,
+					    'id_forma' => $condpago			        
+					);
+				};
+				if ($condpago == 5){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'credito60dias' => $v->valor_pago,
+				        'id_caja' => $v->idcaja,
+						'num_documento' => $v->num_doc,
+					    'id_cajero' => $v->idcajero,
+					    'fecha' => $v->fecha_transac,
+					    'id_forma' => $condpago			        
+					);
+				};
+				
+				$this->db->insert('recaudacion_general', $update_general);
+
+		    };	
+
+		}
+
+		$resp['success'] = true;
+        
+        echo json_encode($resp);
 
 	}
 
-	public function save(){
+	public function save2(){
+
+		$resp = array();
+		$numcomp = json_decode($this->input->post('num_comprobante'));
+		$fechacomp = $this->input->post('fecha');
+		$numdocum = json_decode($this->input->post('num_documento'));
+        $documento = json_decode($this->input->post('documento'));
+		$tipodocumento = json_decode($this->input->post('documento'));
+		$idcliente = json_decode($this->input->post('id_cliente'));
+		$vendedor = json_decode($this->input->post('vendedor'));
+		$idcaja = json_decode($this->input->post('id_caja'));
+		$idcajero = json_decode($this->input->post('id_cajero'));
+		$items = json_decode($this->input->post('items'));
+		$recitems = json_decode($this->input->post('items'));
+		$contado = json_decode($this->input->post('contado'));
+		$cheques = json_decode($this->input->post('cheques'));
+		$neto = json_decode($this->input->post('neto'));
+		$ftotal = json_decode($this->input->post('total'));
+		$idcondventa = json_decode($this->input->post('idpago'));
+		$idrecauda = json_decode($this->input->post('idrecauda'));
+		$otros = json_decode($this->input->post('otros'));		
+		$estado = "SI";
+		$corr = 6;
+		$glosa= "Boleta Manual";
+
+		$query = $this->db->query('SELECT * FROM correlativos WHERE id like "'.$corr.'"');
+
+		if($query->num_rows()>0){
+
+			$row = $query->first_row();
+			$corr = (($row->correlativo)+1); 
+	   		$id = ($row->id);
+
+	   		$data3 = array(
+	         'correlativo' => $corr
+		    );
+
+		    $preventa = array(
+	        'num_ticket' => $corr,
+	        'fecha_venta' => $fechacomp,
+	        'id_cliente' => $idcliente,
+	        'id_vendedor' => $vendedor,
+	        'neto' => $neto,
+	        'id_tip_docu' => $tipodocumento,
+	        'id_pago' => $idcondventa,
+	        'total' => $ftotal,
+	        'estado' => $estado,
+	        'id_documento'=> $numdocum
+			);
+
+			$this->db->insert('preventa', $preventa);
+			$idticket = $this->db->insert_id();
+
+		    $this->db->where('id', $id);		  
+		    $this->db->update('correlativos', $data3);
+		    $this->Bitacora->logger("M", 'correlativos', $id);
+		};
+
+		$fiva = ($ftotal- $neto);
+
+		$factura_cliente = array(
+			'tipo_documento' => $tipodocumento,
+	        'id_cliente' => $idcliente,
+	        'num_factura' => $numdocum,
+	        'id_vendedor' => $vendedor,
+	        'id_cond_venta' => $idcondventa,
+	        'sub_total' => $neto,
+	        'neto' => $neto,
+	        'iva' => $fiva,
+	        'totalfactura' => $ftotal,
+	        'fecha_factura' => $fechacomp,
+	        'fecha_venc' => $fechacomp,
+	        'forma' => 1,
+	        'tipo_boleta' => "2"	          
+		);
+
+		$this->db->insert('factura_clientes', $factura_cliente); 
+		$idfactura = $this->db->insert_id();
+
+		$factura_clientes_item = array(
+		        'id_factura' => $idfactura,
+		        'glosa' => $glosa,
+		        'neto' => $neto,
+		        'iva' => $fiva,
+		        'total' => $ftotal
+		);
+
+		$this->db->insert('detalle_factura_glosa', $factura_clientes_item);
+
+		if($idrecauda){
+			$cajas = array(
+		         'efectivo' => $contado,
+		         'cheques' => $cheques,
+		         'otros' => $otros
+		    );
+		    $this->db->where('id', $idrecauda);		  
+		    $this->db->update('control_caja', $cajas);
+	    }else{
+	    	$cajas2 = array(
+	    	 'id_caja' => $idcaja,
+	    	 'id_cajero' => $idcajero,
+	         'efectivo' => $contado,
+	         'cheques' => $cheques,
+	         'otros' => $otros
+	    	);
+
+	    	$this->db->insert('control_caja', $cajas2);
+	    };
+
+		$data2 = array(
+	         'estado' => $estado
+	    );
+	    $this->db->where('id', $idticket);	  
+	    $this->db->update('preventa', $data2);
+
+
+		$data3 = array(
+	         'correlativo' => $numcomp
+	    );
+
+	    $this->db->where('id', $idcaja);	  
+	    $this->db->update('cajas', $data3);
+
+		$recaudacion = array(
+	        'num_comp' => $numcomp,
+	        'fecha' => $fechacomp,
+	        'id_cliente' => $idcliente,
+			'num_doc' => $numdocum,
+			'id_caja' => $idcaja,
+			'id_ticket' => $idticket,
+		    'id_cajero' => $idcajero
+		);
+
+		$this->db->insert('recaudacion', $recaudacion); 
+		$recauda = $this->db->insert_id();
+        $ftotal = 0;
+		foreach($items as $v){
+					
+			$recaudacion_detalle = array(				
+		        'id_recaudacion' => $recauda,
+		        'id_forma' => $condpago,
+		        'detalle' => $v->detalle,
+		        'num_cheque' => $v->num_cheque,
+		        'id_banco' => $v->id_banco,
+		        'valor_pago' => ($valorcancela-$valorvuelto),
+		        'valor_cancelado' => $valorcancela,
+		        'valor_vuelto' => $valorvuelto,
+		        'fecha_transac' => $v->fecha_comp,
+		        'fecha_comp' => $fechacomp
+			);
+
+			$idforma = ($condpago);
+			if ($documento == 2){
+			if($condpago==7 or $condpago==4 ){
+			$numdocum = ($v->num_cheque);			
+			$ftotal = ($ftotal + ($valorcancela-$valorvuelto));
+
+			};
+		    };
+				
+			$this->db->insert('recaudacion_detalle', $recaudacion_detalle);
+
+			$query5 = $this->db->query('SELECT * FROM recaudacion_general 
+			WHERE id_recaudacion = '.$recauda.'');
+			
+			if($query5->num_rows()>0){
+
+				$row = $query5->first_row();
+	   			$id = $row->id;
+	   			$contado = $row->contado;
+	   			$chequealdia = $row->chequealdia;
+	   			$chequeafecha = $row->chequeafecha;
+	   			$credito = $row->credito;
+	   			$tarjetadebito = $row->tarjetadebito;
+	   			$tarjetacredito = $row->tarjetacredito;
+	   			$credito30dias = $row->credito30dias;
+	   			$credito60dias = $row->credito60dias;
+	   			$transferencia = $row->transferencia;
+				if ($condpago == 1){
+					$update_general = array(				        
+				        'contado' => (($valorcancela-$valorvuelto)+$contado)			        
+					);
+				};
+				if ($condpago == 2){
+					$update_general = array(				        
+				        'chequealdia' => ($valorcancela+$chequealdia)			        
+					);
+				};
+				if ($condpago == 8){
+					$update_general = array(				        
+				        'chequeafecha' => ($valorcancela+$chequeafecha)			        
+					);
+				};
+				if ($condpago == 11){
+					$update_general = array(				        
+				        'credito' => ($valorcancela+$credito)			        
+					);
+				};
+				if ($condpago == 7){
+					$update_general = array(				        
+				        'tarjetadebito' => ($valorcancela+$tarjetadebito)			        
+					);
+				};
+				if ($condpago == 4){
+					$update_general = array(				        
+				        'tarjetacredito' => ($valorcancela+$tarjetacredito)				        
+					);
+				};
+				if ($condpago == 6){
+					$update_general = array(				        
+				        'transferencia' => ($valorcancela+$transferencia)				        
+					);
+				};
+				if ($condpago == 3){
+					$update_general = array(				        
+				        'credito30dias' => ($valorcancela+$credito30dias)			        
+					);
+				};
+				if ($condpago == 5){
+					$update_general = array(				        
+				        'credito60dias' => ($valorcancela+$credito60dias)			        
+					);
+				};
+
+				$this->db->where('id', $id);		  
+	    		$this->db->update('recaudacion_general', $update_general);				
+					
+			}else{
+
+				if ($condpago == 1){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'contado' => ($valorcancela-$valorvuelto),
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => $fechacomp			        
+					);
+				};
+				if ($condpago == 2){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'chequealdia' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => $fechacomp			        
+					);
+				};
+				if ($condpago == 8){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'chequeafecha' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => $fechacomp			        
+					);
+				};
+				if ($condpago == 11){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'credito' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => $fechacomp			        
+					);
+				};
+				if ($condpago == 7){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'tarjetadebito' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => $fechacomp			        
+					);
+				};
+				if ($condpago == 4){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'tarjetacredito' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => $fechacomp			        
+					);
+				};
+				if ($condpago == 6){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'transferencia' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => $fechacomp			        
+					);
+				};
+				if ($condpago == 3){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'credito30dias' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => $fechacomp			        
+					);
+				};
+				if ($condpago == 5){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'credito60dias' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => $fechacomp			        
+					);
+				};
+				
+				$this->db->insert('recaudacion_general', $update_general);
+
+		    };
+		}
+
+		if ($documento == 2){
+
+			if ($idforma == 4){
+
+			$docu = array(
+		         'num_comp' => $numdocum
+		    );
+
+		    $docu2 = array(
+		         'num_factura' => $numdocum
+		    );
+
+		    $docu3 = array(
+		         'num_movimiento' => $numdocum
+		    );
+
+			$this->db->where('id', $recauda);
+		  
+		    $this->db->update('recaudacion', $docu);
+
+		    $doc = 20;
+
+			$docu = array(
+		         'correlativo' => $numdocum
+		    );
+
+		    $this->db->where('id', $doc);
+		  
+		    $this->db->update('correlativos', $docu);
+		    
+			$query = $this->db->query('SELECT * FROM factura_clientes 
+			WHERE tipo_documento = 2 and num_factura = '.$numdocum.'');
+			
+			if($query->num_rows()>0){
+	   			$row = $query->first_row();
+	   			$factura = $row->id;
+			    $this->db->where('id', $factura);			  
+			    $this->db->update('factura_clientes', $docu2);
+	        };	        
+	        
+	        $query = $this->db->query('SELECT * FROM existencia_detalle 
+		    WHERE id_tipo_movimiento = 2 and num_movimiento = '.$numdocum.'');
+
+		    if($query->num_rows()>0){
+	   			
+	   			foreach($query->result() as $item){
+	   			$factura = $item->id;
+	   			$this->db->where('id', $factura);		  
+		    	$this->db->update('existencia_detalle', $docu3);
+
+			};
+
+	        };
+			};
+		    if ($idforma == 7){
+			$docu = array(
+		         'num_comp' => $numdocum
+		    );
+
+ 			$docu2 = array(
+		         'num_factura' => $numdocum
+		    );
+		    $docu3 = array(
+		         'num_movimiento' => $numdocum
+		    );
+			$this->db->where('id', $recauda);		  
+		    $this->db->update('recaudacion', $docu);
+
+		    $doc = 20;
+
+			$docu = array(
+		         'correlativo' => $numdocum
+		    );
+
+		    $this->db->where('id', $doc);
+		  
+		    $this->db->update('correlativos', $docu);
+
+		    
+		    $query = $this->db->query('SELECT * FROM factura_clientes 
+		    WHERE tipo_documento = 2 and num_factura = '.$numdocum.'');
+			
+			if($query->num_rows()>0){
+	   			$row = $query->first_row();
+	   			$factura = $row->id;
+	   			$this->db->where('id', $factura);		  
+		    	$this->db->update('factura_clientes', $docu2);
+	        };
+
+	        $query = $this->db->query('SELECT * FROM existencia_detalle 
+		    WHERE id_tipo_movimiento = 2 and num_movimiento = '.$numdocum.'');
+
+		    if($query->num_rows()>0){
+	   			
+	   			foreach($query->result() as $item){
+	   			$factura = $item->id;
+	   			$this->db->where('id', $factura);
+		  
+		    	$this->db->update('existencia_detalle', $docu3);
+
+			    };
+
+	        };
+			};
+
+		};
+
+		//********************* GRABA BOLETA EN CTA CTE ***********************
+
+		$query = $this->db->query("SELECT cc.id as idcuentacontable FROM cuenta_contable cc WHERE cc.nombre = 'FACTURAS POR COBRAR'");
+		 $row = $query->result();
+		 $row = $row[0];
+		 $idcuentacontable = $row->idcuentacontable;	
+
+
+			// VERIFICAR SI CLIENTE YA TIENE CUENTA CORRIENTE
+		 $query = $this->db->query("SELECT co.idcliente, co.id as idcuentacorriente  FROM cuenta_corriente co
+		 							WHERE co.idcuentacontable = '$idcuentacontable' and co.idcliente = '" . $idcliente . "'");
+    	 $row = $query->result();
+	
+		if ($query->num_rows()==0){	
+			$cuenta_corriente = array(
+		        'idcliente' => $idcliente,
+		        'idcuentacontable' => $idcuentacontable,
+		        'saldo' => $ftotal,
+		        'fechaactualiza' => date('Y-m-d H:i:s')
+			);
+			$this->db->insert('cuenta_corriente', $cuenta_corriente); 
+			$idcuentacorriente = $this->db->insert_id();
+
+
+		}else{
+			$row = $row[0];
+			$query = $this->db->query("UPDATE cuenta_corriente SET saldo = saldo + " . $ftotal . " where id = " .  $row->idcuentacorriente );
+			$idcuentacorriente =  $row->idcuentacorriente;
+		}
+
+		$detalle_cuenta_corriente = array(
+	        'idctacte' => $idcuentacorriente,
+	        'tipodocumento' => $tipodocumento,
+	        'numdocumento' => $numdocum,
+	        'saldoinicial' => $ftotal,
+	        'saldo' => $ftotal,
+	        'fechavencimiento' => $fechacomp,
+	        'fecha' => date('Y-m-d H:i:s')
+		);
+
+		$this->db->insert('detalle_cuenta_corriente', $detalle_cuenta_corriente); 	
+
+
+		$cartola_cuenta_corriente = array(
+	        'idctacte' => $idcuentacorriente,
+	        'idcuenta' => $idcuentacontable,
+	        'tipodocumento' => $tipodocumento,
+	        'numdocumento' => $numdocum,
+	        'glosa' => 'Registro de Factura en Cuenta Corriente',
+	        'fecvencimiento' => $fechacomp,
+	        'valor' => $ftotal,
+	        'origen' => 'VENTA',
+	        'fecha' => date('Y-m-d H:i:s')
+		);
+
+		$this->db->insert('cartola_cuenta_corriente', $cartola_cuenta_corriente); 			
+
+		/*****************************************/
+
+        //********************* CANCELA BOLETA EN CTA CTE ***********************
+		if ($tipodocumento != 3 && $tipodocumento != 105){
+		
+		$total_cancelacion = 0;
+		$total_factura_cta_cte = 0;
+		foreach($recitems as $ri){ // SUMAR MONTOS PARA VER TOTAL CANCELACION
+			$total_factura_cta_cte += $ri->valor_pago;
+			if($ri->id_forma != 3 && $ri->id_forma != 5 ){ // NO CONSIDERA PAGOS A CREDITO
+				$total_cancelacion += $ri->valor_pago;
+			}
+		}
+
+		if($tipodocumento == 1 || $tipodocumento == 2 || $tipodocumento == 19 || $tipodocumento == 101 || $tipodocumento == 103){
+		 	 $nombre_cuenta = $tipodocumento == 2 ? "BOLETAS POR COBRAR" : "FACTURAS POR COBRAR";
+		 	 //$nombre_cuenta = "FACTURAS POR COBRAR";
+			 $query = $this->db->query("SELECT cc.id as idcuentacontable FROM cuenta_contable cc WHERE cc.nombre = '$nombre_cuenta'");
+			 $row = $query->result();
+			 $row = $row[0];
+			 $idcuentacontable = $row->idcuentacontable;
+			 
+			 $query = $this->db->query("SELECT co.idcliente, co.id as idcuentacorriente  FROM cuenta_corriente co
+			 							WHERE co.idcuentacontable = '$idcuentacontable' and co.idcliente = '" . $idcliente . "'");
+	    	 $row = $query->row();	
+	    	 $idcuentacorriente =  $row->idcuentacorriente;			
+
+			$correlativo_cta_cte = null;
+			$array_cuentas = array();
+
+			foreach($recitems as $ri){
+				$formapago = $ri->id_forma;
+				if($formapago == 1 || $formapago == 6 || $formapago == 7){
+					$cuenta_cuadratura = 3;
+				}else if($formapago == 2){	
+					$cuenta_cuadratura = 18;
+				}else if($formapago == 4){
+					$cuenta_cuadratura = 19;
+				}elseif($formapago == 8){
+					$cuenta_cuadratura = 3;
+				}
+
+				
+				if($formapago != 3 && $formapago != 5 ){ 
+					if(is_null($correlativo_cta_cte)){ // si son varias formas de pago, entonces sólo en la primera genera el movimiento
+						 $query = $this->db->query("SELECT correlativo FROM correlativos WHERE nombre = 'CANCELACIONES CTA CTE'");
+						 $row = $query->row();
+						 $correlativo_cta_cte = $row->correlativo;
+						// guarda movimiento cuenta corriente (comprobante de ingreso ??? )
+						$data = array(
+					      	'numcomprobante' => $correlativo_cta_cte,
+					        'tipo' => 'INGRESO',
+					        'proceso' => 'CANCELACION',
+					        'glosa' => 'Cancelación de Documento por Caja',
+					        'fecha' => date("Y-m-d H:i:s")
+						);
+
+						$this->db->insert('movimiento_cuenta_corriente', $data); 
+						$idMovimiento = $this->db->insert_id();
+
+						// actualiza correlativo
+						$query = $this->db->query("UPDATE correlativos SET correlativo = correlativo + 1 where nombre = 'CANCELACIONES CTA CTE'");
+
+						//Detalle movimiento CARGO
+
+						$data = array(
+					      	'idmovimiento' => $idMovimiento,
+					        'tipo' => 'CTACTE',
+					        'idctacte' => $idcuentacorriente,
+					        'idcuenta' => $idcuentacontable,
+					        'tipodocumento' => $tipodocumento,
+					        'numdocumento' => $numdocum,		
+					        'glosa' => 'Cancelación de Documento por Caja',		        
+					        'fecvencimiento' => null,		        
+					        'debe' => 0,
+					        'haber' => $total_cancelacion
+						);
+
+						$this->db->insert('detalle_mov_cuenta_corriente', $data); 								
+					}
+					// DETALLE MOVIMIENTO CUADRATURA
+					$docpago = $formapago == 2 ? $ri->num_cheque : 0;
+					if(!in_array($cuenta_cuadratura, $array_cuentas)){ 
+						$data = array(
+					      	'idmovimiento' => $idMovimiento,
+					        'tipo' => 'CUADRATURA',
+					        'idctacte' => null,
+					        'idcuenta' => $cuenta_cuadratura,
+					        'docpago' => $docpago,
+					        'tipodocumento' => null,
+					        'numdocumento' => null,		
+					        'glosa' => 'Cancelación de Documento por Caja',		        
+					        'fecvencimiento' => null,		        
+					        'debe' => $ri->valor_pago,
+					        'haber' => 0
+						);			
+						$this->db->insert('detalle_mov_cuenta_corriente', $data); 	
+						array_push($array_cuentas,$cuenta_cuadratura);
+					}else{ // se actualiza la cuenta cuadratura (debería suceder sólo con caja)
+						$query = $this->db->query("UPDATE detalle_mov_cuenta_corriente SET debe = debe + " . $ri->valor_pago . " where idmovimiento = " .  $idMovimiento . " and idcuenta  = " . $cuenta_cuadratura );
+
+					}							
+
+					// genera cartola de cancelacion
+					$data = array(
+				      	'idctacte' => $idcuentacorriente,
+				        'idcuenta' => $idcuentacontable,
+				        'idmovimiento' => $idMovimiento,
+				        'tipodocumento' => $tipodocumento,
+				        'numdocumento' => $numdocum,
+				        'fecvencimiento' => $fechacomp,
+				        'glosa' => 'Cancelación de Documento por Caja',		        
+				        'valor' => $ri->valor_pago,
+				        'origen' => 'CTACTE',
+				        'fecha' => date("Y-m-d")
+					);
+
+					$this->db->insert('cartola_cuenta_corriente', $data);
+										
+					// REBAJA SALDO
+					
+					$query = $this->db->query("UPDATE cuenta_corriente SET saldo = saldo - " . $ri->valor_pago . " where id = " .  $idcuentacorriente );
+					$query = $this->db->query("UPDATE detalle_cuenta_corriente SET saldo = saldo - " . $ri->valor_pago . " where idctacte = " .  $idcuentacorriente . " and tipodocumento = " . $tipodocumento . " and numdocumento = " . $numdocum);
+
+					$resp['ctacte'] = $idcuentacorriente; 
+				}
+
+
+			} // end foreach		
+			
+		}
+
+	}
+
+
+	
+		## HASTA
+
+		/*****************************************/
+      
+				
+        $resp['success'] = true;
+        $resp['idrecauda'] = $recauda;
+		$resp['documento'] = $tipodocumento;
+		$resp['numrecauda'] = $numcomp;
+		
+		//$resp['ctacte'] = $idcuentacorriente;       
+        
+		
+        $this->Bitacora->logger("I", 'recaudacion', $numcomp);
+
+
+        echo json_encode($resp);
+    }
+
+    public function save(){
 
 		$resp = array();
 		$fechaboleta = json_decode($this->input->post('fecha'));
@@ -139,9 +996,12 @@ class Recaudacion extends CI_Controller {
 	        'num_comp' => $numcomp,
 	        'fecha' => date('Y-m-d'),
 	        'id_cliente' => $idcliente,
+	        'id_ticket' => 2,
+	        'id_vendedor' => 1,
 			'num_doc' => $numdocum,
 			'id_caja' => $idcaja,
-			'id_cajero' => $idcajero
+			'id_cajero' => $idcajero,
+			'total' => $totaldocumento
 		);
 
 		$this->db->insert('recaudacion', $recaudacion); 
@@ -161,7 +1021,169 @@ class Recaudacion extends CI_Controller {
 		);
 		
 		$this->db->insert('recaudacion_detalle', $recaudacion_detalle);
-	
+
+		$query5 = $this->db->query('SELECT * FROM recaudacion_general 
+			WHERE id_recaudacion = '.$recauda.'');
+			
+			if($query5->num_rows()>0){
+
+				$row = $query5->first_row();
+	   			$id = $row->id;
+	   			$contado = $row->contado;
+	   			$chequealdia = $row->chequealdia;
+	   			$chequeafecha = $row->chequeafecha;
+	   			$credito = $row->credito;
+	   			$tarjetadebito = $row->tarjetadebito;
+	   			$tarjetacredito = $row->tarjetacredito;
+	   			$credito30dias = $row->credito30dias;
+	   			$credito60dias = $row->credito60dias;
+	   			$transferencia = $row->transferencia;
+				if ($condpago == 1){
+					$update_general = array(				        
+				        'contado' => (($valorcancela-$valorvuelto)+$contado)			        
+					);
+				};
+				if ($condpago == 2){
+					$update_general = array(				        
+				        'chequealdia' => ($valorcancela+$chequealdia)			        
+					);
+				};
+				if ($condpago == 8){
+					$update_general = array(				        
+				        'chequeafecha' => ($valorcancela+$chequeafecha)			        
+					);
+				};
+				if ($condpago == 11){
+					$update_general = array(				        
+				        'credito' => ($valorcancela+$credito)			        
+					);
+				};
+				if ($condpago == 7){
+					$update_general = array(				        
+				        'tarjetadebito' => ($valorcancela+$tarjetadebito)			        
+					);
+				};
+				if ($condpago == 4){
+					$update_general = array(				        
+				        'tarjetacredito' => ($valorcancela+$tarjetacredito)				        
+					);
+				};
+				if ($condpago == 6){
+					$update_general = array(				        
+				        'transferencia' => ($valorcancela+$transferencia)				        
+					);
+				};
+				if ($condpago == 3){
+					$update_general = array(				        
+				        'credito30dias' => ($valorcancela+$credito30dias)			        
+					);
+				};
+				if ($condpago == 5){
+					$update_general = array(				        
+				        'credito60dias' => ($valorcancela+$credito60dias)			        
+					);
+				};
+
+				$this->db->where('id', $id);		  
+	    		$this->db->update('recaudacion_general', $update_general);				
+					
+			}else{
+
+				if ($condpago == 1){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'contado' => ($valorcancela-$valorvuelto),
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => date('Y-m-d')			        
+					);
+				};
+				if ($condpago == 2){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'chequealdia' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => date('Y-m-d')			        
+					);
+				};
+				if ($condpago == 8){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'chequeafecha' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => date('Y-m-d')			        
+					);
+				};
+				if ($condpago == 11){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'credito' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => date('Y-m-d')			        
+					);
+				};
+				if ($condpago == 7){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'tarjetadebito' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => date('Y-m-d')			        
+					);
+				};
+				if ($condpago == 4){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'tarjetacredito' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => date('Y-m-d')			        
+					);
+				};
+				if ($condpago == 6){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'transferencia' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => date('Y-m-d')			        
+					);
+				};
+				if ($condpago == 3){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'credito30dias' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => date('Y-m-d')			        
+					);
+				};
+				if ($condpago == 5){
+					$update_general = array(
+					    'id_recaudacion' =>	$recauda,		        
+				        'credito60dias' => $valorcancela,
+				        'id_caja' => $idcaja,
+						'num_documento' => $numdocum,
+					    'id_cajero' => $idcajero,
+					    'fecha' => date('Y-m-d')			        
+					);
+				};
+				
+				$this->db->insert('recaudacion_general', $update_general);
+
+		    };
+			
 		$factura_cliente = array(
 			'tipo_documento' => $tipodocumento,
 	        'id_cliente' => $idcliente,
@@ -342,6 +1364,7 @@ class Recaudacion extends CI_Controller {
 
 	}
 
+
 	public function update(){
 		
 		
@@ -421,13 +1444,13 @@ class Recaudacion extends CI_Controller {
 		<body>
 		<table width="987px" height="602" border="0">
 		  <tr>
-		   <td width="197px"><img src="http://92.168.1.100/vibrados_web/Infosys_web/resources/images/logo_empresa.jpg" width="150" height="136" /></td>
+		    <td width="197px"><img src="http://localhost/Gotru_web/Infosys_web/resources/images/logo_empresa.png" width="150" height="136" /></td>
 		    <td width="493px" style="font-size: 14px;text-align:center;vertical-align:text-top"	>
-		    <p>VIBRADOS CHILE LTDA.</p>
-		    <p>RUT:77.748.100-2</p>
-		    <p>Cienfuegos # 1595 San Javier - Chile</p>
-		    <p>Fonos: (73)2 321100</p>
-		    <p>Correo Electronico : info@vibradoschile.cl</p>
+		    <p>GOTRU ALIMENTOS SPA.</p>
+		    <p>RUT:78.549.450-4</p>
+		    <p>8 ORIENTE, TALCA</p>
+		    <p>Fonos: </p>
+		    <p>http://www.gotru.cl</p>
 		    </td>
 		    <td width="296px" style="font-size: 16px;text-align:left;vertical-align:text-top"	>
 		          <p>COMPROBANTE N°: '.$codigo.'</p>
@@ -482,7 +1505,7 @@ class Recaudacion extends CI_Controller {
               $vuelto = 0;
               $i = 0;
               $body_detail = '';
-      foreach($datas_detalle as $detalle){
+     foreach($datas_detalle as $detalle){
 
 
      $body_detail .= '<tr><td colspan="10">&nbsp;</td></tr></table></td>
@@ -490,7 +1513,7 @@ class Recaudacion extends CI_Controller {
 				<tr>
 				<table width="997" cellspacing="0" cellpadding="0" >
 				<tr>				
-				<td style="text-align:left;font-size: 14px;">'.$detalle['desc_pago'].'</td>		
+				<td style="text-align:left;font-size: 14px;">Boleta</td>		
 				<td style="text-align:left;font-size: 14px;">'.$detalle['num_cheque'].'</td>
 				<td style="text-align:right;font-size: 14px;">'.$nomdocu.'</td>
 				<td style="text-align:center;font-size: 14px;">'.$numdocu.'</td>
@@ -541,7 +1564,7 @@ class Recaudacion extends CI_Controller {
 	      $html .=  '</tr>';
 	    $html .= '</table></td>';
         $html .= "</tr></table>";
-*/
+		*/
 
         $html = $header.$header2.$body_header.$body_detail.$footer;
         //echo $html; exit;
@@ -589,21 +1612,19 @@ class Recaudacion extends CI_Controller {
 		$countAll = $this->db->count_all_results("recaudacion");
 
 		if($nombre){
-			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, v.id as id_vendedor, p.num_ticket as num_ticket, p.total as total, n.nombre as nom_caja, e.nombre as nom_cajero FROM recaudacion acc
-			left join preventa p on (acc.id_ticket = p.id)
+			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, v.id as id_vendedor, n.nombre as nom_caja, e.nombre as nom_cajero FROM recaudacion acc
 			left join clientes c on (acc.id_cliente = c.id)
 			left join cajas n on (acc.id_caja = n.id)
 			left join cajeros e on (acc.id_cajero = e.id)
+			left join vendedores v on (acc.id_vendedor = v.id)
 			WHERE nom_caja like "%'.$nombre.'%"
 			limit '.$start.', '.$limit.'');
 		}else{
-			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, v.id as id_vendedor, p.num_ticket as num_ticket, p.total as total, n.nombre as nom_caja, e.nombre as nom_cajero FROM recaudacion acc
-			left join preventa p on (acc.id_ticket = p.id)
+			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, v.id as id_vendedor, n.nombre as nom_caja, e.nombre as nom_cajero FROM recaudacion acc
 			left join clientes c on (acc.id_cliente = c.id)
 			left join cajas n on (acc.id_caja = n.id)
 			left join cajeros e on (acc.id_cajero = e.id)
-			left join vendedores v on (p.id_vendedor = v.id) order by acc.id desc
-			
+			left join vendedores v on (acc.id_vendedor = v.id) order by acc.id desc			
 			limit '.$start.', '.$limit.' ' 
 
 		);
@@ -649,16 +1670,16 @@ class Recaudacion extends CI_Controller {
 	public function editarecauda(){
 
 		$resp = array();
-
-        $nombre = $this->input->get('ticketid');
+        $nombre = $this->input->get('idrecauda');
         
 		if($nombre){
 			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, c.rut as rut, v.nombre as nom_vendedor, v.id as id_vendedor, p.num_ticket as num_ticket, p.total as total, n.nombre as nom_caja, e.nombre as nom_cajero FROM recaudacion acc
 			left join preventa p on (acc.id_ticket = p.id)
 			left join clientes c on (acc.id_cliente = c.id)
+			left join vendedores v on (p.id_vendedor = v.id)
 			left join cajas n on (acc.id_caja = n.id)
 			left join cajeros e on (acc.id_cajero = e.id)
-			WHERE id like "'.$nombre.'"');
+			WHERE acc.id like "'.$nombre.'"');
 		}
 		
 		$data = array();
@@ -680,8 +1701,7 @@ class Recaudacion extends CI_Controller {
 		      $row->rut_cliente = ($ruta4.".".$ruta3.".".$ruta2."-".$ruta1);
 		   
 		    };
-
-		     if (strlen($rutautoriza) == 2){
+		    if (strlen($rutautoriza) == 2){
 		      $ruta1 = substr($rutautoriza, -1);
 		      $ruta2 = substr($rutautoriza, -4, 1);
 		      $row->rut_cliente = ($ruta2."-".$ruta1);
@@ -692,7 +1712,6 @@ class Recaudacion extends CI_Controller {
 			$data[] = $row;
 		}
         $resp['success'] = true;
-        $resp['total'] = $countAll;
         $resp['cliente'] = $data;
 
         echo json_encode($resp);	
@@ -732,10 +1751,12 @@ class Recaudacion extends CI_Controller {
           $cancelado10=0;
           $doc11="";
           $cancelado11=0;
+          $b=0;
+          $pag=1;
 
-          if ($tipo == "DETALLE"){
+          if ($tipo == "DETALLES"){
 
-            $this->load->database();
+ 			$this->load->database();
 
             $query = $this->db->query('SELECT acc.*, t.nombre as desc_pago,
             r.id_caja as id_caja, r.id_cajero as id_cajero, n.nombre as nom_caja,
@@ -743,16 +1764,16 @@ class Recaudacion extends CI_Controller {
             r.num_doc as num_doc, cor.nombre as nom_documento, cli.nombres as nom_cliente FROM recaudacion_detalle acc
             left join cond_pago t on (acc.id_forma = t.id)
             left join recaudacion r on (acc.id_recaudacion = r.id)
-            left join preventa pr on (r.id_ticket = pr.id)
-            left join correlativos cor on (pr.id_tip_docu = cor.id)
+            left join correlativos cor on (r.id_ticket = cor.id)
             left join cajas n on (r.id_caja = n.id)
             left join cajeros e on (r.id_cajero = e.id)
             left join banco b on (acc.id_banco = b.id)
             left join clientes cli on (r.id_cliente = cli.id)
-            WHERE acc.fecha_comp = "'.$fecha.'"
-            order by desc_pago,nom_documento, num_doc asc');
-            
-            $header = '
+            WHERE acc.fecha_comp = "'.$fecha.'" 
+            order by num_doc asc');
+
+
+                $header = '
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
@@ -770,20 +1791,20 @@ class Recaudacion extends CI_Controller {
 		<body>
 		<table width="987px" height="602" border="0">
 		  <tr>
-		   <td width="197px"><img src="http://localhost/vibrados_web/Infosys_web/resources/images/logo_empresa.jpg" width="150" height="136" /></td>
+		    <td width="197px"><img src="http://localhost/Gotru_web/Infosys_web/resources/images/logo_empresa.png" width="150" height="136" /></td>
 		    <td width="493px" style="font-size: 14px;text-align:center;vertical-align:text-top"	>
-		    <p>VIBRADOS CHILE LTDA.</p>
-		    <p>RUT:77.748.100-2</p>
-		    <p>Cienfuegos # 1595 San Javier - Chile</p>
-		    <p>Fonos: (73)2 321100</p>
-		    <p>Correo Electronico : info@vibradoschile.cl</p>
+		    <p>GOTRU ALIMENTOS SPA.</p>
+		    <p>RUT:78.549.450-4</p>
+		    <p>8 ORIENTE, TALCA</p>
+		    <p>Fonos: </p>
+		    <p>http://www.gotru.cl</p>
 		    </td>
 		    <td width="296px" style="font-size: 16px;text-align:left;vertical-align:text-top">
-		    <p>FECHA EMISION : '.date('d/m/Y').'</p>
-			</td>
+		    <p>FECHA EMISION : '.$fecha2.'</p>
+		    </td>
 		  </tr>';              
               
-		  $header2 = '<tr>
+		  $header .= '<tr>
 			<td style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" colspan="3"><h2>LIBRO DE RECAUDACION</h2></td>
 		  </tr>
 		  <tr>
@@ -795,159 +1816,66 @@ class Recaudacion extends CI_Controller {
 			
 		  </tr>
 			<tr><td colspan="3">&nbsp;</td></tr>		  
-			';     
+			</table>';     
 		      $cancelado = 0;		     
 		      $i = 0;
-              $body_detail = '';
+              //$body_detail = '';
               $users = $query->result_array();
               $despago = " ";
               $boleta = 0;
 			  $chequealdia = 0;
 			  $chequeafecha = 0;
 			  $credito = 0;
-			  $credito = 0;
-			  $credito = 0;
 			  $tarjetadebito = 0;
 			  $tarjetacredito = 0;
 			  $transferencia = 0;
 			  $valevista = 0;
-			
-		      foreach($users as $v){
+			  $credito30dias = 0;
+			  $credito60dias = 0;
 
-		      	$body_detail .= '<tr><td colspan="10">&nbsp;</td></tr></table></td>
-				</tr>
-				<tr>
-				<table width="987" cellspacing="0" cellpadding="0" >
-				<tr>				
-				<td width="50px" style="text-align:center;">'.$v['num_doc'].'</td>	
-				<td width="50px" style="text-align:center;">'.$tip.'</td>
-				<td width="120px" style="text-align:left;">'.$v['nom_cliente'].'</td>
-				<td width="60px" style="text-align:right;">'.number_format($boleta, 0, '.', ',').'</td>
-				<td width="60px" style="text-align:right;">'.$v['num_comp'].'</td>
-				<td width="60px" style="text-align:right;">'.number_format($boleta, 0, '.', ',').'</td>
-				<td width="60px" style="text-align:right;">'.number_format($chequealdia, 0, '.', ',').'</td>
-				<td width="60px" style="text-align:right;">'.number_format($chequeafecha, 0, '.', ',').'</td>
-				<td width="60px" align="right">'.number_format($credito, 0, '.', ',').'</td>
-				<td width="60px" align="right">'.number_format($tarjetadebito, 0, '.', ',').'</td>
-				<td width="60px" align="right">'.number_format($tarjetacredito, 0, '.', ',').'</td>
-				<td width="60px" align="right">'.number_format($transferencia, 0, '.', ',').'</td>
-				<td width="60px" align="right">'.number_format($valevista, 0, '.', ',').'</td>
-				<td width="100px" align="right">'.$fecha3.'</td>
-				</tr>
-				</table>
-				</tr>';
-
-		      	if($v['desc_pago'] != $despago){
-		      		//$this->mpdf->AddPage();	
-                    
-                 if($despago != ""){
-                   if ($cancelado > 0 or $i>50){
-                    if($i==51){
-                    	$i=0;
-                    	//$this->mpdf->AddPage();	
-                    }	
-                 	$body_detail .= '<tr>
-						<td colspan="3" >
-						<table width="987px" cellspacing="0" cellpadding="0" border="0">
-						<tr>
-						<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>TOTALES</b></td>
-						<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-						<td width="180px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>'.$despago.'</b></td>
-						<td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado, 0, ',', '.').'</b></td>
-						</tr></table>
-						</tr>';	
-
-						if ($despago == "CHEQUE A FECHA"){
-						$doc1 = $despago;
-						$cancelado1 = $cancelado;
-					    };
-					    if ($despago == "CONTADO"){
-						$doc2 = $despago;
-						$cancelado2 = $cancelado;
-					    };
-					    if ($despago == "CREDITO 30 DIAS"){
-						$doc3 = $despago;
-						$cancelado3 = $cancelado;
-					    };
-					    if ($despago == "TARJETA CREDITO"){
-						$doc4 = $despago;
-						$cancelado4 = $cancelado;
-					    };
-					    if ($despago == "TARJETA DEBITO"){
-						$doc5 = $despago;
-						$cancelado5 = $cancelado;
-					    };
-					    if ($despago == "TRANSFERENCIA BANCARIA"){
-						$doc6 = $despago;
-						$cancelado6 = $cancelado;
-					    };
-					    if ($despago == "VALE VISTA"){
-						$doc7 = $despago;
-						$cancelado7 = $cancelado;
-					    };
-					    if ($despago == "NOTA CREDITO"){
-						$doc8 = $despago;
-						$cancelado8 = $cancelado;
-					    };
-					    if ($despago == "CREDITO"){
-						$doc9 = $despago;
-						$cancelado9 = $cancelado;
-					    };
-					    if ($despago == "CREDITO 60 DIAS"){
-						$doc10 = $despago;
-						$cancelado10 = $cancelado;
-					    };
-					    if ($despago == "CHEQUE AL DIA"){
-						$doc11 = $despago;
-						$cancelado11 = $cancelado;
-					    };
-
-						$cancelado = 0;
-
-						}
-	                }
-
-    $body_header = '<tr>
-	    <td colspan="10" >
-	    	<table width="987px" cellspacing="0" cellpadding="0" >
+			  $header .= '
+	    	<table width="987px" cellspacing="0" cellpadding="0" border="0">
 	      <tr>
-	        <td width="67"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Num.Docum.</td>
-	        <td width="70px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Tip Doc.</td>
-	        <td width="150px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Cliente</td>
-	         <td width="70px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >&nbsp;</td>
-	        <td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Total</td>
-	        <td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Compte</td>
-	        <td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Efectivo</td>
-	        <td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Cheque al Dia</td>
-	        <td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Cheque a fecha</td>
-	        <td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Credito</td>
-	        <td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Tarjeta Debito.</td>
-	        <td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Tarjeta Credito</td>
-	        <td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Transfer.</td>
-	        <td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Vale Vista</td>
-	        <td width="110px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Fecha transac</td>	       
-	       </tr>';
+	        <td width="60"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;font-size:12px" >Num.Doc.</td>
+	        <td width="60px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;font-size:12px" >Tip Doc.</td>
+	        <td width="247px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;font-size:12px" >Cliente</td>
+	         <!--td width="70px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >&nbsp;</td-->
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Total</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Compte</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Efectivo</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Cheque al Dia</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Cheque a fecha</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Credito</td>
+	        <td width="80px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Cred 30d</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Tarjeta Deb/Credito</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Tarjeta AbcDin</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Transfer.</td>	        	             
+	       </tr>';	
+	       
+	        $a="ok";
 
-	    }
+			$array_detail = array();
+			$body_detail = "";	  
+		    foreach($users as $v){		      	    		      		     	
 
-
-  	    list($dia, $mes, $anio) = explode("-",$v['fecha_transac']);
-			$fecha3 = $anio ."-". $mes ."-". $dia;
-            if ($v['nom_documento']=="BOLETAS"){
-            	$tip = "BOL";
-            	if ($v['desc_pago']=="CONTADO"){				
+		      	list($dia, $mes, $anio) = explode("-",$v['fecha_transac']);
+				$fecha3 = $anio ."-". $mes ."-". $dia;
+	            
+	            if ($v['nom_documento']=="BOLETAS"){
+            	$tip = "BOL";            	
+            	if ($v['id_forma']==1){				
 					$boleta = $v['valor_pago'];
 					$chequealdia = 0;
 					$chequeafecha = 0;
-					$credito = 0;
-					$credito = 0;
 					$credito = 0;
 					$tarjetadebito = 0;
 					$tarjetacredito = 0;
 					$transferencia = 0;
 					$valevista = 0;
+					$credito30dias = 0;
+					$credito60dias = 0;
 				};
-				if ($v['desc_pago']=="CHEQUE AL DIA"){				
+				if ($v['id_forma']==2){				
 					$chequealdia = $v['valor_pago'];
 					$boleta = 0;
 					$chequeafecha = 0;
@@ -956,20 +1884,11 @@ class Recaudacion extends CI_Controller {
 					$tarjetacredito = 0;
 					$transferencia = 0;
 					$valevista = 0;
-				
+					$credito30dias = 0;
+					$credito60dias = 0;				
 				};
-				if ($v['desc_pago']=="CHEQUE A FECHA"){				
-					$chequeafecha = $v['valor_pago'];
-					$chequealdia = 0;
-					$boleta = 0;
-					$credito = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
 				
-				};
-				if ($v['desc_pago']=="CREDITO 30 DIAS"){				
+				if ($v['id_forma']==11){				
 					$credito = $v['valor_pago'];
 					$chequealdia = 0;
 					$chequeafecha = 0;
@@ -978,29 +1897,9 @@ class Recaudacion extends CI_Controller {
 					$tarjetacredito = 0;
 					$transferencia = 0;
 					$valevista = 0;
-				
+					$credito30dias = 0;
 				};
-				if ($v['desc_pago']=="CREDITO"){				
-					$credito = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="CREDITO 60 DIAS"){				
-					$credito = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="TARJETA DEBITO"){				
+				if ($v['id_forma']==4){				
 					$tarjetadebito = $v['valor_pago'];
 					$chequealdia = 0;
 					$chequeafecha = 0;
@@ -1009,8 +1908,10 @@ class Recaudacion extends CI_Controller {
 					$tarjetacredito = 0;
 					$transferencia = 0;
 					$valevista = 0;
+					$credito30dias = 0;
+					$credito60dias = 0;
 				};
-				if ($v['desc_pago']=="TARJETA CREDITO"){				
+				if ($v['id_forma']==7){				
 					$tarjetacredito = $v['valor_pago'];
 					$chequealdia = 0;
 					$chequeafecha = 0;
@@ -1019,488 +1920,205 @@ class Recaudacion extends CI_Controller {
 					$credito = 0;
 					$transferencia = 0;
 					$valevista = 0;
+					$credito30dias = 0;
+					$credito60dias = 0;
 				};
-				if ($v['desc_pago']=="TRANSFERENCIA BANCARIA"){				
-					$transferencia = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$credito = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="VALE VISTA"){				
-					$valevista = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$credito = 0;
-				};
-			};
-			if ($v['nom_documento']=="FACTURA ELECTRONICA"){
-				$tip = "FACT.";
-				if ($v['desc_pago']=="CONTADO"){				
-					$boleta = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$credito = 0;
-					$credito = 0;
-					$credito = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="CHEQUE AL DIA"){				
-					$chequealdia = $v['valor_pago'];
-					$boleta = 0;
-					$chequeafecha = 0;
-					$credito = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;				
-				};
-				if ($v['desc_pago']=="CHEQUE A FECHA"){				
-					$chequeafecha = $v['valor_pago'];
-					$chequealdia = 0;
-					$boleta = 0;
-					$credito = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
+			};			
 				
-				};
-				if ($v['desc_pago']=="CREDITO 30 DIAS"){				
-					$credito = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				
-				};
-				if ($v['desc_pago']=="CREDITO"){				
-					$credito = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="CREDITO 60 DIAS"){				
-					$credito = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="TARJETA DEBITO"){				
-					$tarjetadebito = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$credito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="TARJETA CREDITO"){				
-					$tarjetacredito = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$credito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="TRANSFERENCIA BANCARIA"){				
-					$transferencia = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$credito = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="VALE VISTA"){				
-					$valevista = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$credito = 0;
-				};
-			};
+			if ($a=="ok"){
+				$a="no";
 
-			if ($v['nom_documento']=="GUIA DE DESPACHO ELECTRONICA"){
-				$tip = "G/D";
-				if ($v['desc_pago']=="CONTADO"){				
-					$boleta = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$credito = 0;
-					$credito = 0;
-					$credito = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="CHEQUE AL DIA"){				
-					$chequealdia = $v['valor_pago'];
-					$boleta = 0;
-					$chequeafecha = 0;
-					$credito = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				
-				};
-				if ($v['desc_pago']=="CHEQUE A FECHA"){				
-					$chequeafecha = $v['valor_pago'];
-					$chequealdia = 0;
-					$boleta = 0;
-					$credito = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				
-				};
-				if ($v['desc_pago']=="CREDITO 30 DIAS"){				
-					$credito = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				
-				};
-				if ($v['desc_pago']=="CREDITO"){				
-					$credito = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="CREDITO 60 DIAS"){				
-					$credito = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="TARJETA DEBITO"){				
-					$tarjetadebito = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$credito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="TARJETA CREDITO"){				
-					$tarjetacredito = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$credito = 0;
-					$transferencia = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="TRANSFERENCIA BANCARIA"){				
-					$transferencia = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$credito = 0;
-					$valevista = 0;
-				};
-				if ($v['desc_pago']=="VALE VISTA"){				
-					$valevista = $v['valor_pago'];
-					$chequealdia = 0;
-					$chequeafecha = 0;
-					$boleta = 0;
-					$tarjetadebito = 0;
-					$tarjetacredito = 0;
-					$transferencia = 0;
-					$credito = 0;
-				};
-			};
-
-
-          			
-			/*$body_detail .= '<tr><td colspan="10">&nbsp;</td></tr></table></td>
-	  </tr>
-	  <tr>
-	  	<table width="987" cellspacing="0" cellpadding="0" >
-	    <tr>				
-		<td width="50px" style="text-align:center;">'.$v['num_doc'].'</td>	
-		<td width="50px" style="text-align:center;">'.$tip.'</td>
-		<td width="120px" style="text-align:left;">'.$v['nom_cliente'].'</td>
-		<td width="60px" style="text-align:right;">'.number_format($boleta, 0, '.', ',').'</td>
-		<td width="60px" style="text-align:right;">'.$v['num_comp'].'</td>
-		<td width="60px" style="text-align:right;">'.number_format($boleta, 0, '.', ',').'</td>
-		<td width="60px" style="text-align:right;">'.number_format($chequealdia, 0, '.', ',').'</td>
-		<td width="60px" style="text-align:right;">'.number_format($chequeafecha, 0, '.', ',').'</td>
-		<td width="60px" align="right">'.number_format($credito, 0, '.', ',').'</td>
-		<td width="60px" align="right">'.number_format($tarjetadebito, 0, '.', ',').'</td>
-		<td width="60px" align="right">'.number_format($tarjetacredito, 0, '.', ',').'</td>
-		<td width="60px" align="right">'.number_format($transferencia, 0, '.', ',').'</td>
-		<td width="60px" align="right">'.number_format($valevista, 0, '.', ',').'</td>
-		<td width="100px" align="right">'.$fecha3.'</td>
-	    </tr>
-	    </table>
-	  </tr>'*/;         			  			
-          			
-	  $body_detail .= '<tr>
-					
-	  </tr>';
-		$cancelado += $v['valor_pago'];	        
-
-        $i++;
-        $despago = $v['desc_pago'];
-       
-     }
-
-     $body_detail .= '<tr><td colspan="10">&nbsp;</td></tr></table></td>
-				</tr>
-				<tr>
-				<table width="987" cellspacing="0" cellpadding="0" >
+				$body_detail .= '
 				<tr>				
-				<td width="50px" style="text-align:center;">'.$v['num_doc'].'</td>	
-				<td width="50px" style="text-align:center;">'.$tip.'</td>
-				<td width="120px" style="text-align:left;">'.$v['nom_cliente'].'</td>
-				<td width="60px" style="text-align:right;">'.number_format($boleta, 0, '.', ',').'</td>
-				<td width="60px" style="text-align:right;">'.$v['num_comp'].'</td>
-				<td width="60px" style="text-align:right;">'.number_format($boleta, 0, '.', ',').'</td>
-				<td width="60px" style="text-align:right;">'.number_format($chequealdia, 0, '.', ',').'</td>
-				<td width="60px" style="text-align:right;">'.number_format($chequeafecha, 0, '.', ',').'</td>
-				<td width="60px" align="right">'.number_format($credito, 0, '.', ',').'</td>
-				<td width="60px" align="right">'.number_format($tarjetadebito, 0, '.', ',').'</td>
-				<td width="60px" align="right">'.number_format($tarjetacredito, 0, '.', ',').'</td>
-				<td width="60px" align="right">'.number_format($transferencia, 0, '.', ',').'</td>
-				<td width="60px" align="right">'.number_format($valevista, 0, '.', ',').'</td>
-				<td width="100px" align="right">'.$fecha3.'</td>
+				<td width="60px" style="text-align:center;font-size:12px">'.$v['num_doc'].'</td>	
+				<td width="60px" style="text-align:center;font-size:12px">'.$tip.'</td>
+				<td width="247px" style="text-align:left;font-size:12px">'.$v['nom_cliente'].'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($v['valor_pago'], 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.$v['num_comp'].'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($boleta, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($chequealdia, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($chequeafecha, 0, ',', ',').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($credito, 0, ',', '.').'</td>
+				<td width="80px" style="text-align:right;font-size:12px">'.number_format($credito30dias, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($tarjetadebito, 0, ',', ',').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($tarjetacredito, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($transferencia, 0, ',', '.').'</td>
 				</tr>
-				</table>
-				</tr>';
+				';				
 
-     $body_detail .= '<tr>
-		<td colspan="3" >
-		<table width="987px" cellspacing="0" cellpadding="0" border="0">
-		<tr>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>TOTALES</b></td>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="180px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>'.$v['desc_pago'].'</b></td>
-		<td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado, 0, ',', '.').'</b></td>
-        
+			};
 
-		</tr></table>
+		    $body_detail .= '
+				<tr>				
+				<td width="60px" style="text-align:center;font-size:12px">'.$v['num_doc'].'</td>	
+				<td width="60px" style="text-align:center;font-size:12px">'.$tip.'</td>
+				<td width="247px" style="text-align:left;font-size:12px">'.$v['nom_cliente'].'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($v['valor_pago'], 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.$v['num_comp'].'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($boleta, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($chequealdia, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($chequeafecha, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($credito, 0, ',', '.').'</td>
+				<td width="80px" style="text-align:right;font-size:12px">'.number_format($credito30dias, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($tarjetadebito, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($tarjetacredito, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($transferencia, 0, ',', '.').'</td>
+				</tr>
+				';
+
+				$array_detail[] = $body_detail;
+				if ($chequeafecha>0){
+				$doc1 = "CHEQUE A FECHA";
+				if ($v['estado']!="NUL"){
+				$cancelado1 +=$chequeafecha;
+			    };
+				};
+				if ($boleta>0){
+				$doc2 = "CONTADO";
+				if ($v['estado']!="NUL"){
+				$cancelado2 +=$boleta;
+			    };
+				};
+				if ($credito30dias>0){
+				$doc3 = "CREDITO 30 DIAS";
+				if ($v['estado']!="NUL"){
+				$cancelado3 +=$credito30dias;
+			    };
+				};
+				if ($tarjetacredito>0){
+				$doc4 = "TARJETA ABCDIN";
+				if ($v['estado']!="NUL"){
+				$cancelado4 +=$tarjetacredito;
+				};
+				};
+				if ($tarjetadebito>0){
+				$doc5 = "TARJETA DEBITO/CREDITO";
+				if ($v['estado']!="NUL"){
+				$cancelado5 +=$tarjetadebito;
+			    };
+				};
+				if ($transferencia>0){
+				$doc6 = "TRANSFERENCIA BANCARIA";
+				if ($v['estado']!="NUL"){
+				$cancelado6 +=$transferencia;
+			    };
+				};
+				if ($credito>0){
+				$doc9 = "CREDITO";
+				if ($v['estado']!="NUL"){
+				$cancelado9 += $credito;
+			    };
+				};
+				if ($chequealdia>0){
+				$doc8 = "CHEQUE AL DIA";
+				if ($v['estado']!="NUL"){
+				$cancelado8 += $chequealdia;
+			    };
+				};
+				
+				$i++;
+     	};
+
+
+     		$body_totales = '<table width="987px" cellspacing="0" cellpadding="0" border="0"><	tr><td colspan="2">&nbsp;</td></tr><tr>
+		<td  colspan="13" style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>TOTALES</b></td>
 		</tr>';
+		$footer = "";
+
+		if($doc1 != ""){
 		
-		$footer .= '<tr><td colspan="10">&nbsp;</td></tr></table></td>
-	    </tr><tr><td colspan="10">&nbsp;</td></tr></table></td>
-	    </tr>
+		$footer .= '
+		<tr>
+		<td width="867px"  style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc1.'</b></td>
+		<td width="120px"  style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado1, 0, ',', '.').'</b></td>
+		</tr>
+		';
 
+	    };
+
+	    if($doc2 != ""){
+
+		$footer .= '<tr>
 		<tr>
-		<td colspan="3" >
-		<table width="987px" cellspacing="0" cellpadding="0" border="0">
+		<td width="867px"  style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc2.'</b></td>
+		<td width="120px"  style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado2, 0, ',', '.').'</b></td>
+	    </tr>';
+
+	    };
+	    	         
+        if($doc3 != ""){
+
+		$footer .= '
 		<tr>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="180px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc1.'</b></td>
-		<td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado1, 0, ',', '.').'</b></td>
-		</tr></table>
+		<td width="867px"   style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc3.'</b></td>
+		<td width="120px"  style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado3, 0, ',', '.').'</b></td>
+	    </tr>';
+
+	    };
+
+	    if($doc4 != ""){
+
+		$footer .= '
+		<tr>
+		<td width="867px"    style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc4.'</b></td>
+		<td width="120px"  style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado4, 0, ',', '.').'</b></td>
+	    </tr>';
+
+	    };
+
+	    if($doc5 != ""){
+
+		$footer .= '
+		<tr>
+		<td width="867px"     style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc5.'</b></td>
+		<td width="120px"   style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado5, 0, ',', '.').'</b></td>
+	    </tr>';
+
+	    };
+
+	    if($doc6 != ""){
+
+		$footer .= '
+		<tr>
+		<td width="867px"     style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc6.'</b></td>
+		<td width="120px"   style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado6, 0, ',', '.').'</b></td>
+	    </tr>';
+
+	    };	   
+
+	   
+	    if($doc8 != ""){
+
+		$footer .= '
+		<tr>
+		<td width="867px"     style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc8.'</b></td>
+		<td width="120px"   style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado8, 0, ',', '.').'</b></td>
+	    </tr>';
+
+	    };	   
+
+
+	    if($doc9 != ""){
+		$footer .= '<tr>
+		<td width="867px"  style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc9.'</b></td>
+		<td width="120px"  style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado9, 0, ',', '.').'</b></td>
 		</tr>
 
-		<tr><td colspan="10">&nbsp;</td></tr></table></td>
-	    </tr>
-
-		<tr>
-		<td colspan="3" >
-		<table width="987px" cellspacing="0" cellpadding="0" border="0">
-		<tr>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="180px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc2.'</b></td>
-		<td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado2, 0, ',', '.').'</b></td>
-		</tr></table>
-		</tr>
-
-		<tr><td colspan="10">&nbsp;</td></tr></table></td>
-	    </tr>
-
-		<tr>
-		<td colspan="3" >
-		<table width="987px" cellspacing="0" cellpadding="0" border="0">
-		<tr>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="180px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc3.'</b></td>
-		<td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado3, 0, ',', '.').'</b></td>
-		</tr></table>
-		</tr>
-		<tr><td colspan="10">&nbsp;</td></tr></table></td>
-	    </tr>
-
-		<tr>
-		<td colspan="3" >
-		<table width="987px" cellspacing="0" cellpadding="0" border="0">
-		<tr>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="180px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc4.'</b></td>
-		<td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado4, 0, ',', '.').'</b></td>
-		</tr></table>
-		</tr>
-
-		<tr><td colspan="10">&nbsp;</td></tr></table></td>
-	    </tr>
-
-		<tr>
-		<td colspan="3" >
-		<table width="987px" cellspacing="0" cellpadding="0" border="0">
-		<tr>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="180px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc5.'</b></td>
-		<td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado5, 0, ',', '.').'</b></td>
-		</tr></table>
-		</tr>
-
-		<tr><td colspan="10">&nbsp;</td></tr></table></td>
-	    </tr>
-
-		<tr>
-		<td colspan="3" >
-		<table width="987px" cellspacing="0" cellpadding="0" border="0">
-		<tr>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="180px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc6.'</b></td>
-		<td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado6, 0, ',', '.').'</b></td>
-		</tr></table>
-		</tr>
-
-		<tr><td colspan="10">&nbsp;</td></tr></table></td>
-	    </tr>
-
-		<tr>
-		<td colspan="3" >
-		<table width="987px" cellspacing="0" cellpadding="0" border="0">
-		<tr>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="180px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc7.'</b></td>
-		<td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado7, 0, ',', '.').'</b></td>
-		</tr></table>
-		</tr>
-
-		<tr><td colspan="10">&nbsp;</td></tr></table></td>
-	    </tr>
-
-		<tr>
-		<td colspan="3" >
-		<table width="987px" cellspacing="0" cellpadding="0" border="0">
-		<tr>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="180px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc8.'</b></td>
-		<td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado8, 0, ',', '.').'</b></td>
-		</tr></table>
-		</tr>
-
-		<tr><td colspan="10">&nbsp;</td></tr></table></td>
-	    </tr>
-
-		<tr>
-		<td colspan="3" >
-		<table width="987px" cellspacing="0" cellpadding="0" border="0">
-		<tr>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="180px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc9.'</b></td>
-		<td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado9, 0, ',', '.').'</b></td>
-		</tr></table>
-		</tr>
-
-		<tr><td colspan="10">&nbsp;</td></tr></table></td>
-	    </tr>
-
-		<tr>
-		<td colspan="3" >
-		<table width="987px" cellspacing="0" cellpadding="0" border="0">
-		<tr>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="180px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc10.'</b></td>
-		<td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado10, 0, ',', '.').'</b></td>
-		</tr></table>
-		</tr>
-
-		<tr><td colspan="10">&nbsp;</td></tr></table></td>
-	    </tr>
-
-		<tr>
-		<td colspan="3" >
-		<table width="987px" cellspacing="0" cellpadding="0" border="0">
-		<tr>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-		<td width="180px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc11.'</b></td>
-		<td width="80px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado11, 0, ',', '.').'</b></td>
-		</tr></table>
-		</tr>
-
-		</td>
-		  </tr></table>
+		';
+	    };
+	    $fin_tabla = "</table>
 		</body>
-		</html>';			              
-             
-        $html = $header.$header2.$body_header.$body_detail.$footer;
-        //echo $html; exit;
-        //$html = $header.$header2.$body_header.$body_detail.$spaces;
-		$this->load->library("mpdf");
-			//include(defined('BASEPATH')."/libraries/MPDF54/mpdf.php");
-			//include(dirname(__FILE__)."/../libraries/MPDF54/mpdf.php");
-
+		</html>";
+	    
+	   	              
+        $this->load->library("mpdf");
+			
 			$this->mpdf->mPDF(
 				'',    // mode - default ''
 				'',    // format - A4, for example, default ''
-				8,     // font size - default 0
+				6,     // font size - default 0
 				'',    // default font family
-				10,    // margin_left
+				5,    // margin_left
 				5,    // margin right
 				16,    // margin top
 				16,    // margin bottom
@@ -1508,32 +2126,64 @@ class Recaudacion extends CI_Controller {
 				9,     // margin footer
 				'L'    // L - landscape, P - portrait
 				);  
+
+			$cantidad_hoja = 50;
+			$fila = 1;
+
+			$this->mpdf->SetHeader('Gotru - Libro Recaudación');
+			$this->mpdf->setFooter('{PAGENO}');			
+			foreach ($array_detail as $detail) {
+				if($fila == 1){
+					$this->mpdf->WriteHTML($header);		
+					//echo $header.$header2.$body_header;
+				}
+
+				$this->mpdf->WriteHTML($detail);
+				//echo $detail;
+
+				if(($fila % $cantidad_hoja) == 0 ){  #LLEVA 30 LINEAS EN LA HOJA
+						$this->mpdf->WriteHTML($fin_tabla);					
+					//echo $fin_tabla;
+						$fila = 0;						
+						$this->mpdf->AddPage();
+				}		
+				//echo $fila."<br>";
+				$fila++;
+				$pag++;
+			}
+			$this->mpdf->WriteHTML($fin_tabla);
+			//echo $body_totales.$footer.$fin_tabla; exit;
+			$this->mpdf->WriteHTML($body_totales.$footer.$fin_tabla);
 			//echo $html; exit;
-			$this->mpdf->WriteHTML($html);
+			//exit;
+			//$this->mpdf->AddPage();
+			//$this->mpdf->WriteHTML($html2);
 			$this->mpdf->Output("LibroRecauda.pdf", "I");
 
-			exit;            
-               
-
-            
+			exit; 
+			
+		            
           }else{
 
-          	 $this->load->database();
+          	$this->load->database();
+          	$pag=1;
 
-                $query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, v.id as id_vendedor, p.num_ticket as num_ticket, p.total as total, n.nombre as nom_caja, e.nombre as nom_cajero FROM recaudacion acc
-                left join preventa p on (acc.id_ticket = p.id)
-                left join clientes c on (acc.id_cliente = c.id)                
-                left join cajas n on (acc.id_caja = n.id)
-                left join cajeros e on (acc.id_cajero = e.id)
-                left join vendedores v on (p.id_vendedor = v.id)
-                WHERE acc.id_caja = "'.$idcaja.'" AND acc.id_cajero = "'.$idcajero.'" AND acc.fecha = "'.$fecha.'"');
+            $query = $this->db->query('SELECT acc.*, t.nombre as desc_pago, n.nombre as nom_caja, e.nombre as nom_cajero, r.num_comp as num_comp, cor.nombre as nom_documento, cli.nombres as nom_cliente FROM recaudacion_general acc
+            left join cond_pago t on (acc.id_forma = t.id)
+            left join recaudacion r on (acc.id_recaudacion = r.id)
+            left join correlativos cor on (r.id_ticket = cor.id)
+            left join cajas n on (acc.id_caja = n.id)
+            left join cajeros e on (acc.id_cajero = e.id)
+            left join clientes cli on (r.id_cliente = cli.id)
+            WHERE acc.fecha = "'.$fecha.'"
+            order by num_documento asc');
 
                 $header = '
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Libro general de Recaudacion</title>
+		<title>Libro de Recaudacion</title>
 		<style type="text/css">
 		td {
 			font-size: 16px;
@@ -1546,138 +2196,311 @@ class Recaudacion extends CI_Controller {
 		<body>
 		<table width="987px" height="602" border="0">
 		  <tr>
-		    <td width="197px"><img src="http://localhost/vibrados_web/Infosys_web/resources/images/logo_empresa.jpg" width="150" height="136" /></td>
+		    <td width="197px"><img src="http://localhost/Gotru_web/Infosys_web/resources/images/logo_empresa.png" width="150" height="136" /></td>
 		    <td width="493px" style="font-size: 14px;text-align:center;vertical-align:text-top"	>
-		    <p>VIBRADOS CHILE LTDA.</p>
-		    <p>RUT:77.748.100-2</p>
-		    <p>Cienfuegos # 1595 San Javier - Chile</p>
-		    <p>Fonos: (73)2 321100</p>
-		    <p>Correo Electronico : info@vibradoschile.cl</p>
+		    <p>GOTRU ALIMENTOS SPA.</p>
+		    <p>RUT:78.549.450-4</p>
+		    <p>8 ORIENTE, TALCA</p>
+		    <p>Fonos: </p>
+		    <p>http://www.gotru.cl</p>
 		    </td>
-		    <td width="296px" style="font-size: 16px;text-align:left;vertical-align:text-top"	>
-		          <p>FECHA EMISION : '.date('d/m/Y').'</p>
-			</td>
+		    <td width="296px" style="font-size: 16px;text-align:left;vertical-align:text-top">
+		    <p>FECHA EMISION : '.$fecha2.'</p>
+		    </td>
 		  </tr>';              
               
-		  $header2 = '<tr>
-			<td style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" colspan="3"><h2>LIBRO DE RECAUDACION GENERAL</h2></td>
+		  $header .= '<tr>
+			<td style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" colspan="3"><h2>LIBRO DE RECAUDACION</h2></td>
 		  </tr>
 		  <tr>
 			<td>CAJA : '.$nomcaja.'</td>
 			<td>CAJERO : '.$nomcajero.'</td>
 			<td>FECHA : '.$fecha2.'</td>
 		  </tr>
+		  <tr>
+			
+		  </tr>
 			<tr><td colspan="3">&nbsp;</td></tr>		  
-			';              
-
-
-		$body_header = '<tr>
-		    <td colspan="3" >
-		    	<table width="987px" cellspacing="0" cellpadding="0" >
-		      <tr>
-		        <td width="67"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Comp.</td>
-		        <td width="100px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Ticket Venta</td>
-		        <td width="120px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Rut</td>
-		        <td width="20px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" ></td>
-		        <td width="450px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Cliente</td>
-		        <td width="120px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:left;" >Total</td>
-		        <td width="110px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Fecha Transac</td>
-		       </tr>';
-
-
-		      $cancelado = 0;
-		      $vuelto = 0;
-		      $totalfactura = 0;
-              $i = 0;
-              $body_detail = '';
+			</table>';     
+		      $cancelado = 0;		     
+		      $i = 0;
+              //$body_detail = '';
               $users = $query->result_array();
+              $despago = " ";
+              $boleta = 0;
+			  $chequealdia = 0;
+			  $chequeafecha = 0;
+			  $credito = 0;
+			  $tarjetadebito = 0;
+			  $tarjetacredito = 0;
+			  $transferencia = 0;
+			  $valevista = 0;
+			  $credito30dias = 0;
+			  $credito60dias = 0;
 
+			  $header .= '
+	    	<table width="987px" cellspacing="0" cellpadding="0" border="0">
+	      <tr>
+	        <td width="60"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;font-size:12px" >Num.Doc.</td>
+	        <td width="60px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;font-size:12px" >Tip Doc.</td>
+	        <td width="247px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;font-size:12px" >Cliente</td>
+	         <!--td width="70px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >&nbsp;</td-->
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Total</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Compte</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Efectivo</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Cheque al Dia</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Cheque a fecha</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Credito</td>
+	        <td width="80px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Cred 30d</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Tarjeta Deb/Cred</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Tarjeta AbcDin</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Transfer.</td>	        	             
+	       </tr>';	
+	       
+	          $a="ok";
+
+			  $array_detail = array();
+			  
 		      foreach($users as $v){
+		      	$body_detail = "";	   		      		     	
 
-		      	     $rutautoriza = $v['rut_cliente'];
-					   	if (strlen($rutautoriza) == 8){
-					      $ruta1 = substr($rutautoriza, -1);
-					      $ruta2 = substr($rutautoriza, -4, 3);
-					      $ruta3 = substr($rutautoriza, -7, 3);
-					      $ruta4 = substr($rutautoriza, -8, 1);
-					      $v['rut_cliente'] = ($ruta4.".".$ruta3.".".$ruta2."-".$ruta1);
-					    };
-					    if (strlen($rutautoriza) == 9){
-					      $ruta1 = substr($rutautoriza, -1);
-					      $ruta2 = substr($rutautoriza, -4, 3);
-					      $ruta3 = substr($rutautoriza, -7, 3);
-					      $ruta4 = substr($rutautoriza, -9, 2);
-					      $v['rut_cliente'] = ($ruta4.".".$ruta3.".".$ruta2."-".$ruta1);
-					   
-					    };
-					    if (strlen($rutautoriza) == 2){
-					      $ruta1 = substr($rutautoriza, -1);
-					      $ruta2 = substr($rutautoriza, -4, 1);
-					      $v['rut_cliente'] = ($ruta2."-".$ruta1);
-					     
-					    };
+		      	list($dia, $mes, $anio) = explode("-",$v['fecha']);
+				$fecha3 = $anio ."-". $mes ."-". $dia;
+	            
+	            if ($v['nom_documento']=="BOLETAS"){
+            	$tip = "BOL";            	
+				};
+				if ($v['nom_documento']=="FACTURA ELECTRONICA"){
+				$tip = "FACT.";				
+				};
+				if ($v['nom_documento']=="GUIA DE DESPACHO ELECTRONICA"){
+				$tip = "G/D";
+				};
+				if ($v['nom_documento']=="NOTAS DE CREDITO ELECTRONICAS"){
+				$tip = "N/C";
+				};
 
-					     list($dia, $mes, $anio) = explode("-",$v['fecha']);
-          				$fecha3 = $anio ."-". $mes ."-". $dia;	      	    
+				$boleta = $v['contado'];
+				$chequealdia = $v['chequealdia'];
+				$chequeafecha = $v['chequeafecha'];
+				$credito = $v['credito'];
+				$tarjetadebito = $v['tarjetadebito'];
+				$tarjetacredito = $v['tarjetacredito'];
+				$transferencia = $v['transferencia'];
+				$credito30dias = $v['credito30dias'];
+				$credito60dias = $v['credito60dias'];
+				$valor_pago = ($boleta+$chequealdia+$chequeafecha+$credito+$tarjetadebito+$tarjetacredito+$transferencia+$credito30dias+$credito60dias);
+
+				if ($v['estado']=="NUL"){
+				  $boleta = 0;
+				  $chequealdia = 0;
+				  $chequeafecha = 0;
+				  $credito = 0;
+				  $tarjetadebito = 0;
+				  $tarjetacredito = 0;
+				  $transferencia = 0;
+				  $valevista = 0;
+				  $credito30dias = 0;
+				  $credito60dias = 0;
+				  $valor_pago=0;
+				  $v['nom_cliente'] = "DOCUMENTO NULO";
+				}				
+				
+			if ($a=="ok"){
+				$a="no";
+
+				$body_detail .= '
+				<tr>				
+				<td width="60px" style="text-align:center;font-size:12px">'.$v['num_documento'].'</td>	
+				<td width="60px" style="text-align:center;font-size:12px">'.$tip.'</td>
+				<td width="247px" style="text-align:left;font-size:12px">'.$v['nom_cliente'].'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($valor_pago, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.$v['num_comp'].'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($boleta, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($chequealdia, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($chequeafecha, 0, ',', ',').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($credito, 0, ',', '.').'</td>
+				<td width="80px" style="text-align:right;font-size:12px">'.number_format($credito30dias, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($tarjetadebito, 0, ',', ',').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($tarjetacredito, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($transferencia, 0, ',', '.').'</td>
+				</tr>
+				';				
+
+			}else{
+
+		    $body_detail .= '
+				<tr>				
+				<td width="60px" style="text-align:center;font-size:12px">'.$v['num_documento'].'</td>	
+				<td width="60px" style="text-align:center;font-size:12px">'.$tip.'</td>
+				<td width="247px" style="text-align:left;font-size:12px">'.$v['nom_cliente'].'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($valor_pago, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.$v['num_comp'].'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($boleta, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($chequealdia, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($chequeafecha, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($credito, 0, ',', '.').'</td>
+				<td width="80px" style="text-align:right;font-size:12px">'.number_format($credito30dias, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($tarjetadebito, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($tarjetacredito, 0, ',', '.').'</td>
+				<td width="60px" style="text-align:right;font-size:12px">'.number_format($transferencia, 0, ',', '.').'</td>
+				</tr>
+				';
+			}
+
+				$array_detail[] = $body_detail;
+				if ($chequeafecha>0){
+				$doc1 = "CHEQUE A FECHA";
+				if ($v['estado']!="NUL"){
+				$cancelado1 +=$chequeafecha;
+			    };
+				};
+				if ($boleta>0){
+				$doc2 = "CONTADO";
+				if ($v['estado']!="NUL"){
+				$cancelado2 +=$boleta;
+			    };
+				};
+				if ($credito30dias>0){
+				$doc3 = "CREDITO 30 DIAS";
+				if ($v['estado']!="NUL"){
+				$cancelado3 +=$credito30dias;
+			    };
+				};
+				if ($tarjetacredito>0){
+				$doc4 = "TARJETA ABCDIN";
+				if ($v['estado']!="NUL"){
+				$cancelado4 +=$tarjetacredito;
+				};
+				};
+				if ($tarjetadebito>0){
+				$doc5 = "TARJETA DEBITO/CREDITO";
+				if ($v['estado']!="NUL"){
+				$cancelado5 +=$tarjetadebito;
+			    };
+				};
+				if ($transferencia>0){
+				$doc6 = "TRANSFERENCIA BANCARIA";
+				if ($v['estado']!="NUL"){
+				$cancelado6 +=$transferencia;
+			    };
+				};
+				if ($credito>0){
+				$doc9 = "CREDITO";
+				if ($v['estado']!="NUL"){
+				$cancelado9 += $credito;
+			    };
+				};
+				if ($chequealdia>0){
+				$doc8 = "CHEQUE AL DIA";
+				if ($v['estado']!="NUL"){
+				$cancelado8 += $chequealdia;
+			    };
+				};
+				
+				$i++;
+     };
 
 
-		      	    $body_detail .= '<tr><td colspan="10">&nbsp;</td></tr></table></td>
-				  	</tr>
-				  	<tr>
-				  	<table width="987" cellspacing="0" cellpadding="0" >
-				    <tr>				
-					<td width="47px" style="text-align:right">'.$v['num_comp'].'</td>	
-					<td width="80px" style="text-align:right">'.$v['num_ticket'].'</td>
-					<td width="20px" style="text-align:left">&nbsp;</td>
-					<td width="100px" style="text-align:right">'.$v['rut_cliente'].'</td>
-					<td width="20px" style="text-align:left">&nbsp;</td>
-					<td width="300px" style="text-align:left">'.$v['nom_cliente'].'</td>
-					<td width="20px" style="text-align:left">&nbsp;</td>
-					<td width="180px" style="text-align:right">'.number_format($v['total'], 0, ',', '.').'</td>
-					<td width="20px" style="text-align:left">&nbsp;</td>				
-					<td width="90px" style="text-align:left">'.$fecha3.'</td>
-				    </tr>
-				    </table>
-				    </tr>';
-										
-			        $cancelado += $v['total'];
-			     	     
-		            $i++;
-		         }  
+     $body_totales = '<table width="987px" cellspacing="0" cellpadding="0" border="0"><tr><td colspan="2">&nbsp;</td></tr><tr>
+		<td  colspan="13" style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>TOTALES</b></td>
+		</tr>';
+		$footer = "";
 
-				$footer .= '<tr><td colspan="10">&nbsp;</td></tr></table></td>
-				   </tr>
-				  <tr>
-				  	<td colspan="3" >
-				    	<table width="987px" cellspacing="0" cellpadding="0" border="0">
-				      <tr>
-				        <td width="67px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:left;font-size: 14px;" ><b>Totales</b></td>
-				        <td width="130px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-				        <td width="90px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-				        <td width="20px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-				        <td width="450px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-				        <td width="100px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado, 0, ',', '.').'</b></td>
-				        <td width="130px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
-				      </tr>
-				      	</table>
-				  	</td>
-				  </tr></table>
-				</body>
-				</html>';		              
-             
-        $html = $header.$header2.$body_header.$body_detail.$footer;
-        //echo $html; exit;
-        //$html = $header.$header2.$body_header.$body_detail.$spaces;
-			$this->load->library("mpdf");
-			//include(defined('BASEPATH')."/libraries/MPDF54/mpdf.php");
-			//include(dirname(__FILE__)."/../libraries/MPDF54/mpdf.php");
+		if($doc1 != ""){
+		
+		$footer .= '
+		<tr>
+		<td width="867px"  style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc1.'</b></td>
+		<td width="120px"  style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado1, 0, ',', '.').'</b></td>
+		</tr>
+		';
 
+	    };
+
+	    if($doc2 != ""){
+
+		$footer .= '<tr>
+		<tr>
+		<td width="867px"  style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc2.'</b></td>
+		<td width="120px"  style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado2, 0, ',', '.').'</b></td>
+	    </tr>';
+
+	    };
+	    	         
+        if($doc3 != ""){
+
+		$footer .= '
+		<tr>
+		<td width="867px"   style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc3.'</b></td>
+		<td width="120px"  style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado3, 0, ',', '.').'</b></td>
+	    </tr>';
+
+	    };
+
+	    if($doc4 != ""){
+
+		$footer .= '
+		<tr>
+		<td width="867px"    style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc4.'</b></td>
+		<td width="120px"  style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado4, 0, ',', '.').'</b></td>
+	    </tr>';
+
+	    };
+
+	    if($doc5 != ""){
+
+		$footer .= '
+		<tr>
+		<td width="867px"     style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc5.'</b></td>
+		<td width="120px"   style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado5, 0, ',', '.').'</b></td>
+	    </tr>';
+
+	    };
+
+	    if($doc6 != ""){
+
+		$footer .= '
+		<tr>
+		<td width="867px"     style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc6.'</b></td>
+		<td width="120px"   style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado6, 0, ',', '.').'</b></td>
+	    </tr>';
+
+	    };	   
+
+	   
+	    if($doc8 != ""){
+
+		$footer .= '
+		<tr>
+		<td width="867px"     style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc8.'</b></td>
+		<td width="120px"   style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado8, 0, ',', '.').'</b></td>
+	    </tr>';
+
+	    };	   
+
+
+	    if($doc9 != ""){
+		$footer .= '<tr>
+		<td width="867px"  style="border-bottom:1pt solid black;text-align:left;font-size: 14px;" ><b>'.$doc9.'</b></td>
+		<td width="120px"  style="border-bottom:1pt solid black;text-align:right;font-size: 14px;" ><b>$ '.number_format($cancelado9, 0, ',', '.').'</b></td>
+		</tr>
+
+		';
+	    };
+	    $fin_tabla = "</table>
+		</body>
+		</html>";
+	    
+	   	              
+        $this->load->library("mpdf");
+			
 			$this->mpdf->mPDF(
 				'',    // mode - default ''
 				'',    // format - A4, for example, default ''
-				8,     // font size - default 0
+				6,     // font size - default 0
 				'',    // default font family
-				10,    // margin_left
+				5,    // margin_left
 				5,    // margin right
 				16,    // margin top
 				16,    // margin bottom
@@ -1685,8 +2508,37 @@ class Recaudacion extends CI_Controller {
 				9,     // margin footer
 				'L'    // L - landscape, P - portrait
 				);  
+
+			$cantidad_hoja = 50;
+			$fila = 1;
+			$this->mpdf->SetHeader('Gotru - Libro Recaudación');
+			$this->mpdf->setFooter('{PAGENO}');					
+			foreach ($array_detail as $detail) {
+				if($fila == 1){
+					$this->mpdf->WriteHTML($header);		
+					//echo $header.$header2.$body_header;
+				}
+
+				$this->mpdf->WriteHTML($detail);
+				//echo $detail;
+
+				if(($fila % $cantidad_hoja) == 0 ){  #LLEVA 30 LINEAS EN LA HOJA
+						$this->mpdf->WriteHTML($fin_tabla);					
+					//echo $fin_tabla;
+						$fila = 0;						
+						$this->mpdf->AddPage();
+				}		
+				//echo $fila."<br>";
+				$fila++;
+				$pag++;
+			}
+			$this->mpdf->WriteHTML($fin_tabla);
+			//echo $body_totales.$footer.$fin_tabla; exit;
+			$this->mpdf->WriteHTML($body_totales.$footer.$fin_tabla);
 			//echo $html; exit;
-			$this->mpdf->WriteHTML($html);
+			//exit;
+			//$this->mpdf->AddPage();
+			//$this->mpdf->WriteHTML($html2);
 			$this->mpdf->Output("LibroRecauda.pdf", "I");
 
 			exit;            

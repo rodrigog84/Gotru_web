@@ -30,7 +30,7 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
         fields: ['id', 'nombre'],
         data : [
             {"id":1, "nombre":"CONTADO"},
-            {"id":3, "nombre":"CREDITO"},
+            {"id":11, "nombre":"CREDITO"},
             {"id":2, "nombre":"PAGO CHEQUE "},
             {"id":4, "nombre":"TARJETA DE DEBITO"},
             {"id":7, "nombre":"TARJETA DE CREDITO"}
