@@ -550,7 +550,7 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                 },{
                         text: 'Ventas',
                         iconCls: '',
-                        action: ''
+                        action: 'mestadisticas',
                 },{
                         text: 'Recaudaciones',
                         itemId: 'vyf_eds_recaudaciones',
@@ -559,7 +559,7 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                         action: 'mrecauda',
                         hidden: true
                 },{
-                        text: 'Resportes Legales',
+                        text: 'Reportes Legales',
                         disabled: true,
                         itemId: 'vyf_eds_reportes',
                         iconCls: '',
@@ -567,11 +567,6 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                             text: 'Libro Ventas',
                             iconCls: '',
                             action: 'mejemplo'
-                        },{
-                            text: 'Estadisticas Ventas',
-                            iconCls: '',
-                            action: 'mestadisticas',
-                            hidden: true
                         }]
                 },]
 
