@@ -303,3 +303,9 @@ ALTER TABLE `log_libros`
 	ADD COLUMN `trackid` VARCHAR(30) NULL AFTER `estado`;
 ALTER TABLE `log_libros`
 	ADD COLUMN `xml_libro` TEXT NULL DEFAULT NULL AFTER `trackid`;	
+
+
+/*****************************************************************************************************/
+
+ALTER TABLE `clientes`
+	ADD COLUMN `celular` VARCHAR(12) NOT NULL AFTER `fono`;
