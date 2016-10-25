@@ -85,7 +85,7 @@ class Precios extends CI_Controller {
 	   };
 
 	   echo json_encode($resp);
-	   return false;
+	   //return false;
 
 	}
 
@@ -118,7 +118,7 @@ class Precios extends CI_Controller {
 	   };
 
 	   echo json_encode($resp);
-	   return false;
+	   //return false;
 
 	}
 
@@ -167,8 +167,6 @@ class Precios extends CI_Controller {
 
 		$resp = array();
 		set_time_limit(0);
-
-
 		$fecha = $this->input->post('fecha');
 		$numero = $this->input->post('numero');
 		$nombre = $this->input->post('nombre');

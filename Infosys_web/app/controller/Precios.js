@@ -137,12 +137,12 @@ Ext.define('Infosys_web.controller.Precios', {
         viewIngresa.down('#agregarId').setDisabled(bolEnable);
         var margen = viewIngresa.down('#margenId').getValue();
         var idlista = viewIngresa.down('#idId').getValue();
-        var stp = this.getPreciosStore();
-        
+        var stp = this.getPreciosStore();                
         
         Ext.Ajax.request({
-            url: preurl + 'precios/actualiza',
+
             waitMsg: 'Actualizando...',
+            url: preurl + 'precios/actualiza',
             params: {
                 id: 1,
                 margen: margen,
@@ -154,10 +154,10 @@ Ext.define('Infosys_web.controller.Precios', {
                 if (resp.success == true) {
                 
                     viewIngresa.close();
-                    stp.load();                                
+                    stp.load();
                     Ext.Msg.alert('Datos Actualizados Exitosamente');
-                    return;              
-                                   
+                    return;
+                                  
 
                  }else{
 
@@ -174,6 +174,8 @@ Ext.define('Infosys_web.controller.Precios', {
         st.proxy.extraParams = {nombre : idlista}
         st.load();
         stp.load();
+
+        
 
         
     },
@@ -259,8 +261,9 @@ Ext.define('Infosys_web.controller.Precios', {
         var st = this.getPreciosStore();
          
         Ext.Ajax.request({
-            url: preurl + 'precios/actualiza',
+
             waitMsg: 'Actualizando...',
+            url: preurl + 'precios/actualiza',            
             params: {
 
                 id: 1
@@ -526,7 +529,6 @@ Ext.define('Infosys_web.controller.Precios', {
         view.down('#nuevovalorId').setValue(cero);
         view.down('#valorOriginalId').setValue(cero);
         view.down("#buscarproc").focus();
-
         
     },
 
