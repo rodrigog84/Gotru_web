@@ -1420,6 +1420,8 @@ cargar_listado_contribuyentes: function(){
 
         });
         }
+
+        viewIngresa.down("#cantidadId").focus();
         
     },
 
@@ -1435,12 +1437,12 @@ cargar_listado_contribuyentes: function(){
             viewIngresa.down('#codigoId').setValue(row.data.codigo);
             viewIngresa.down('#precioId').setValue(row.data.valor_lista);
             viewIngresa.down('#cantidadOriginalId').setValue(row.data.stock);
-            viewIngresa.down("#cantidadId").focus();
             view.close();
         }else{
             Ext.Msg.alert('Alerta', 'Selecciona un registro.');
             return;
         }
+        viewIngresa.down("#cantidadId").focus();
     },
 
     buscarp: function(){

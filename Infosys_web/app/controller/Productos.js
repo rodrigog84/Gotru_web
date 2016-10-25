@@ -339,7 +339,10 @@ Ext.define('Infosys_web.controller.Productos', {
         var descuento = view.down('#totdescuentoId').getValue(); 
         var iddescuento = view.down('#DescuentoproId').getValue();
         var bolEnable = true;
-        
+        if(!cantidad){            
+            Ext.Msg.alert('Alerta', 'Debe Ingresar Cantidad');
+            return false;
+        }        
         var tot = ((cantidad * precio) - descuento);
         var neto = (Math.round(tot / 1.19));
         var exists = 0;
