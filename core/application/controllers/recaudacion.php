@@ -1847,8 +1847,8 @@ class Recaudacion extends CI_Controller {
 	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Cheque a fecha</td>
 	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Credito</td>
 	        <td width="80px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Cred 30d</td>
-	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Tarjeta Deb/Credito</td>
-	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Tarjeta AbcDin</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Tarjeta Credito</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Tarjeta Debito</td>
 	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Transfer.</td>	        	             
 	       </tr>';	
 	       
@@ -1986,13 +1986,13 @@ class Recaudacion extends CI_Controller {
 			    };
 				};
 				if ($tarjetacredito>0){
-				$doc4 = "TARJETA ABCDIN";
+				$doc4 = "TARJETA DEBITO";
 				if ($v['estado']!="NUL"){
 				$cancelado4 +=$tarjetacredito;
 				};
 				};
 				if ($tarjetadebito>0){
-				$doc5 = "TARJETA DEBITO/CREDITO";
+				$doc5 = "TARJETA CREDITO";
 				if ($v['estado']!="NUL"){
 				$cancelado5 +=$tarjetadebito;
 			    };
@@ -2252,8 +2252,8 @@ class Recaudacion extends CI_Controller {
 	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Cheque a fecha</td>
 	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Credito</td>
 	        <td width="80px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Cred 30d</td>
-	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Tarjeta Deb/Cred</td>
-	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Tarjeta AbcDin</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Tarjeta Credito</td>
+	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Tarjeta Debito</td>
 	        <td width="60px"  style="text-align:right;border-bottom:1pt solid black;border-top:1pt solid black;font-size:12px" >Transfer.</td>	        	             
 	       </tr>';	
 	       
@@ -2368,13 +2368,13 @@ class Recaudacion extends CI_Controller {
 			    };
 				};
 				if ($tarjetacredito>0){
-				$doc4 = "TARJETA ABCDIN";
+				$doc4 = "TARJETA DEBITO";
 				if ($v['estado']!="NUL"){
 				$cancelado4 +=$tarjetacredito;
 				};
 				};
 				if ($tarjetadebito>0){
-				$doc5 = "TARJETA DEBITO/CREDITO";
+				$doc5 = "TARJETA CREDITO";
 				if ($v['estado']!="NUL"){
 				$cancelado5 +=$tarjetadebito;
 			    };
