@@ -855,7 +855,7 @@ class Facturaelectronica extends CI_Model
 
 	 }	 	 
 
-	public function crea_dte($idfactura){
+	public function crea_dte($idfactura,$tipo = 'sii'){
 
 		$data_factura = $this->get_factura($idfactura);
 
@@ -883,12 +883,17 @@ class Facturaelectronica extends CI_Model
 		$empresa = $this->get_empresa();
 		$datos_empresa_factura = $this->get_empresa_factura($idfactura);
 
-		$detalle_factura = $this->get_detalle_factura($idfactura);
+		//$detalle_factura = $this->get_detalle_factura($idfactura);
+		$detalle_factura = $data_factura->forma == 1 ? $this->get_detalle_factura_glosa($idfactura) : $this->get_detalle_factura($idfactura);
+
+
 		$lista_detalle = array();
 		$i = 0;
 		foreach ($detalle_factura as $detalle) {
-			$lista_detalle[$i]['NmbItem'] = $detalle->nombre;
-			$lista_detalle[$i]['QtyItem'] = $detalle->cantidad;
+
+			$lista_detalle[$i]['NmbItem'] = $data_factura->forma == 1 ? $detalle->glosa : $detalle->nombre;
+			$lista_detalle[$i]['QtyItem'] = $data_factura->forma == 1 ? 1 : $detalle->cantidad;
+
 			//$lista_detalle[$i]['PrcItem'] = $detalle->precio;
 			//$lista_detalle[$i]['PrcItem'] = round((($detalle->precio*$detalle->cantidad)/1.19)/$detalle->cantidad,0);
 			//$total = $detalle->precio*$detalle->cantidad;
@@ -897,16 +902,27 @@ class Facturaelectronica extends CI_Model
 			//$lista_detalle[$i]['PrcItem'] = round($neto/$detalle->cantidad,2);
 			//$lista_detalle[$i]['PrcItem'] = $tipo_caf == 33 ? floor($detalle->precio/1.19) : floor($detalle->precio);
 
-			$lista_detalle[$i]['PrcItem'] = $tipo_caf == 33 ? floor(($detalle->totalproducto - $detalle->iva)/$detalle->cantidad) : round($detalle->precio,3);
-			if($tipo_caf == 33){
+
+			if($data_factura->forma == 1){
+				$lista_detalle[$i]['PrcItem'] = $tipo_caf == 33 || $tipo_caf == 52 ? floor($detalle->neto) : floor($detalle->total);
+			}else{
+				$lista_detalle[$i]['PrcItem'] = $tipo_caf == 33 ? floor(($detalle->totalproducto - $detalle->iva)/$detalle->cantidad) : round($detalle->precio,3);
+			}
+
+
+
+			if($tipo_caf == 33 && $data_factura->forma != 1){
 				$lista_detalle[$i]['MontoItem'] = ($detalle->totalproducto - $detalle->iva);
 			}				
+		
 
-			if($detalle->descuento != 0){
-				$porc_descto = round(($detalle->descuento/($detalle->cantidad*$lista_detalle[$i]['PrcItem'])*100),0);
-				$lista_detalle[$i]['DescuentoPct'] = $porc_descto;		
-				//$lista_detalle[$i]['PrcItem'] =- $lista_detalle[$i]['PrcItem']*$porc_descto;
+			if($data_factura->forma != 1){
+				if($detalle->descuento != 0){
+					$porc_descto = round(($detalle->descuento/($detalle->cantidad*$lista_detalle[$i]['PrcItem'])*100),0);
+					$lista_detalle[$i]['DescuentoPct'] = $porc_descto;		
+					//$lista_detalle[$i]['PrcItem'] =- $lista_detalle[$i]['PrcItem']*$porc_descto;
 
+				}
 			}
 
 			$i++;
@@ -1014,35 +1030,24 @@ class Facturaelectronica extends CI_Model
 			$track_id = 0;
 		    $xml_dte = $EnvioDTE->generar();
 
-		    $tipo_envio = $this->busca_parametro_fe('envio_sii'); //ver si está configurado para envío manual o automático
+		    $dte = $this->crea_archivo_dte($xml_dte,$idfactura,$tipo_caf,$tipo);
 
-			$nombre_dte = $numfactura."_". $tipo_caf ."_".$idfactura."_".date("His").".xml"; // nombre archivo
-			$path = date('Ym').'/'; // ruta guardado
-			if(!file_exists('./facturacion_electronica/dte/'.$path)){
-				mkdir('./facturacion_electronica/dte/'.$path,0777,true);
-			}				
-			$f_archivo = fopen('./facturacion_electronica/dte/'.$path.$nombre_dte,'w');
-			fwrite($f_archivo,$xml_dte);
-			fclose($f_archivo);
-
-		    if($tipo_envio == 'automatico'){
-			    $track_id = $EnvioDTE->enviar();
-		    }
-
+		    $campos['dte'] = $tipo == 'cliente' ? 'dte_cliente' : 'dte';
+		    $campos['archivo_dte'] = $tipo == 'cliente' ? 'archivo_dte_cliente' : 'archivo_dte';
 
 		    $this->db->where('f.folio', $numfactura);
 		    $this->db->where('c.tipo_caf', $tipo_caf);
-			$this->db->update('folios_caf f inner join caf c on f.idcaf = c.id',array('dte' => $xml_dte,
+			$this->db->update('folios_caf f inner join caf c on f.idcaf = c.id',array($campos['dte'] => $dte['xml_dte'],
 																					  'estado' => 'O',
 																					  'idfactura' => $idfactura,
-																					  'path_dte' => $path,
-																					  'archivo_dte' => $nombre_dte,
+																					  'path_dte' => $dte['path'],
+																					  $campos['archivo_dte'] => $dte['nombre_dte'],
 																					  'trackid' => $track_id
-																					  )); 
+																					  )); 		    
 
-			if($track_id != 0 && $datos_empresa_factura->e_mail != ''){ //existe track id, se envía correo
+			/*if($track_id != 0 && $datos_empresa_factura->e_mail != ''){ //existe track id, se envía correo
 				$this->envio_mail_dte($idfactura);
-			}
+			}*/
 
 		}
 

@@ -841,7 +841,7 @@ exit;*/
 		if(empty($dte)){
 		//if($dte->path_dte == ''){
 
-			$dte = $this->facturaelectronica->crea_dte($idfactura);
+			$dte = $this->facturaelectronica->crea_dte($idfactura,$tipo);
 		}
 
 
