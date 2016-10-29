@@ -52,7 +52,8 @@ class Notacredito extends CI_Controller {
 	        'totalfactura' => $ftotal,
 	        'fecha_factura' => $fechafactura,
 	        'id_factura' => $numfactura,
-	        'fecha_venc' => $fechavenc
+	        'fecha_venc' => $fechavenc,
+	        'forma' => 1
 	          
 		);
 

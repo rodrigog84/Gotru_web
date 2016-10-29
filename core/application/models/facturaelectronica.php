@@ -858,7 +858,6 @@ class Facturaelectronica extends CI_Model
 	public function crea_dte($idfactura,$tipo = 'sii'){
 
 		$data_factura = $this->get_factura($idfactura);
-
 		$tipodocumento = $data_factura->tipo_documento;
 		$numfactura = $data_factura->num_factura;
 		$fecemision = $data_factura->fecha_factura;
@@ -878,7 +877,6 @@ class Facturaelectronica extends CI_Model
 		$this->load->model('facturaelectronica');
 		$config = $this->genera_config();
 		include $this->ruta_libredte();
-
 
 		$empresa = $this->get_empresa();
 		$datos_empresa_factura = $this->get_empresa_factura($idfactura);
