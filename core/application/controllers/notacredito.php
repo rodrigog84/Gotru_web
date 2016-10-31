@@ -51,12 +51,12 @@ class Notacredito extends CI_Controller {
 	        'iva' => $fiva,
 	        'totalfactura' => $ftotal,
 	        'fecha_factura' => $fechafactura,
-	        'id_factura' => $numfactura,
+	        'id_factura' => $numfactura_asoc,
 	        'fecha_venc' => $fechavenc,
 	        'forma' => 1
 	          
 		);
-
+		
 		$this->db->insert('factura_clientes', $factura_cliente); 
 		$idfactura = $this->db->insert_id();
 
@@ -73,7 +73,7 @@ class Notacredito extends CI_Controller {
     	
 		}
 
-		$data3 = array(
+		/*$data3 = array(
 	         'id_factura' => $relacionado,
 		    );
 
@@ -81,7 +81,7 @@ class Notacredito extends CI_Controller {
 		    $this->db->where('id', $idfactura);
 		  
 		    $this->db->update('factura_clientes', $data3);
-		
+		*/
 
 
 		/******* CUENTAS CORRIENTES ****/
