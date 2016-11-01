@@ -187,16 +187,10 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                                 name : 'id_sucursal',
                                 hidden: true
                             },{
-                                xtype: 'textareafield',
+                                xtype: 'textfield',
                                 itemId: 'obsId',
                                 name : 'idobserva',
                                 fieldLabel: 'Id Observacion',
-                                hidden: true
-                            },{
-                                xtype: 'textareafield',
-                                itemId: 'observaId',
-                                name : 'observacion',
-                                fieldLabel: 'Observacion',
                                 hidden: true
                             },{
                                 xtype: 'textfield',
@@ -420,7 +414,6 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                             store: 'Tabladescuento',
                             emptyText : "Seleccione",
                             valueField: 'id',
-                            disabled : true,
                             displayField: 'nombre'
                             },
                             {xtype: 'splitter'},
@@ -466,8 +459,8 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                                 { text: 'Bodega',  dataIndex: 'id_bodega', width: 250, hidden:true},
                                 { text: 'Precio Unitario',  dataIndex: 'precio', align: 'right',flex:1, decimalPrecision:3},
                                 { text: 'Cantidad',  dataIndex: 'cantidad', align: 'right',width: 150, decimalPrecision:3},
-                                { text: 'Descuento',  dataIndex: 'dcto', align: 'right',width: 100, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
-                                { text: 'Neto',  dataIndex: 'neto', align: 'right',flex:1,decimalPrecision:3},
+                                { text: 'Descuento',  dataIndex: 'descuento', align: 'right',width: 100, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
+                                { text: 'Neto',  dataIndex: 'neto', align: 'right',flex:1, decimalPrecision:3},
                                 { text: 'Iva',  dataIndex: 'iva', align: 'right',flex:1,renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
                                 { text: 'Total',  dataIndex: 'total', align: 'right',flex:1, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} }
                                 ]

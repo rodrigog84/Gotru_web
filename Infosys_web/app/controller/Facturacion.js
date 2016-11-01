@@ -312,6 +312,8 @@ Ext.define('Infosys_web.controller.Facturacion', {
         });
     },
 
+    
+
     exporttxt: function(){
 
          Ext.create('Infosys_web.view.ventas.Exportartxt').show();

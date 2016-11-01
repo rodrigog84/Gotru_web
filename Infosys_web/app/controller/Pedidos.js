@@ -24,7 +24,10 @@ Ext.define('Infosys_web.controller.Pedidos', {
             'Pedidos.BuscarClientes',
             'Pedidos.Editarpedidos',
             'Pedidos.BuscarProductos',
-            'ventas.BuscarSucursales'
+            'ventas.BuscarSucursales',
+            'Pedidos.Observaciones',
+            'Pedidos.Observaciones2',
+            'Pedidos.Exportar'
             ],
 
     //referencias, es un alias interno para el controller
@@ -57,6 +60,15 @@ Ext.define('Infosys_web.controller.Pedidos', {
     },{
         ref: 'buscarsucursalesclientes',
         selector: 'buscarsucursalesclientes'
+    },{
+        ref: 'observacionespedidos',
+        selector: 'observacionespedidos'
+    },{
+        ref: 'observacionespedidos2',
+        selector: 'observacionespedidos2'
+    },{
+        ref: 'formularioexportarpedidos',
+        selector: 'formularioexportarpedidos'
     }
 
   
@@ -67,9 +79,6 @@ Ext.define('Infosys_web.controller.Pedidos', {
         this.control({
             'pedidosprincipal button[action=buscarPedidos]': {
                 click: this.buscarPedidos
-            },
-            'pedidosprincipal button[action=exportarexcelPedidos]': {
-                click: this.exportarexcelPedidos
             },
             'topmenus menuitem[action=mPedidos]': {
                 click: this.mPedidos
@@ -138,8 +147,14 @@ Ext.define('Infosys_web.controller.Pedidos', {
             'pedidosprincipal button[action=exportarpedidos]': {
                 click: this.exportarpedidos
             },
+             'pedidosprincipal #tipoPedidoId': {
+                select: this.buscarDoc
+            },
             'pedidosprincipal button[action=editarpedidos]': {
                 click: this.editarpedidos
+            },
+             'pedidosprincipal button[action=BuscarPedidos]': {
+                click: this.buscarDoc
             },
             'pedidosingresar button[action=eliminaritem]': {
                 click: this.eliminaritem
@@ -156,7 +171,262 @@ Ext.define('Infosys_web.controller.Pedidos', {
             'buscarsucursalesclientes button[action=seleccionarsucursalcliente]': {
                 click: this.seleccionarsucursalcliente
             },
+            'pedidosingresar button[action=observaciones]': {
+                click: this.agregarobserva
+            },
+            'observacionespedidos button[action=ingresaobs]': {
+                click: this.ingresaobs
+            },
+            'editarpedidos button[action=observaciones]': {
+                click: this.agregarobserva2
+            },
+            'observacionespedidos2 button[action=ingresaobs2]': {
+                click: this.ingresaobs2
+            },
+            'pedidosingresar #DescuentoproId': {
+                change: this.changedctofinal3
+            },
+            'editarpedidos #DescuentoproId': {
+                change: this.changedctofinal4
+            },
+            'formularioexportarpedidos button[action=exportarExcelFormulario]': {
+                click: this.exportarExcelFormulario
+            },
+            'pedidosprincipal button[action=exportarexcelpedidos]': {
+                click: this.exportarexcelpedidos
+            },
         });
+    },
+
+    exportarexcelpedidos: function(){
+
+        var viewnew =this.getPedidosprincipal();
+        var opcion = viewnew.down('#tipoPedidoId').getValue()
+        if (!opcion){
+
+            Ext.Msg.alert('Alerta', 'Seleccione Tipo Informe');
+            return;       
+            
+        }else{
+            Ext.create('Infosys_web.view.Pedidos.Exportar').show();
+        }
+    
+    },
+
+    exportarExcelFormulario: function(){
+        
+        var jsonCol = new Array()
+        var i = 0;
+        var grid =this.getPedidosprincipal()
+        Ext.each(grid.columns, function(col, index){
+          if(!col.hidden){
+              jsonCol[i] = col.dataIndex;
+          }
+          
+          i++;
+        })
+
+        var view =this.getFormularioexportarpedidos()
+        var viewnew =this.getPedidosprincipal()
+
+        var fecha = view.down('#fechaId').getSubmitValue();
+        var opcion = viewnew.down('#tipoPedidoId').getValue()
+        if (!opcion){
+
+              Ext.Msg.alert('Alerta', 'Seleccione Tipo Informe');
+            return;       
+            
+        }
+        var fecha2 = view.down('#fecha2Id').getSubmitValue();
+                
+        if (fecha > fecha2) {
+        
+               Ext.Msg.alert('Alerta', 'Fechas Incorrectas');
+            return;          
+
+        };     
+
+        window.open(preurl + 'adminServicesExcel/exportarExcelPedidos?cols='+Ext.JSON.encode(jsonCol)+'&fecha='+fecha+'&fecha2='+fecha2+'&opcion='+opcion);
+        view.close();    
+
+     
+ 
+    },
+
+    recalculardescuentopro: function(){
+        var view = this.getPedidosingresar();
+        var precio = view.down('#precioId').getValue();
+        var cantidad = view.down('#cantidadId').getValue();
+        var total = ((precio * cantidad));
+        var desc = view.down('#DescuentoproId').getValue();
+        if (desc){
+        var descuento = view.down('#DescuentoproId');
+        var stCombo = descuento.getStore();
+        var record = stCombo.findRecord('id', descuento.getValue()).data;
+        var dcto = (record.porcentaje);
+        totaldescuento = (Math.round(total * dcto)  / 100);
+        view.down('#totdescuentoId').setValue(totaldescuento);
+        };         
+    },
+
+    recalculardescuentopro2: function(){
+        var view = this.getEditarpedidos();
+        var precio = view.down('#precioId').getValue();
+        var cantidad = view.down('#cantidadId').getValue();
+        var total = ((precio * cantidad));
+        var desc = view.down('#DescuentoproId').getValue();
+        if (desc){
+        var descuento = view.down('#DescuentoproId');
+        var stCombo = descuento.getStore();
+        var record = stCombo.findRecord('id', descuento.getValue()).data;
+        var dcto = (record.porcentaje);
+        totaldescuento = (Math.round(total * dcto)  / 100);
+        view.down('#totdescuentoId').setValue(totaldescuento);
+        };         
+    },
+
+    changedctofinal3: function(){
+        this.recalculardescuentopro();
+    },
+
+     changedctofinal4: function(){
+        this.recalculardescuentopro2();
+    },
+
+    buscarDoc: function(){
+        
+        var view = this.getPedidosprincipal();
+        var st = this.getPedidosStore();
+        var opcion = view.down('#tipoSeleccionId').getValue();
+        var tipo = view.down('#tipoPedidoId').getValue();
+        var nombre = view.down('#nombreId').getValue();
+        st.proxy.extraParams = {nombre : nombre,
+                                opcion : opcion,
+                                tipo: tipo
+                               }
+        st.load();
+        var cero="";
+        view.down('#tipoSeleccionId').setValue(cero);
+        //view.down('#tipoPedidoId').setValue(cero);
+        view.down('#nombreId').setValue(cero);
+
+    },
+
+    ingresaobs2: function(){
+
+        var view = this.getObservacionespedidos2();
+        var viewIngresar = this.getEditarpedidos();                
+        var observa = view.down('#observaId').getValue();
+        var numero = viewIngresar.down('#ticketId').getValue();
+        var id = viewIngresar.down('#obsId').getValue();       
+        
+        if (!observa){
+             Ext.Msg.alert('Alerta', 'Ingrese Observaciones');
+                 return;
+        };
+
+        Ext.Ajax.request({
+            url: preurl + 'pedidos/saveobserva',
+            params: {
+                observa : observa,
+                numero : numero,
+                id: id
+            },
+            success: function(response){
+                var resp = Ext.JSON.decode(response.responseText);
+                var idobserva = resp.idobserva;         
+                view.close();
+                viewIngresar.down("#obsId").setValue(idobserva);
+            }           
+        });
+    },
+
+    ingresaobs: function(){
+
+        var view = this.getObservacionespedidos();
+        var viewIngresar = this.getPedidosingresar();                
+        var observa = view.down('#observaId').getValue();
+        var numero = viewIngresar.down('#ticketId').getValue();
+        var id = viewIngresar.down('#obsId').getValue();       
+        
+        if (!observa){
+             Ext.Msg.alert('Alerta', 'Ingrese Observaciones');
+                 return;
+        };
+
+        Ext.Ajax.request({
+            url: preurl + 'pedidos/saveobserva',
+            params: {
+                observa : observa,
+                numero : numero,
+                id: id
+            },
+            success: function(response){
+                var resp = Ext.JSON.decode(response.responseText);
+                var idobserva = resp.idobserva;         
+                view.close();
+                viewIngresar.down("#obsId").setValue(idobserva);
+            }           
+        });
+    },
+
+    agregarobserva: function(){
+
+        var viewIngresa = this.getPedidosingresar();
+        var observa = viewIngresa.down('#obsId').getValue();
+        var numpedidos = viewIngresa.down('#ticketId').getValue();
+        if (!observa){
+            var view = Ext.create('Infosys_web.view.Pedidos.Observaciones').show();
+            view.down("#numpedidoId").setValue(numpedidos);
+        }else{
+            Ext.Ajax.request({
+            url: preurl + 'pedidos/getObserva',
+            params: {
+                idobserva: observa
+            },
+            success: function(response){
+                var resp = Ext.JSON.decode(response.responseText);
+                if (resp.success == true){                
+                var observar = (resp.observar);
+                var view = Ext.create('Infosys_web.view.Pedidos.Observaciones').show();
+                view.down('#observaId').setValue(observar.observaciones);
+                };
+            }           
+            });
+        }
+
+    },
+
+    agregarobserva2: function(){
+
+         var viewIngresa = this.getEditarpedidos();
+         var observa = viewIngresa.down('#obsId').getValue();
+         var numpedidos = viewIngresa.down('#ticketId').getValue();
+         if (!observa){
+            var view = Ext.create('Infosys_web.view.Pedidos.Observaciones2').show();
+            view.down("#numpedidoId").setValue(numpedidos);
+         }else{
+            Ext.Ajax.request({
+            url: preurl + 'pedidos/getObserva',
+            params: {
+                idobserva: observa
+            },
+            success: function(response){
+                var resp = Ext.JSON.decode(response.responseText);
+                if (resp.success == true){                
+                var observar = (resp.observar);
+                var view = Ext.create('Infosys_web.view.Pedidos.Observaciones2').show();
+                view.down('#observaId').setValue(observar.observaciones);
+                view.down('#numpedidoId').setValue(observar.num_pedidos);
+                }else{
+                  var view = Ext.create('Infosys_web.view.Pedidos.Observaciones2').show();
+                  view.down("#numpedidoId").setValue(numpedidos);
+
+                };
+            }           
+            });
+        }
+        
     },
 
     agregarItem: function() {
@@ -174,12 +444,7 @@ Ext.define('Infosys_web.controller.Pedidos', {
         var descuento = view.down('#totdescuentoId').getValue(); 
         var iddescuento = view.down('#DescuentoproId').getValue();
         var bolEnable = true;
-        
-        if (descuento == 1){            
-            var descuento = 0;
-            var iddescuento = 0;
-        };
-
+     
         if (descuento > 0){            
             view.down('#tipoDescuentoId').setDisabled(bolEnable);
             view.down('#descuentovalorId').setDisabled(bolEnable);
@@ -190,8 +455,6 @@ Ext.define('Infosys_web.controller.Pedidos', {
         var exists = 0;
         var iva = (tot - neto);
         var total = (neto + iva );
-
-
         
         if(!producto){            
             Ext.Msg.alert('Alerta', 'Debe Seleccionar un Producto');
@@ -242,13 +505,13 @@ Ext.define('Infosys_web.controller.Pedidos', {
             neto: neto,
             total: total,
             iva: iva,
-            descuento: descuento
+            dcto: descuento
         }));
         this.recalcularFinal();
 
         cero="";
         cero1=0;
-        cero2=1;
+        cero2=0;
         view.down('#codigoId').setValue(cero);
         view.down('#productoId').setValue(cero);
         view.down('#nombreproductoId').setValue(cero);
@@ -481,10 +744,10 @@ Ext.define('Infosys_web.controller.Pedidos', {
         var cero2= 1;
         var bolEnable = true;
         
-        if (descuento == 1){            
+        /*if (descuento == 1){            
             var descuento = 0;
             var iddescuento = 0;
-        };
+        };*/
 
         if (descuento > 0){            
             view.down('#tipoDescuentoId').setDisabled(bolEnable);
@@ -492,7 +755,7 @@ Ext.define('Infosys_web.controller.Pedidos', {
         };
         
         var tot = (Math.round(cantidad * precio) - descuento);
-        var neto = (tot / 1.19);
+        var neto = (Math.round(tot / 1.19));
         var exists = 0;
         var iva = (tot - neto);
         var total = (neto + iva );
@@ -552,7 +815,7 @@ Ext.define('Infosys_web.controller.Pedidos', {
 
         cero="";
         cero1=0;
-        cero2=1;
+        cero2=0;
         view.down('#codigoId').setValue(cero);
         view.down('#productoId').setValue(cero);
         view.down('#nombreproductoId').setValue(cero);
@@ -591,6 +854,7 @@ Ext.define('Infosys_web.controller.Pedidos', {
                     var view = Ext.create('Infosys_web.view.Pedidos.Editarpedidos').show();                   
                     var cliente = resp.cliente;                   
                     view.down("#ticketId").setValue(cliente.num_pedido);
+                    view.down("#obsId").setValue(cliente.num_pedido);
                     view.down("#idId").setValue(cliente.id);
                     view.down("#tipoDocumentoId").setValue(cliente.tip_documento);
                     view.down("#tipoPedidoId").setValue(cliente.id_tipopedido);
@@ -839,23 +1103,6 @@ Ext.define('Infosys_web.controller.Pedidos', {
         view.down('#nombre_id').setDisabled(bolDisabled);
         view.down("#rutId").focus();
 
-    },
-
-    exportarexcelpedidos: function(){
-        
-        var jsonCol = new Array()
-        var i = 0;
-        var grid =this.getPedidosprincipal()
-        Ext.each(grid.columns, function(col, index){
-          if(!col.hidden){
-              jsonCol[i] = col.dataIndex;
-          }
-          
-          i++;
-        })     
-                         
-        window.open(preurl + 'adminServicesExcel/exportarExcelpedidos?cols='+Ext.JSON.encode(jsonCol));
- 
     },
 
     changedctofinal: function(){
@@ -1250,7 +1497,7 @@ Ext.define('Infosys_web.controller.Pedidos', {
         viewport.add({xtype: 'pedidosprincipal'});
     },
 
-
+    
     buscarpedidos: function(){
         
         var view = this.getPedidosprincipal()
@@ -1280,7 +1527,6 @@ Ext.define('Infosys_web.controller.Pedidos', {
         var horadespacho = viewIngresa.down('#horadespachoId').getValue();
         var condpago = viewIngresa.down('#tipocondpagoId').getValue();
         var idobserva = viewIngresa.down('#obsId').getValue();
-
         var idtipopedido = viewIngresa.down('#tipoPedidoId').getValue();
 
         if(!idtipopedido){

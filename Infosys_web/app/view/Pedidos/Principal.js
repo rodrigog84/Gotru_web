@@ -143,28 +143,39 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
                 width: 120,
                 iconCls : 'icon-exel',
                 text: 'Exportar EXCEL',
-                action:'exportarexcelnotaventa'
-            },'->',{
-                xtype: 'button',
-                width: 120,
-                iconCls : 'icon-exel',
-                text: 'Pedidos Retenidos',
-                action:'pedidosretenidos'
+                action:'exportarexcelpedidos'
             },{
-                xtype: 'button',
-                width: 120,
-                iconCls : 'icon-exel',
-                text: 'Pedidos Fijos',
-                action:'pedidosfijos'
-            },{
+                xtype: 'combo',
+                itemId: 'tipoPedidoId',
                 width: 250,
+                fieldCls: 'required',
+                maxHeight: 25,
+                fieldLabel: '<b>TIPO PEDIDO</b>',
+                forceSelection : true,
+                name : 'tipopedido',
+                valueField : 'id',
+                displayField : 'nombre',
+                emptyText : "Seleccione",
+                store : 'Pedidos.Selector'
+            },'->',{
+                xtype: 'combo',
+                itemId: 'tipoSeleccionId',
+                fieldLabel: '',
+                forceSelection : true,
+                editable : false,
+                valueField : 'id',
+                displayField : 'nombre',
+                emptyText : "Seleccione",
+                store : 'clientes.Selector'
+            },{
+                width: 160,
                 xtype: 'textfield',
-                itemId: 'nombresId',
-                fieldLabel: 'Nombre'
+                itemId: 'nombreId',
+                fieldLabel: ''
             },'-',{
                 xtype: 'button',
                 iconCls: 'icon-search',
-                action: '',
+                action: 'BuscarPedidos',
                 text : 'Buscar'
             },{
                 xtype: 'button',

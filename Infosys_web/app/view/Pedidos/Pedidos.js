@@ -185,16 +185,10 @@ Ext.define('Infosys_web.view.Pedidos.Pedidos', {
                                 name : 'id_sucursal',
                                 hidden: true
                             },{
-                                xtype: 'textareafield',
+                                xtype: 'textfield',
                                 itemId: 'obsId',
                                 name : 'idobserva',
                                 fieldLabel: 'Id Observacion',
-                                hidden: true
-                            },{
-                                xtype: 'textareafield',
-                                itemId: 'observaId',
-                                name : 'observacion',
-                                fieldLabel: 'Observacion',
                                 hidden: true
                             },{
                                 xtype: 'textfield',
@@ -403,7 +397,7 @@ Ext.define('Infosys_web.view.Pedidos.Pedidos', {
                                 width: 120,
                                 labelWidth: 60,
                                 minValue: 0,
-                                value: 1,
+                                value: 0,
                                 fieldLabel: 'Descuento Pro',
                                 itemId: 'totdescuentoId',
                                 hidden: true
@@ -418,7 +412,7 @@ Ext.define('Infosys_web.view.Pedidos.Pedidos', {
                             store: 'Tabladescuento',
                             emptyText : "Seleccione",
                             valueField: 'id',
-                            disabled : true,
+                            //disabled : true,
                             displayField: 'nombre'
                             },
                             {xtype: 'splitter'},

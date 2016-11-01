@@ -503,15 +503,7 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                         disabled: true,
                         action: '',
                         menu: [{
-                            text: 'Ingreso Pedidos',
-                            iconCls: '',
-                            action: 'mPedidos'
-                        },{
-                            text: 'Pedidos Fijos',
-                            iconCls: '',
-                            action: 'mPedidos'
-                        },{
-                            text: 'Pedidos Retenidos',
+                            text: 'Genera Pedidos',
                             iconCls: '',
                             action: 'mPedidos'
                         }]

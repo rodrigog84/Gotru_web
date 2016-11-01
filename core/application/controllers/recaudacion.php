@@ -1754,15 +1754,11 @@ class Recaudacion extends CI_Controller {
           $b=0;
           $pag=1;
 
-          if ($tipo == "DETALLES"){
+          if ($tipo == "DETALLE"){
 
  			$this->load->database();
 
-            $query = $this->db->query('SELECT acc.*, t.nombre as desc_pago,
-            r.id_caja as id_caja, r.id_cajero as id_cajero, n.nombre as nom_caja,
-            e.nombre as nom_cajero, r.num_comp as num_comp, b.nombre as nom_banco,
-            r.num_doc as num_doc, cor.nombre as nom_documento, cli.nombres as nom_cliente FROM recaudacion_detalle acc
-            left join cond_pago t on (acc.id_forma = t.id)
+            $query = $this->db->query('SELECT acc.*, r.id_caja as id_caja, r.id_cajero as id_cajero, n.nombre as nom_caja, e.nombre as nom_cajero, r.num_comp as num_comp, b.nombre as nom_banco, r.num_doc as num_doc, cor.nombre as nom_documento, cli.nombres as nom_cliente FROM recaudacion_detalle acc
             left join recaudacion r on (acc.id_recaudacion = r.id)
             left join correlativos cor on (r.id_ticket = cor.id)
             left join cajas n on (r.id_caja = n.id)
