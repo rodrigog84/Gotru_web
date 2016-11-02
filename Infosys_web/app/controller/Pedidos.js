@@ -27,7 +27,8 @@ Ext.define('Infosys_web.controller.Pedidos', {
             'ventas.BuscarSucursales',
             'Pedidos.Observaciones',
             'Pedidos.Observaciones2',
-            'Pedidos.Exportar'
+            'Pedidos.Exportar',
+            'Pedidos.Facturas'
             ],
 
     //referencias, es un alias interno para el controller
@@ -69,6 +70,9 @@ Ext.define('Infosys_web.controller.Pedidos', {
     },{
         ref: 'formularioexportarpedidos',
         selector: 'formularioexportarpedidos'
+    },{
+        ref: 'facturasingresarpedidos',
+        selector: 'facturasingresarpedidos'
     }
 
   
@@ -195,7 +199,138 @@ Ext.define('Infosys_web.controller.Pedidos', {
             'pedidosprincipal button[action=exportarexcelpedidos]': {
                 click: this.exportarexcelpedidos
             },
+            'pedidosprincipal button[action=generafactura]': {
+                click: this.generafactura
+            },
         });
+    },
+
+    generafactura : function() {
+
+        var view = this.getPedidosprincipal();
+        //var grid  = view.down('grid');
+        if (view.getSelectionModel().hasSelection()) {
+        //if (view.getSelectionModel().hasSelection()){
+            //var row = grid.getSelectionModel().getSelection()[0];
+            var row = view.getSelectionModel().getSelection()[0];
+            var idpago = (row.data.id_pago);
+            var factura = (row.data.tip_documento);
+            var nombre = (row.data.tip_documento);
+            var fechafactura = (row.data.fecha_doc);
+            //var st = this.getProductosItemStore()
+            var ticket = (row.data.id);
+            var idcliente = (row.data.id_cliente);
+            var neto = parseInt(row.data.neto);
+            var iva = parseInt(row.data.iva);
+            var total = parseInt(row.data.total);
+            //st.proxy.extraParams = {ticket : ticket}
+            //st.load();        
+            var newview =Ext.create('Infosys_web.view.Pedidos.Facturas').show();
+                      
+            Ext.Ajax.request({
+                url: preurl + 'cond_pago/calculodias',
+                params: {
+                    idpago: idpago
+                },
+                success: function(response){
+                   var resp = Ext.JSON.decode(response.responseText);
+                   var dias = resp.dias;
+                   Ext.Ajax.request({
+                        url: preurl + 'facturas/calculofechas',
+                        params: {
+                            dias: dias,
+                            fechafactura : fechafactura
+                        },
+                        success: function(response){
+                           var resp = Ext.JSON.decode(response.responseText);
+                           var fecha_final = resp.fecha_final;
+                           newview.down("#fechavencId").setValue(fecha_final);                                  
+                        }
+                  });                                
+                }
+            });
+
+            if(nombre == 101 || nombre == 103 || nombre == 105){ // FACTURA ELECTRONICA o FACTURA EXENTA
+
+            // se valida que exista certificado
+            response_certificado = Ext.Ajax.request({
+            async: false,
+            url: preurl + 'facturas/existe_certificado/'});
+
+                var obj_certificado = Ext.decode(response_certificado.responseText);
+
+                if(obj_certificado.existe == true){
+
+                response_folio = Ext.Ajax.request({
+                async: false,
+                url: preurl + 'facturas/folio_documento_electronico/'+nombre});
+                 
+                var obj_folio = Ext.decode(response_folio.responseText);
+                //console.log(obj_folio); 
+                nuevo_folio = obj_folio.folio;
+                if(nuevo_folio != 0){
+                    newview.down('#numfacturaId').setValue(nuevo_folio);  
+                    habilita = true;
+                }else{
+                    Ext.Msg.alert('Atención','No existen folios disponibles');
+                    newview.down('#numfacturaId').setValue('');
+                }
+
+                }else{
+                    Ext.Msg.alert('Atención','No se ha cargado certificado');
+                    newview.down('#numfacturaId').setValue('');  
+                }
+            };
+            
+            Ext.Ajax.request({
+            url: preurl + 'clientes/getallc?idcliente='+idcliente,
+            params: {
+                id: 1,
+                idcliente: idcliente
+            },
+            success: function(response){
+                var resp = Ext.JSON.decode(response.responseText);
+
+                if (resp.success == true) {
+                    if(resp.cliente){
+                        newview.down("#rutId").setValue(cliente.rut);
+                        newview.down("#nombre_id").setValue(cliente.nombre);
+                        newview.down("#direccionId").setValue(cliente.direccion);
+                        newview.down("#giroId").setValue(cliente.giro);
+                        newview.down("#tipoComunaId").setValue(cliente.comuna);
+                        newview.down("#tipoCiudadId").setValue(cliente.ciudad);
+                        newview.down("#idvendedorId").setValue(cliente.idvendedor);
+                        newview.down("#vendedorId").setValue(cliente.vendedor);
+                        newview.down("#id_cliente").setValue(idcliente);
+                    }
+                }
+            }
+            });         
+           
+            newview.down("#finaltotalnetoId").setValue(Ext.util.Format.number(neto, '0,000'));
+            newview.down("#finaltotalnetonId").setValue(neto);
+            newview.down("#preventaId").setValue(preventa);
+
+            newview.down("#finaldescuentoId").setValue(Ext.util.Format.number(descuento, '0,000'));
+            newview.down("#finaldescuentonId").setValue(descuento);
+
+            newview.down("#finalafectoId").setValue(Ext.util.Format.number(afecto, '0,000'));
+            newview.down("#finalafectonId").setValue(afecto);
+
+            newview.down("#finaltotalivaId").setValue(Ext.util.Format.number(iva, '0,000'));
+            newview.down("#finaltotalivanId").setValue(iva);
+
+            newview.down("#finaltotalId").setValue(Ext.util.Format.number(total, '0,000'));
+
+            newview.down("#finaltotalpostId").setValue(total);
+            newview.down("#finaltotalUnformat").setValue(total_unformat);
+    
+        }else{
+            Ext.Msg.alert('Atención','Debe Selecionar Pedido');
+            return;
+            
+        }
+   
     },
 
     exportarexcelpedidos: function(){

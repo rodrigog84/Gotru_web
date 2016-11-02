@@ -88,6 +88,12 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
         align: 'right',
         dataIndex: 'rut_cliente'
     },{
+        header: "Id_Cliente",
+        flex: 1,
+        align: 'right',
+        dataIndex: 'id_cliente',
+        hidden: true
+    },{
         header: "Razon Social",
          width: 390,
         dataIndex: 'nom_cliente'
@@ -95,6 +101,11 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
         header: "Vendedor",
         flex: 1,
         dataIndex: 'nom_vendedor'
+    },{
+        header: "Cond Pago",
+        flex: 1,
+        dataIndex: 'id_pago',
+        hidden: true
     },{
         header: "Neto",
         flex: 1,
@@ -144,6 +155,12 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
                 iconCls : 'icon-exel',
                 text: 'Exportar EXCEL',
                 action:'exportarexcelpedidos'
+            },{
+                xtype: 'button',
+                width: 120,
+                iconCls : '',
+                text: 'Genera Venta',
+                action:'generafactura'
             },{
                 xtype: 'combo',
                 itemId: 'tipoPedidoId',

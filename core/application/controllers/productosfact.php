@@ -141,7 +141,7 @@ class Productosfact extends CI_Controller {
         $idlista = $this->input->get('idlista');
         $nombres = $this->input->get('nombre');
         $idbodega = $this->input->get('idbodega');
-		$countAll = $this->db->count_all_results("detalle_lista_precios");
+		//$countAll = $this->db->count_all_results("detalle_lista_precios");
 
 		
 		if($nombres){
@@ -153,14 +153,14 @@ class Productosfact extends CI_Controller {
 	        	$sql_nombre .= "p.nombre like '%".$nombre."%' and ";
 	        }
 	        
-			$query = $this->db->query('SELECT acc.*, ca.nombre as nom_medida, p.stock as stock, p.codigo as codigo, p.codigo_barra as codigo_barra, p.nombre as nombre FROM detalle_lista_precios acc
+			$query2 = $this->db->query('SELECT acc.*, ca.nombre as nom_medida, p.stock as stock, p.codigo as codigo, p.codigo_barra as codigo_barra, p.nombre as nombre FROM detalle_lista_precios acc
 			left join mae_medida ca on (acc.id_medida = ca.id)
 			left join productos p on (acc.id_producto = p.id)
 			WHERE acc.id_lista = "'.$idlista.'" and ' . $sql_nombre . ' 1 = 1');
 
 			$total = 0;
 
-		  foreach ($query->result() as $row)
+		  foreach ($query2->result() as $row)
 			{
 				$total = $total +1;
 			
@@ -168,13 +168,32 @@ class Productosfact extends CI_Controller {
 
 			$countAll = $total;
 
+			$query = $this->db->query('SELECT acc.*, ca.nombre as nom_medida, p.stock as stock, p.codigo as codigo, p.codigo_barra as codigo_barra, p.nombre as nombre FROM detalle_lista_precios acc
+			left join mae_medida ca on (acc.id_medida = ca.id)
+			left join productos p on (acc.id_producto = p.id)
+			WHERE acc.id_lista = "'.$idlista.'" and ' . $sql_nombre . ' 1 = 1');
+
 		}else{
+			$query2 = $this->db->query('SELECT acc.*, ca.nombre as nom_medida, p.stock as stock, p.codigo as codigo, p.codigo_barra as codigo_barra, p.nombre as nombre FROM detalle_lista_precios acc
+			left join mae_medida ca on (acc.id_medida = ca.id)
+			left join productos p on (acc.id_producto = p.id)
+			WHERE acc.id_lista = "'.$idlista.'"');
+
+		     $total = 0;
+
+		  foreach ($query2->result() as $row)
+			{
+				$total = $total +1;
+			
+			}
+			$countAll = $total;
+
 			$query = $this->db->query('SELECT acc.*, ca.nombre as nom_medida, p.stock as stock, p.codigo as codigo, p.codigo_barra as codigo_barra, p.nombre as nombre FROM detalle_lista_precios acc
 			left join mae_medida ca on (acc.id_medida = ca.id)
 			left join productos p on (acc.id_producto = p.id)
 			WHERE acc.id_lista = "'.$idlista.'"
 			limit '.$start.', '.$limit.'
-		     ' );
+			' );
 		}
 
 		$data = array();
@@ -189,10 +208,6 @@ class Productosfact extends CI_Controller {
 				$stock = $row2->stock;
 				$nombodega = $row2->nom_bodega;
 			}
-
-			//$row->stock=$stock;
-			//$row->nom_bodega=$nombodega;
-
 			$data[] = $row;
 		}
         $resp['success'] = true;
