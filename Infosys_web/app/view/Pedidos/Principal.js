@@ -158,13 +158,13 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
             },{
                 xtype: 'button',
                 width: 120,
-                iconCls : '',
+                iconCls : 'icon-edit',
                 text: 'Genera Venta',
                 action:'generafactura'
             },{
                 xtype: 'combo',
                 itemId: 'tipoPedidoId',
-                width: 250,
+                width: 230,
                 fieldCls: 'required',
                 maxHeight: 25,
                 fieldLabel: '<b>TIPO PEDIDO</b>',
@@ -176,6 +176,7 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
                 store : 'Pedidos.Selector'
             },'->',{
                 xtype: 'combo',
+                width: 130,
                 itemId: 'tipoSeleccionId',
                 fieldLabel: '',
                 forceSelection : true,
@@ -185,7 +186,7 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
                 emptyText : "Seleccione",
                 store : 'clientes.Selector'
             },{
-                width: 160,
+                width: 140,
                 xtype: 'textfield',
                 itemId: 'nombreId',
                 fieldLabel: ''
@@ -197,7 +198,7 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
             },{
                 xtype: 'button',
                 iconCls: 'icon-delete',
-                action: 'cerrarnotaventa',
+                action: 'cerrarpedidos',
                 text : 'Cerrar'
             }]      
         },{
