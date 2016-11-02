@@ -1600,14 +1600,16 @@ Ext.define('Infosys_web.controller.Pedidos', {
             success: function(response){
                 var resp = Ext.JSON.decode(response.responseText);
                 var cero = "";
-                console.log(resp);
                 if (resp.success == true) {
                     
                     if(resp.cliente){
                         var cliente = resp.cliente;
                         view.down("#id_cliente").setValue(cliente.id)
                         view.down("#nombre_id").setValue(cliente.nombres)                        
-                        view.down("#rutId").setValue(rut)                       
+                        view.down("#rutId").setValue(rut)
+                        view.down('#tipoVendedorId').setValue(cliente.id_vendedor);
+                        view.down('#direccionId').setValue(cliente.direccion);
+                        view.down('#tipocondpagoId').setValue(cliente.id_pago);                      
                     }else{
                          Ext.Msg.alert('Rut No Exite');
                          view.down("#rutId").setValue(cero); 

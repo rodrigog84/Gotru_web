@@ -40,8 +40,8 @@ Ext.define('Infosys_web.controller.Tiponegocio', {
             'Tiponegocioprincipal button[action=buscarcontrolcaja]': {
                 click: this.buscarcontrolcaja
             },
-            'Tiponegocioprincipal button[action=cerrarTiponegocio]': {
-                click: this.cerrarTiponegocio
+            'Tiponegocioprincipal button[action=cerrarTiponegocios]': {
+                click: this.cerrarTiponegocios
             },
             'Tiponegocioprincipal button[action=exportarexcelcontrolcaja]': {
                 click: this.exportarexcelcontrolcaja
@@ -120,7 +120,7 @@ Ext.define('Infosys_web.controller.Tiponegocio', {
     },
 
 
-    cerrarTiponegocio: function(){
+    cerrarTiponegocios: function(){
         var viewport = this.getPanelprincipal();
         viewport.removeAll();
     },

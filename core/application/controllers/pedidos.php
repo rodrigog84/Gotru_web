@@ -791,23 +791,21 @@ class Pedidos extends CI_Controller {
 		$fafecto = $this->input->post('afecto');
 		$ftotal = $this->input->post('total');
 		$idobserva = $this->input->post('idobserva');
+					
 						
 		if ($desc){			
 			$desc = $this->input->post('descuento');
-		}else{
-				
+		}else{				
 			$desc = 0;
-		};	
+		};
 
 		$query = $this->db->query('DELETE FROM pedidos_detalle WHERE id_pedido = "'.$idpedidos.'"');
 
 		$secuencia = 0;
 
 		foreach($items as $v){
-			if ($v->descuento){			
-			$desc_pro = $this->input->post('descuento');
-			}else{					
-				$desc_pro = 0;
+			if (!$v->descuento){
+				$v->id_descuento=0;
 			};
 			$secuencia = $secuencia + 1;
 			$pedidos_detalle = array(

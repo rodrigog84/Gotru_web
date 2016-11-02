@@ -399,7 +399,7 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                                 width: 120,
                                 labelWidth: 60,
                                 minValue: 0,
-                                value: 1,
+                                value: 0,
                                 fieldLabel: 'Descuento Pro',
                                 itemId: 'totdescuentoId',
                                 hidden: true
