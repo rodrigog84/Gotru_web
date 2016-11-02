@@ -23,7 +23,7 @@ class Notacredito extends CI_Controller {
 		$idfactura = $this->input->post('idfactura');
 		$fechafactura = $this->input->post('fechafactura');
 		$fechavenc = $this->input->post('fechavenc');
-		$vendedor = $this->input->post('idvendedor');
+		$vendedor = $this->input->post('vendedor');
 		$datacliente = json_decode($this->input->post('datacliente'));
 		$items = json_decode($this->input->post('items'));
 		$neto = $this->input->post('netofactura');
@@ -32,6 +32,7 @@ class Notacredito extends CI_Controller {
 		$fafecto = $this->input->post('afectofactura');
 		$ftotal = $this->input->post('totalfacturas');
 		$tipodocumento = $this->input->post('tipodocumento');
+		$id_cond_venta = $this->input->post('idcondventa');
 		//$tipodocumento = 11;
 
 		$data3 = array(
@@ -46,6 +47,7 @@ class Notacredito extends CI_Controller {
 	        'id_cliente' => $idcliente,
 	        'num_factura' => $numdocuemnto,
 	        'id_vendedor' => $vendedor,
+	        'id_cond_venta' => $id_cond_venta,
 	        'sub_total' => $neto,
 	        'neto' => $neto,
 	        'iva' => $fiva,
@@ -307,7 +309,7 @@ class Notacredito extends CI_Controller {
 	}
 
 	public function save(){
-		
+		//print_r($this->input->post(NULL,true)); exit;
 		$resp = array();
 		$numfactura_asoc = $this->input->post('numfactura_asoc'); //ID OBTENIDO PARA REBAJAR 
 		$idcliente = $this->input->post('idcliente');
@@ -316,7 +318,7 @@ class Notacredito extends CI_Controller {
 		$idfactura = $this->input->post('idfactura');
 		$fechafactura = $this->input->post('fechafactura');
 		$fechavenc = $this->input->post('fechavenc');
-		$vendedor = $this->input->post('idvendedor');
+		$vendedor = $this->input->post('vendedor');
 		$datacliente = json_decode($this->input->post('datacliente'));
 		$items = json_decode($this->input->post('items'));
 		$neto = $this->input->post('netofactura');
@@ -324,6 +326,7 @@ class Notacredito extends CI_Controller {
 		$fafecto = $this->input->post('afectofactura');
 		$ftotal = $this->input->post('totalfacturas');
 		$tipodocumento = $this->input->post('tipodocumento');
+		$id_cond_venta = $this->input->post('idcondventa');
 
 		$data3 = array(
 	         'correlativo' => $numdocuemnto
@@ -338,6 +341,7 @@ class Notacredito extends CI_Controller {
 	        'id_cliente' => $idcliente,
 	        'num_factura' => $numdocuemnto,
 	        'id_vendedor' => $vendedor,
+	        'id_cond_venta' => $id_cond_venta,
 	        'sub_total' => $neto,
 	        'descuento' => ($neto - $fafecto),
 	        'neto' => $neto,

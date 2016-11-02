@@ -259,20 +259,21 @@ class Facturaelectronica extends CI_Model
 
 	public function datos_dte($idfactura){
 
-		$this->db->select('f.id, f.folio, f.path_dte, f.archivo_dte, f.archivo_dte_cliente, f.dte, f.pdf, f.pdf_cedible, f.trackid, c.tipo_caf, tc.nombre as tipo_doc, cae.nombre as giro ')
+		$this->db->select('f.id, f.folio, f.path_dte, f.archivo_dte, f.archivo_dte_cliente, f.dte, f.dte_cliente, f.pdf, f.pdf_cedible, f.trackid, c.tipo_caf, tc.nombre as tipo_doc, cae.nombre as giro, cp.nombre as cond_pago, v.nombre as vendedor ')
 		  ->from('folios_caf f')
 		  ->join('caf c','f.idcaf = c.id')
 		  ->join('tipo_caf tc','c.tipo_caf = tc.id')
 		  ->join('factura_clientes fc','f.idfactura = fc.id','left')
 		  ->join('clientes cl','fc.id_cliente = cl.id','left')
 		  ->join('cod_activ_econ cae','cl.id_giro = cae.id','left')
+		  ->join('cond_pago cp','fc.id_cond_venta = cp.id','left')
+		  ->join('vendedores v','fc.id_vendedor = v.id','left')
 
 		  ->where('f.idfactura',$idfactura)
 		  ->limit(1);
 		$query = $this->db->get();
 		return $query->row();
-	}	
-
+	}
 
 
 	public function get_libro_by_id($idlibro){
@@ -283,17 +284,23 @@ class Facturaelectronica extends CI_Model
 		return $query->row();
 	}	
 
+
+
 	public function datos_dte_by_trackid($trackid){
-		$this->db->select('f.id, f.folio, f.path_dte, f.archivo_dte, f.dte, f.pdf, f.pdf_cedible, f.trackid, c.tipo_caf, tc.nombre as tipo_doc ')
+		$this->db->select('f.id, f.folio, f.path_dte, f.archivo_dte, f.dte, f.pdf, f.pdf_cedible, f.trackid, c.tipo_caf, tc.nombre as tipo_doc, cae.nombre as giro, cp.nombre as cond_pago, v.nombre as vendedor    ')
 		  ->from('folios_caf f')
 		  ->join('caf c','f.idcaf = c.id')
 		  ->join('tipo_caf tc','c.tipo_caf = tc.id')
+		  ->join('factura_clientes fc','f.idfactura = fc.id','left')
+		  ->join('clientes cl','fc.id_cliente = cl.id','left')
+		  ->join('cod_activ_econ cae','cl.id_giro = cae.id','left')	
+		  ->join('cond_pago cp','fc.id_cond_venta = cp.id','left')	
+		  ->join('vendedores v','fc.id_vendedor = v.id','left')  
 		  ->where('f.trackid',$trackid)
 		  ->limit(1);
 		$query = $this->db->get();
 		return $query->row();
-	}	
-
+	}
 
 
 	public function datos_dte_provee($iddte){
@@ -362,6 +369,10 @@ class Facturaelectronica extends CI_Model
 			    $pdf->setFooterText();
 			    $pdf->setLogo('./facturacion_electronica/images/logo_empresa.png'); // debe ser PNG!
 			    $pdf->setGiroCliente($factura->giro); 
+
+			    $pdf->setCondPago($factura->cond_pago); 
+			    $pdf->setVendedor($factura->vendedor); 
+
 			    $pdf->setGiroEmisor($empresa->giro); 
 			    $pdf->setResolucion(['FchResol'=>$Caratula['FchResol'], 'NroResol'=>$Caratula['NroResol']]);
 			    /*if(!is_null($cedible)){
