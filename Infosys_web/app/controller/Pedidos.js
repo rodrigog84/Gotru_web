@@ -15,7 +15,10 @@ Ext.define('Infosys_web.controller.Pedidos', {
             'Pedidos',
             'Sucursales_clientes',
             'Correlativos',
-            'Clientes'
+            'Clientes',
+            'facturapedidos',
+            'Bodegas',
+            'Factura'
              ],
 
     
@@ -202,30 +205,132 @@ Ext.define('Infosys_web.controller.Pedidos', {
             'pedidosprincipal button[action=generafactura]': {
                 click: this.generafactura
             },
+            'facturasingresarpedidos button[action=grabarfactura]': {
+                click: this.grabarfactura
+            },
         });
     },
+
+    grabarfactura: function() {
+
+        var viewIngresa = this.getFacturasingresarpedidos();
+        var bolEnable = true;
+        viewIngresa.down('#grabarfactura').setDisabled(bolEnable);
+        var tipo_documento = viewIngresa.down('#tipoDocumentoId');
+        var idcliente = viewIngresa.down('#id_cliente').getValue();
+        var idtipo= viewIngresa.down('#tipoDocumentoId').getValue();
+        var idsucursal= viewIngresa.down('#id_sucursalID').getValue();
+        var idcondventa= viewIngresa.down('#tipocondpagoId').getValue();
+        var idfactura = viewIngresa.down('#idfactura').getValue();
+        var vendedor = viewIngresa.down('#tipoVendedorId').getValue();
+        var observa = viewIngresa.down('#observaId').getValue();
+        var idobserva = viewIngresa.down('#obsId').getValue();
+        var numfactura = viewIngresa.down('#numfacturaId').getValue();
+        var formadepago = viewIngresa.down('#tipocondpagoId').getValue();
+        var fechafactura = viewIngresa.down('#fechafacturaId').getValue();
+        var fechavenc = viewIngresa.down('#fechavencId').getValue();
+        var stItem = this.getFacturapedidosStore();
+        var stFactura = this.getFacturaStore();
+
+        if(vendedor==0  && tipo_documento.getValue() == 1){                 
+            //viewIngresa.down('#grabarId').setDisabled(bolEnable);
+            Ext.Msg.alert('Ingrese Datos del Vendedor');
+            return;   
+        }
+
+        if(numfactura==0){
+            //viewIngresa.down('#grabarId').setDisabled(bolEnable);
+            
+            Ext.Msg.alert('Ingrese Datos a La Factura');
+            return;   
+            }
+
+        var dataItems = new Array();
+        stItem.each(function(r){
+            dataItems.push(r.data)
+        });
+
+        Ext.Ajax.request({
+            url: preurl + 'facturas/save',
+            params: {
+                idcliente: idcliente,
+                idfactura: idfactura,
+                idsucursal: idsucursal,
+                idcondventa: idcondventa,
+                idtipo:idtipo,
+                items: Ext.JSON.encode(dataItems),
+                observacion: observa,
+                idobserva: idobserva,
+                vendedor : vendedor,
+                numfactura : numfactura,
+                fechafactura : fechafactura,
+                fechavenc: fechavenc,
+                formadepago: formadepago,
+                tipodocumento : tipo_documento.getValue(),
+                netofactura: viewIngresa.down('#finaltotalnetoId').getValue(),
+                ivafactura: viewIngresa.down('#finaltotalivaId').getValue(),
+                afectofactura: viewIngresa.down('#finalafectoId').getValue(),
+                descuentofactura : viewIngresa.down('#descuentovalorId').getValue(),
+                totalfacturas: viewIngresa.down('#finaltotalpostId').getValue()
+            },
+             success: function(response){
+                var resp = Ext.JSON.decode(response.responseText);
+                var idfactura= resp.idfactura;
+                 viewIngresa.close();
+                 stFactura.load();
+                 window.open(preurl + 'facturas/exportPDF/?idfactura='+idfactura);
+
+            }
+           
+        });
+    },
+
+
 
     generafactura : function() {
 
         var view = this.getPedidosprincipal();
-        //var grid  = view.down('grid');
         if (view.getSelectionModel().hasSelection()) {
-        //if (view.getSelectionModel().hasSelection()){
-            //var row = grid.getSelectionModel().getSelection()[0];
             var row = view.getSelectionModel().getSelection()[0];
             var idpago = (row.data.id_pago);
             var factura = (row.data.tip_documento);
             var nombre = (row.data.tip_documento);
+            var id_giro = (row.data.giro);
+            var id_bodega = (row.data.id_bodega);
             var fechafactura = (row.data.fecha_doc);
-            //var st = this.getProductosItemStore()
-            var ticket = (row.data.id);
+            var st = this.getFacturapedidosStore()
+            var pedido = (row.data.id);
             var idcliente = (row.data.id_cliente);
-            var neto = parseInt(row.data.neto);
-            var iva = parseInt(row.data.iva);
             var total = parseInt(row.data.total);
-            //st.proxy.extraParams = {ticket : ticket}
-            //st.load();        
+            var neto = (Math.round(parseInt(row.data.total) / 1.19))
+            var iva = (total - neto);
+            
+            st.proxy.extraParams = {pedido : pedido}
+            st.load();        
             var newview =Ext.create('Infosys_web.view.Pedidos.Facturas').show();
+
+            Ext.Ajax.request({
+            url: preurl +'pedidos/edita/?idpedidos=' + row.data.id,
+            params: {
+                id: 1
+            },
+            success: function(response){
+                var resp = Ext.JSON.decode(response.responseText);
+                var cliente = (resp.cliente); 
+                if (resp.success == true) {                    
+                    var total = (cliente.total);
+                    var neto = (cliente.neto);
+                    var iva = (cliente.total - cliente.neto);
+                    newview.down("#finalafectoId").setValue(neto);
+                    newview.down("#finaltotalnetoId").setValue(neto);
+                    newview.down("#finaltotalivaId").setValue(iva);
+                    newview.down("#finaltotalId").setValue(Ext.util.Format.number(total, '0,000'));
+                    newview.down("#finaltotalpostId").setValue(total);
+            
+                }
+
+            }            
+            });
                       
             Ext.Ajax.request({
                 url: preurl + 'cond_pago/calculodias',
@@ -290,40 +395,28 @@ Ext.define('Infosys_web.controller.Pedidos', {
             },
             success: function(response){
                 var resp = Ext.JSON.decode(response.responseText);
-
+                var cliente = (resp.cliente);                
                 if (resp.success == true) {
                     if(resp.cliente){
+                        newview.down("#tipoDocumentoId").setValue(factura);
                         newview.down("#rutId").setValue(cliente.rut);
-                        newview.down("#nombre_id").setValue(cliente.nombre);
+                        newview.down("#nombre_id").setValue(cliente.nombres);
                         newview.down("#direccionId").setValue(cliente.direccion);
                         newview.down("#giroId").setValue(cliente.giro);
-                        newview.down("#tipoComunaId").setValue(cliente.comuna);
-                        newview.down("#tipoCiudadId").setValue(cliente.ciudad);
-                        newview.down("#idvendedorId").setValue(cliente.idvendedor);
-                        newview.down("#vendedorId").setValue(cliente.vendedor);
+                        newview.down("#tipoComunaId").setValue(cliente.nombre_comuna);
+                        newview.down("#tipoCiudadId").setValue(cliente.nombre_ciudad);
+                        newview.down("#tipoVendedorId").setValue(cliente.id_vendedor);
+                        newview.down("#tipocondpagoId").setValue(cliente.id_pago);
+                        newview.down("#giroId").setValue(cliente.id_giro);
                         newview.down("#id_cliente").setValue(idcliente);
+                        newview.down("#bodegaId").setValue(id_bodega);
                     }
                 }
             }
             });         
            
-            newview.down("#finaltotalnetoId").setValue(Ext.util.Format.number(neto, '0,000'));
-            newview.down("#finaltotalnetonId").setValue(neto);
-            newview.down("#preventaId").setValue(preventa);
-
-            newview.down("#finaldescuentoId").setValue(Ext.util.Format.number(descuento, '0,000'));
-            newview.down("#finaldescuentonId").setValue(descuento);
-
-            newview.down("#finalafectoId").setValue(Ext.util.Format.number(afecto, '0,000'));
-            newview.down("#finalafectonId").setValue(afecto);
-
-            newview.down("#finaltotalivaId").setValue(Ext.util.Format.number(iva, '0,000'));
-            newview.down("#finaltotalivanId").setValue(iva);
-
-            newview.down("#finaltotalId").setValue(Ext.util.Format.number(total, '0,000'));
-
-            newview.down("#finaltotalpostId").setValue(total);
-            newview.down("#finaltotalUnformat").setValue(total_unformat);
+            //newview.down("#finaltotalnetoId").setValue(Ext.util.Format.number(neto, '0,000'));
+             //newview.down("#finaltotalUnformat").setValue(total_unformat);
     
         }else{
             Ext.Msg.alert('Atención','Debe Selecionar Pedido');
@@ -571,6 +664,7 @@ Ext.define('Infosys_web.controller.Pedidos', {
         var rut = view.down('#rutId').getValue();
         var stItem = this.getPedidosItemsStore();
         var producto = view.down('#productoId').getValue();
+        var idbodega = view.down('#bodegaId').getValue();
         var nombre = view.down('#nombreproductoId').getValue();
         var cantidad = view.down('#cantidadId').getValue();
         var cantidadori = view.down('#cantidadOriginalId').getValue();
@@ -634,6 +728,7 @@ Ext.define('Infosys_web.controller.Pedidos', {
             id: producto,
             id_producto: producto,
             id_descuento: iddescuento,
+            id_bodega: idbodega,
             nom_producto: nombre,
             precio: precio,
             cantidad: cantidad,
@@ -770,9 +865,11 @@ Ext.define('Infosys_web.controller.Pedidos', {
         var numeropedido = viewIngresa.down('#ticketId').getValue();
         var idpedido = viewIngresa.down('#idId').getValue();        
         var idtipo = viewIngresa.down('#tipoDocumentoId').getValue();
+        var idpago = viewIngresa.down('#tipocondpagoId').getValue();
         var idcliente = viewIngresa.down('#id_cliente').getValue();
         var idsucursal = viewIngresa.down('#id_sucursalID').getValue();      
         var vendedor = viewIngresa.down('#tipoVendedorId');
+        var idbodega = viewIngresa.down('#bodegaId').getValue();
         var stCombo = vendedor.getStore();
         var record = stCombo.findRecord('id', vendedor.getValue()).data;
         var finalafectoId = viewIngresa.down('#finaltotalnetoId').getValue();
@@ -783,7 +880,6 @@ Ext.define('Infosys_web.controller.Pedidos', {
         var horadespacho = viewIngresa.down('#horadespachoId').getValue();
         var condpago = viewIngresa.down('#tipocondpagoId').getValue();
         var idobserva = viewIngresa.down('#obsId').getValue();
-
         var idtipopedido = viewIngresa.down('#tipoPedidoId').getValue();
 
         if(!idtipopedido){
@@ -819,6 +915,8 @@ Ext.define('Infosys_web.controller.Pedidos', {
                 items: Ext.JSON.encode(dataItems),
                 vendedor : vendedor,
                 idtipo : idtipo,
+                idpago: idpago,
+                idbodega: idbodega,
                 idtipopedido: idtipopedido,
                 idobserva: idobserva,
                 numeropedido : numeropedido,
@@ -866,6 +964,7 @@ Ext.define('Infosys_web.controller.Pedidos', {
         var rut = view.down('#rutId').getValue();
         var stItem = this.getPedidosEditarStore();
         var producto = view.down('#productoId').getValue();
+        var idbodega = view.down('#bodegaId').getValue();
         var nombre = view.down('#nombreproductoId').getValue();
         var cantidad = view.down('#cantidadId').getValue();
         var cantidadori = view.down('#cantidadOriginalId').getValue();
@@ -938,6 +1037,7 @@ Ext.define('Infosys_web.controller.Pedidos', {
             id: producto,
             id_producto: producto,
             id_descuento: iddescuento,
+            id_bodega: idbodega,
             nom_producto: nombre,
             precio: precio,
             cantidad: cantidad,
@@ -974,6 +1074,7 @@ Ext.define('Infosys_web.controller.Pedidos', {
             var view = this.getEditarpedidos();
             var stItem = this.getPedidosEditarStore();
             var idpedidos = row.data.id;
+            var id_bodega = row.data.id_bodega;
             stItem.proxy.extraParams = {idpedidos : idpedidos};
             stItem.load();
             
@@ -1003,6 +1104,7 @@ Ext.define('Infosys_web.controller.Pedidos', {
                     view.down("#nombre_id").setValue(cliente.nom_cliente);
                     view.down("#preciosId").setValue(cliente.id_lista);
                     view.down("#tipoVendedorId").setValue(cliente.id_vendedor);
+                    view.down("#bodegaId").setValue(id_bodega);
                     if(cliente.id_sucursal!=0){
                         view.down("#direccionId").setValue(cliente.direccion_sucursal);
                         view.down("#id_sucursalID").setValue(cliente.id_sucursal);                                              
@@ -1654,6 +1756,8 @@ Ext.define('Infosys_web.controller.Pedidos', {
         var idcliente = viewIngresa.down('#id_cliente').getValue();
         var idsucursal = viewIngresa.down('#id_sucursalID').getValue();      
         var vendedor = viewIngresa.down('#tipoVendedorId');
+        var idbodega = viewIngresa.down('#bodegaId').getValue();
+        var idpago = viewIngresa.down('#tipocondpagoId').getValue();        
         var stCombo = vendedor.getStore();
         var record = stCombo.findRecord('id', vendedor.getValue()).data;
         var finalafectoId = viewIngresa.down('#finaltotalnetoId').getValue();
@@ -1698,8 +1802,10 @@ Ext.define('Infosys_web.controller.Pedidos', {
                 items: Ext.JSON.encode(dataItems),
                 vendedor : vendedor,
                 idtipo : idtipo,
+                idpago: idpago,
                 idtipopedido: idtipopedido,
                 idobserva: idobserva,
+                idbodega: idbodega,
                 numeropedido : numeropedido,
                 fechadocum: Ext.Date.format(fechapedidos,'Y-m-d'),
                 fechapedidos: Ext.Date.format(fechapedidos,'Y-m-d'),
@@ -1723,13 +1829,17 @@ Ext.define('Infosys_web.controller.Pedidos', {
            
         });
        
-    },
-
-        
+    },        
     
     agregarpedido: function(){
 
-         //var view = this.getPedidosingresar();
+         var viewIngresa = this.getPedidosprincipal();
+         var idbodega = viewIngresa.down('#bodegaId').getValue();
+         
+         if(!idbodega){
+            Ext.Msg.alert('Alerta', 'Debe Elegir Bodega');
+            return;    
+         }else{
          var nombre = "20";    
          Ext.Ajax.request({
 
@@ -1747,15 +1857,15 @@ Ext.define('Infosys_web.controller.Pedidos', {
                     correlanue = (parseInt(correlanue)+1);
                     var correlanue = correlanue;
                     view.down("#ticketId").setValue(correlanue);
+                    view.down("#bodegaId").setValue(idbodega);
                 }else{
                     Ext.Msg.alert('Correlativo YA Existe');
                     return;
                 }
-
-
-
             }            
-        });        
+        });
+        
+        };        
        
     },
 

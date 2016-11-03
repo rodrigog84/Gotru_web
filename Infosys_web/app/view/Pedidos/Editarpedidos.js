@@ -210,7 +210,7 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                                 action: 'buscarsucursalfactura'
                             },{
                                 xtype: 'displayfield',
-                                width: 90                                           
+                                width: 10                                           
                             },{
                                 xtype: 'combo',
                                 itemId: 'tipoVendedorId',
@@ -225,6 +225,9 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                                 emptyText : "Seleccione",
                                 store : 'Vendedores'
                             },{
+                                xtype: 'displayfield',
+                                width: 10                                           
+                            },{
                                 xtype: 'textfield',
                                 fieldCls: 'required',
                                 maxHeight: 25,
@@ -234,6 +237,21 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                                 itemId: 'preciosId',
                                 fieldLabel: '<b>Lista Precios</b>',
                                 hidden: true
+                            },{
+                                xtype: 'combo',
+                                itemId: 'bodegaId',
+                                labelWidth: 60,
+                                width: 205,
+                                fieldCls: 'required',
+                                maxHeight: 25,
+                                fieldLabel: '<b>BODEGA</b>',
+                                forceSelection : true,
+                                name : 'id_bodega',
+                                valueField : 'id',
+                                displayField : 'nombre',
+                                emptyText : "Seleccione",
+                                store : 'Bodegas',
+                                readOnly: true
                             }
                             ]
                         },{

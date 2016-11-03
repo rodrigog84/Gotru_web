@@ -146,7 +146,7 @@ Ext.define('Infosys_web.view.clientes.Principal' ,{
         flex: 1,
         dataIndex: 'id_tiponegocio',
         hidden: true
-    }   
+    }  
     ],
     
     initComponent: function() {

@@ -9,6 +9,35 @@ class Pedidos extends CI_Controller {
 		$this->load->database();
 	}
 
+	public function pedidosdetalle(){
+
+		$resp = array();
+		$pedido = $this->input->get('pedido');
+
+		if ($pedido){
+
+		$items = $this->db->query('SELECT * FROM pedidos_detalle 
+	   	    WHERE id_pedido like "'.$pedido.'"');
+
+		//$items = $this->db->get_where('pedidos_detalle', array('id_pedido' => $pedido));
+
+	   	$data = array();
+
+	   	foreach($items->result() as $item){
+			$this->db->where('id', $item->id_producto);
+			$producto = $this->db->get("productos");	
+			$producto = $producto->result();
+			$producto = $producto[0];
+			$item->nombre = $producto->nombre;
+			$item->dcto = $item->descuento;	
+			$data[] = $item;
+		}	     	
+	    $resp['success'] = true;
+        $resp['data'] = $data; 
+        echo json_encode($resp);
+        }
+	}
+
 	public function getObserva(){
 
 		$resp = array();
@@ -662,6 +691,7 @@ class Pedidos extends CI_Controller {
 		$numeropedido = $this->input->post('numeropedido');
 		$idtipo = $this->input->post('idtipo');
 		$idpago = $this->input->post('idpago');
+		$idbodega = $this->input->post('idbodega');
 		$idtipopedido = $this->input->post('idtipopedido');
 		$fechapedidos = $this->input->post('fechapedidos');
 	    $fechadoc = $this->input->post('fechadocum');
@@ -690,6 +720,8 @@ class Pedidos extends CI_Controller {
 	        'fecha_doc' => $fechadoc ,
 	        'id_cliente' => $idcliente,
 	        'id_sucursal' => $sucursal,
+	        'id_pago' => $idpago,
+	        'id_bodega' => $idbodega,
 	        'id_vendedor' => $vendedor,
 	        'fecha_pedido' => $fechapedidos,
 	        'hora_pedido' => $horapedido,
@@ -721,6 +753,7 @@ class Pedidos extends CI_Controller {
 			$pedidos_detalle = array(
 		        'id_producto' => $v->id_producto,
 		        'id_pedido' => $idpedidos,
+		        'id_bodega' => $v->id_bodega,
 		        'id_descuento' => $v->id_descuento,
 		        'num_pedido' => $numeropedido,
 		        'precio' => $v->precio,
@@ -776,6 +809,7 @@ class Pedidos extends CI_Controller {
 		$numeropedido = $this->input->post('numeropedido');
 		$idtipo = $this->input->post('idtipo');
 		$idpago = $this->input->post('idpago');
+		$idbodega = $this->input->post('idbodega');
 		$idtipopedido = $this->input->post('idtipopedido');
 		$fechapedidos = $this->input->post('fechapedidos');
 	    $fechadoc = $this->input->post('fechadocum');
@@ -812,6 +846,7 @@ class Pedidos extends CI_Controller {
 		        'id_producto' => $v->id_producto,
 		        'id_pedido' => $idpedidos,
 		        'id_descuento' => $v->id_descuento,
+		        'id_bodega' => $v->id_bodega,
 		        'num_pedido' => $numeropedido,
 		        'precio' => $v->precio,
 		        'neto' => $v->neto,
@@ -828,59 +863,16 @@ class Pedidos extends CI_Controller {
 
 	    $this->db->insert('pedidos_detalle', $pedidos_detalle);
 
-		$query = $this->db->query('SELECT * FROM productos WHERE id="'.$producto.'"');
-		if($query->num_rows()>0){
-
-		 	$row = $query->first_row();
-
-		 	$saldo = ($row->stock)+($v->cantidad); 
-
-		};
-
-		$datos = array(
-         'stock' => $saldo,
-    	);
-
-    	$this->db->where('id', $producto);
-
-    	$this->db->update('productos', $datos);
-
+		
     	$resp['detalle'] = false;
     	
 		}
 
 		if ($desc){			
 			$desc = $this->input->post('descuento');
-		}else{
-				
+		}else{				
 			$desc = 0;
 		};
-
-		$query2 = $this->db->query('SELECT * FROM pedidos_detalle WHERE id_pedido= '.$idpedidos.'');
-
-		foreach ($query2->result() as $row1){
-
-			$producto2 = $row1->id_producto;
-
-			$query = $this->db->query('SELECT * FROM productos WHERE id="'.$producto2.'"');
-		
-			if($query->num_rows()>0){
-
-			 	$row = $query->first_row();
-
-			 	$saldo = ($row->stock)-($row1->cantidad); 
-
-			};
-
-			$datos = array(
-	         'stock' => $saldo,
-	    	);
-
-	    	$this->db->where('id', $producto2);
-
-	    	$this->db->update('productos', $datos);
-
-		}
 
 		if(!$horapedido or !$horadespacho){
 
@@ -889,6 +881,8 @@ class Pedidos extends CI_Controller {
 	        'tip_documento' => $idtipo,
 	        'fecha_doc' => $fechadoc ,
 	        'id_cliente' => $idcliente,
+	        'id_pago' => $idpago,
+	        'id_bodega' => $idbodega,
 	        'id_sucursal' => $sucursal,
 	        'id_vendedor' => $vendedor,
 	        'fecha_pedido' => $fechapedidos,
@@ -909,8 +903,10 @@ class Pedidos extends CI_Controller {
 	        'tip_documento' => $idtipo,
 	        'fecha_doc' => $fechadoc ,
 	        'id_cliente' => $idcliente,
+	        'id_pago' => $idpago,
 	        'id_sucursal' => $sucursal,
 	        'id_vendedor' => $vendedor,
+	        'id_bodega' => $idbodega,
 	        'fecha_pedido' => $fechapedidos,
 	        'hora_pedido' => $horapedido,
 	        'fecha_despacho' => $fechadespacho,
@@ -924,7 +920,6 @@ class Pedidos extends CI_Controller {
 			);		
 
 		};
-
 		
 		$this->db->where('id', $idpedidos);
 		$this->db->update('pedidos', $pedidos);
@@ -934,7 +929,7 @@ class Pedidos extends CI_Controller {
 		$resp['idpedidos'] = $idpedidos;
 
 		$this->Bitacora->logger("I", 'pedidos', $idpedidos);
-		$this->Bitacora->logger("I", 'pedidos_detalle', $idpedidos);       
+		$this->Bitacora->logger("I", 'pedidos_detalle', $idpedidos);  
 
         echo json_encode($resp);
 	}
@@ -983,9 +978,10 @@ class Pedidos extends CI_Controller {
 		if($opcion == "Rut"){
 
 			$data = array();		
-			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu	FROM pedidos acc
+			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu, b.nombre as nom_bodega FROM pedidos acc
 			left join clientes c on (acc.id_cliente = c.id)
 			left join vendedores v on (acc.id_vendedor = v.id)
+			left join bodegas b on (acc.id_bodega = b.id)
 			left join correlativos co on (acc.tip_documento = co.id)
 			WHERE c.rut = "'.$nombres.'" and acc.estado = "'.$estado.'"
 			order by acc.id desc');
@@ -1000,9 +996,10 @@ class Pedidos extends CI_Controller {
 
 				$countAll = $total;
 
-			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu	FROM pedidos acc
+			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu, b.nombre as nom_bodega FROM pedidos acc
 			left join clientes c on (acc.id_cliente = c.id)
 			left join vendedores v on (acc.id_vendedor = v.id)
+			left join bodegas b on (acc.id_bodega = b.id)
 			left join correlativos co on (acc.tip_documento = co.id)
 			WHERE c.rut = "'.$nombres.'" and acc.estado = "'.$estado.'" order by acc.id desc			
 			limit '.$start.', '.$limit.'');
@@ -1018,9 +1015,10 @@ class Pedidos extends CI_Controller {
 	        }
 
 	        $data = array();	        	    	
-			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu	FROM pedidos acc
+			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu, b.nombre as nom_bodega FROM pedidos acc
 			left join clientes c on (acc.id_cliente = c.id)
 			left join vendedores v on (acc.id_vendedor = v.id)
+			left join bodegas b on (acc.id_bodega = b.id)
 			left join correlativos co on (acc.tip_documento = co.id)
 			WHERE acc.estado = "'.$estado.'" ' . $sql_nombre . ' 
 			order by acc.id desc'
@@ -1037,9 +1035,10 @@ class Pedidos extends CI_Controller {
 
 			$countAll = $total;
 
-			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu	FROM pedidos acc
+			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu, b.nombre as nom_bodega FROM pedidos acc
 			left join clientes c on (acc.id_cliente = c.id)
 			left join vendedores v on (acc.id_vendedor = v.id)
+			left join bodegas b on (acc.id_bodega = b.id)
 			left join correlativos co on (acc.tip_documento = co.id)
 			WHERE acc.estado = "'.$estado.'" ' . $sql_nombre . ' order by acc.id desc
 			limit '.$start.', '.$limit.'');
@@ -1048,9 +1047,10 @@ class Pedidos extends CI_Controller {
 
 			
 			$data = array();
-			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu	FROM pedidos acc
+			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu, b.nombre as nom_bodega FROM pedidos acc
 			left join clientes c on (acc.id_cliente = c.id)
 			left join vendedores v on (acc.id_vendedor = v.id)
+			left join bodegas b on (acc.id_bodega = b.id)
 			left join correlativos co on (acc.tip_documento = co.id)
 			WHERE acc.estado = "'.$estado.'"
 			order by acc.id desc');
@@ -1065,9 +1065,10 @@ class Pedidos extends CI_Controller {
 
 			$countAll = $total;
 
-			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu	FROM pedidos acc
+			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu, b.nombre as nom_bodega FROM pedidos acc
 			left join clientes c on (acc.id_cliente = c.id)
 			left join vendedores v on (acc.id_vendedor = v.id)
+			left join bodegas b on (acc.id_bodega = b.id)
 			left join correlativos co on (acc.tip_documento = co.id)
 			WHERE acc.estado = "'.$estado.'"
 			order by acc.id desc
@@ -1080,9 +1081,10 @@ class Pedidos extends CI_Controller {
 			
 			$data = array();
 
-			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu	FROM pedidos acc
+			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu, b.nombre as nom_bodega FROM pedidos acc
 			left join clientes c on (acc.id_cliente = c.id)
 			left join vendedores v on (acc.id_vendedor = v.id)
+			left join bodegas b on (acc.id_bodega = b.id)
 			left join correlativos co on (acc.tip_documento = co.id)
 			WHERE acc.num_pedido =  "'.$nombres.'" and acc.estado = "'.$estado.'"
 			order by acc.id desc');
@@ -1097,9 +1099,10 @@ class Pedidos extends CI_Controller {
 
 			$countAll = $total;
 
-			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu	FROM pedidos acc
+			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu, b.nombre as nom_bodega FROM pedidos acc
 			left join clientes c on (acc.id_cliente = c.id)
 			left join vendedores v on (acc.id_vendedor = v.id)
+			left join bodegas b on (acc.id_bodega = b.id)
 			left join correlativos co on (acc.tip_documento = co.id)
 			WHERE acc.num_pedido =  "'.$nombres.'" and acc.estado = "'.$estado.'"
 			order by acc.id desc');
@@ -1108,10 +1111,11 @@ class Pedidos extends CI_Controller {
 			
 			if ($tipo){
 				$data = array();
-				$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu	FROM pedidos acc
-				left join clientes c on (acc.id_cliente = c.id)
-				left join vendedores v on (acc.id_vendedor = v.id)
-				left join correlativos co on (acc.tip_documento = co.id) 
+				$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu, b.nombre as nom_bodega FROM pedidos acc
+			left join clientes c on (acc.id_cliente = c.id)
+			left join vendedores v on (acc.id_vendedor = v.id)
+			left join bodegas b on (acc.id_bodega = b.id)
+			left join correlativos co on (acc.tip_documento = co.id)
 				WHERE acc.id_tipopedido = ('.$tipo.') and acc.estado = "'.$estado.'"');
 
 				$total = 0;
@@ -1124,19 +1128,21 @@ class Pedidos extends CI_Controller {
 
 				$countAll = $total;
 
-				$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu	FROM pedidos acc
-				left join clientes c on (acc.id_cliente = c.id)
-				left join vendedores v on (acc.id_vendedor = v.id)
-				left join correlativos co on (acc.tip_documento = co.id) 
+				$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu, b.nombre as nom_bodega FROM pedidos acc
+			left join clientes c on (acc.id_cliente = c.id)
+			left join vendedores v on (acc.id_vendedor = v.id)
+			left join bodegas b on (acc.id_bodega = b.id)
+			left join correlativos co on (acc.tip_documento = co.id)
 				WHERE acc.id_tipopedido = ('.$tipo.') and acc.estado = "'.$estado.'"
 				limit '.$start.', '.$limit.'');
 		}else{
 
 			$data = array();
-			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu	FROM pedidos acc
+			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu, b.nombre as nom_bodega FROM pedidos acc
 			left join clientes c on (acc.id_cliente = c.id)
 			left join vendedores v on (acc.id_vendedor = v.id)
-			left join correlativos co on (acc.tip_documento = co.id) 
+			left join bodegas b on (acc.id_bodega = b.id)
+			left join correlativos co on (acc.tip_documento = co.id)
 			WHERE acc.estado = "'.$estado.'" ');
 
 			$total = 0;
@@ -1149,10 +1155,11 @@ class Pedidos extends CI_Controller {
 
 			$countAll = $total;
 
-			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu	FROM pedidos acc
+			$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, co.nombre as nom_documento, v.nombre as nom_vendedor, co.id as id_tip_docu, b.nombre as nom_bodega FROM pedidos acc
 			left join clientes c on (acc.id_cliente = c.id)
 			left join vendedores v on (acc.id_vendedor = v.id)
-			left join correlativos co on (acc.tip_documento = co.id) 
+			left join bodegas b on (acc.id_bodega = b.id)
+			left join correlativos co on (acc.tip_documento = co.id)
 			WHERE acc.estado = "'.$estado.'"			
 			limit '.$start.', '.$limit.'');
 

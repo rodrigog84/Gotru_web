@@ -9,6 +9,29 @@ class Cond_pago extends CI_Controller {
 		$this->load->database();
 	}
 
+	public function calculodias(){
+
+		$resp = array();
+		$idpago = $this->input->post('idpago');
+
+		$query = $this->db->query('SELECT * FROM cond_pago WHERE id like "'.$idpago.'"
+			');
+
+		$data = array();
+		foreach ($query->result() as $row)
+		{
+			$dias = $row->dias;
+		}
+
+		
+		
+	    $resp['success'] = true;
+        $resp['dias'] = $dias;
+        
+        echo json_encode($resp);   
+	
+	}
+
 	public function save(){
 		
 		$resp = array();

@@ -2576,7 +2576,7 @@ public function cargacontribuyentes(){
 		 if($query->num_rows()>0){
 		 	$row = $query->first_row();
 		 	$saldo = ($row->stock)-($v->cantidad);
-		 };
+		};
 
 		 $query = $this->db->query('SELECT * FROM existencia WHERE id_producto="'.$producto.'" and id_bodega="'.$idbodega.'"');
     	 $row = $query->result();

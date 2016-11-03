@@ -126,7 +126,17 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
         align: 'right',
         renderer: function(valor){return Ext.util.Format.number(parseInt(valor),"0,00")}
         
-    },],
+    },{
+        header: "Bodega",
+        flex: 1,
+        dataIndex: 'nom_bodega',
+        hidden: true
+    },{
+        header: "Id Bodega",
+        flex: 1,
+        dataIndex: 'id_bodega',
+        hidden: true
+    }],
     
     initComponent: function() {
         var me = this
@@ -201,6 +211,24 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
                 action: 'cerrarpedidos',
                 text : 'Cerrar'
             }]      
+        },{
+            xtype: 'toolbar',
+            dock: 'top',
+            items: ['-',{
+                xtype: 'combo',
+                itemId: 'bodegaId',
+                labelWidth: 60,
+                width: 205,
+                fieldCls: 'required',
+                maxHeight: 25,
+                fieldLabel: '<b>BODEGA</b>',
+                forceSelection : true,
+                name : 'id_bodega',
+                valueField : 'id',
+                displayField : 'nombre',
+                emptyText : "Seleccione",
+                store : 'Bodegas'
+            }],
         },{
             xtype: 'pagingtoolbar',
             dock:'bottom',

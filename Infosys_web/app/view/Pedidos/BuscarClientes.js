@@ -49,6 +49,11 @@ Ext.define('Infosys_web.view.Pedidos.BuscarClientes' ,{
         dataIndex: 'giro',
         hidden: true
     },{
+        header: "Giro",
+        flex: 1,
+        dataIndex: 'id_giro',
+        hidden: true
+    },{
         header: "Ciudad",
         flex: 1,
         dataIndex: 'nombre_ciudad',
@@ -77,6 +82,11 @@ Ext.define('Infosys_web.view.Pedidos.BuscarClientes' ,{
         header: "Vendedor",
         flex: 1,
         dataIndex: 'nombre_vendedor',
+        hidden: true
+    },{
+        header: "Condicion Pago",
+        flex: 1,
+        dataIndex: 'id_pago',
         hidden: true
     },{
         header: "Condicion Pago",
