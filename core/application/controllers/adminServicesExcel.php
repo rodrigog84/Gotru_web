@@ -91,7 +91,7 @@ class AdminServicesExcel extends CI_Controller {
 
                           
         $data = array();
-        $query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, t.descripcion as nomdocumento, con.nombre as nomcondventa, c.id_pago as codigo_con_pago, cob.id as id_cobrador, rep.id as id_repartidor, tip.codigo as cod_tipo_negocio FROM factura_clientes acc
+        $query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, t.descripcion as nomdocumento, t.id as tipdocumento, con.nombre as nomcondventa, c.id_pago as codigo_con_pago, cob.id as id_cobrador, rep.id as id_repartidor, tip.codigo as cod_tipo_negocio FROM factura_clientes acc
         left join clientes c on (acc.id_cliente = c.id)
         left join tipo_documento t on (acc.tipo_documento = t.id)
         left join cond_pago con on (c.id_pago = con.id)
@@ -168,9 +168,16 @@ class AdminServicesExcel extends CI_Controller {
             $codcondventa = $v->codigo_con_pago;
             $vendedor = $v->nom_vendedor;
             $codvendedor = $v->id_vendedor;
-            $neto = $v->neto;
-            $iva = $v->iva;
-            $total = $v->totalfactura;
+            if ($v->tipdocumento==102){
+                $neto = ($v->neto / -1);
+                $iva = ($v->iva / -1);
+                $total = ($v->totalfactura / -1);                
+            }else{
+                $neto = $v->neto;
+                $iva = $v->iva;
+                $total = $v->totalfactura;                
+            };
+            
             $idrepartidor = $v->id_repartidor;
             $idcobrador = $v->id_cobrador;
             $idtiponegocio = $v->cod_tipo_negocio;
@@ -183,10 +190,18 @@ class AdminServicesExcel extends CI_Controller {
             left join bodegas b on (acc.id_bodega = b.id)
             WHERE acc.id_factura = "'.$id.'"');
 
-            //$row = $query2->result_array();
-                    
+                     
 
             foreach ($query2->result() as $z){
+            if ($v->tipdocumento==102){
+            $netop = ($z->neto / -1);
+            $ivap = ($z->iva / -1);
+            $totalproductop = ($z->totalproducto / -1);
+            }else{
+            $netop = ($z->neto);
+            $ivap = ($z->iva);
+            $totalproductop = ($z->totalproducto);                
+            };
             echo chr(13).chr(10);
             echo $numdocumento;
             echo ";";
@@ -224,11 +239,11 @@ class AdminServicesExcel extends CI_Controller {
             echo ";";
             echo $z->descuento;
             echo ";";
-            echo $z->neto;
+            echo $netop;
             echo ";";
-            echo $z->iva;
+            echo $ivap;
             echo ";";
-            echo $z->totalproducto;
+            echo $totalproductop;
             echo ";";
             echo $idrepartidor;
             echo ";";
