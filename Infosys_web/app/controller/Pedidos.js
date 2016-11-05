@@ -679,11 +679,20 @@ Ext.define('Infosys_web.controller.Pedidos', {
             view.down('#descuentovalorId').setDisabled(bolEnable);
         };
         
-        var tot = (Math.round(cantidad * precio) - descuento);
+        /*var tot = (Math.round(cantidad * precio) - descuento);
         var neto = (Math.round(tot / 1.19));
         var exists = 0;
         var iva = (tot - neto);
-        var total = (neto + iva );
+        var total = (neto + iva );*/
+
+        var neto = ((cantidad * precio) - descuento);
+        var total  = (Math.round(neto * 1.19));
+
+
+        //var tot = ((cantidad * precio) - descuento);
+        //var neto = (Math.round(tot / 1.19));
+        var exists = 0;
+        var iva = (total - neto);
         
         if(!producto){            
             Ext.Msg.alert('Alerta', 'Debe Seleccionar un Producto');
@@ -988,11 +997,17 @@ Ext.define('Infosys_web.controller.Pedidos', {
             view.down('#descuentovalorId').setDisabled(bolEnable);
         };
         
-        var tot = (Math.round(cantidad * precio) - descuento);
+        /*var tot = (Math.round(cantidad * precio) - descuento);
         var neto = (Math.round(tot / 1.19));
         var exists = 0;
         var iva = (tot - neto);
-        var total = (neto + iva );
+        var total = (neto + iva );*/
+
+        var neto = ((cantidad * precio) - descuento);
+        var total  = (Math.round(neto * 1.19));
+
+        var exists = 0;
+        var iva = (total - neto);
         
         if(!producto){            
             Ext.Msg.alert('Alerta', 'Debe Seleccionar un Producto');
@@ -1424,8 +1439,8 @@ Ext.define('Infosys_web.controller.Pedidos', {
             neto = (neto + (parseInt(r.data.neto)));
         });
 
-        neto = (pretotal /1.19);
-        iva = (pretotal - neto);
+        /*neto = (pretotal / 1.19);
+        iva = (pretotal - neto);*/
         afecto = neto;
         neto = neto;
         pretotalfinal = pretotal;
