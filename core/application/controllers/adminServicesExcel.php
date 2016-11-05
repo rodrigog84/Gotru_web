@@ -169,13 +169,13 @@ class AdminServicesExcel extends CI_Controller {
             $vendedor = $v->nom_vendedor;
             $codvendedor = $v->id_vendedor;
             if ($v->tipdocumento==102){
-                $neto = ($v->neto / -1);
-                $iva = ($v->iva / -1);
+                $neto = (round($v->totalfactura /1.19) / -1);
+                $iva = (($v->totalfactura - $neto) / -1);
                 $total = ($v->totalfactura / -1);                
             }else{
-                $neto = $v->neto;
-                $iva = $v->iva;
-                $total = $v->totalfactura;                
+                $neto = (round($v->totalfactura /1.19));
+                $iva = ($v->totalfactura - $neto);
+                $total = ($v->totalfactura);             
             };
             
             $idrepartidor = $v->id_repartidor;
@@ -188,18 +188,16 @@ class AdminServicesExcel extends CI_Controller {
             b.codigo as cod_bodega FROM detalle_factura_cliente acc
             left join productos c on (acc.id_producto = c.id)
             left join bodegas b on (acc.id_bodega = b.id)
-            WHERE acc.id_factura = "'.$id.'"');
-
-                     
+            WHERE acc.id_factura = "'.$id.'"');                     
 
             foreach ($query2->result() as $z){
             if ($v->tipdocumento==102){
-            $netop = ($z->neto / -1);
-            $ivap = ($z->iva / -1);
+            $netop = (round($z->totalproducto / 1.19)/ -1);
+            $ivap = (($z->totalproducto - $netop) /-1);
             $totalproductop = ($z->totalproducto / -1);
             }else{
-            $netop = ($z->neto);
-            $ivap = ($z->iva);
+            $netop = (round($z->totalproducto / 1.19));
+            $ivap = ($z->totalproducto - $netop);
             $totalproductop = ($z->totalproducto);                
             };
             echo chr(13).chr(10);
