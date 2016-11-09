@@ -542,7 +542,8 @@ Ext.define('Infosys_web.view.notacredito.Notacredito', {
                                 width: 150,
                                 fieldLabel: 'Precio',
                                 itemId: 'precioId',
-                                style: 'font-weight: bold;'
+                                style: 'font-weight: bold;',
+                                decimalPrecision:3
                             },{xtype: 'splitter'},
                             {
                                 xtype: 'textfield',
@@ -551,7 +552,8 @@ Ext.define('Infosys_web.view.notacredito.Notacredito', {
                                 fieldLabel: 'Vendidos',
                                 readOnly: true,
                                 itemId: 'cantidadOriginalId',
-                                style: 'font-weight: bold;'
+                                style: 'font-weight: bold;',
+                                decimalPrecision:3
 
                             },
                             {xtype: 'splitter'},

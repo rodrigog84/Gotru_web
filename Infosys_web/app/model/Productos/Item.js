@@ -37,11 +37,6 @@ Ext.define('Infosys_web.model.Productos.Item', {
         {name: 'neto', decimalPrecision:3},
         {name: 'totaliva'},
         {name: 'precio', decimalPrecision:3},
-        {name: 'descuento', decimalPrecision:3}  
-        
-        
-        
-        
-
+        {name: 'descuento', decimalPrecision:3} 
     ]
 });
