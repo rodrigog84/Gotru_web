@@ -411,6 +411,10 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                                     iconCls: '',
                                     action: 'mpagocaja'
                                 },{
+                                    text: 'Pedidos Caja',
+                                    iconCls: '',
+                                    action: 'mPedidoscaja'
+                                },{
                                     text: 'Control de Caja',
                                     iconCls: '',
                                     action: 'mcajas',

@@ -1,6 +1,6 @@
-Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
+Ext.define('Infosys_web.view.pedidos_caja.Editarpedidos', {
     extend: 'Ext.window.Window',
-    alias : 'widget.editarpedidos',
+    alias : 'widget.editarpedidoscaja',
 
     requires: [
         'Ext.form.FieldContainer',
@@ -22,7 +22,7 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
     height: 640,
     width: 1300,
     layout: 'fit',
-    title: 'Editar Pedido',
+    title: 'Pedido',
 
     initComponent: function() {
         var me = this;
@@ -119,6 +119,7 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                                 value: Ext.Date.format(new Date(),'H:i'),
                                 maxHeight: 25,
                                 width: 200,
+                                allowBlank: false,
                                 itemId: 'horapedidoId',
                                 name : 'hora_pedido',
                                 fieldLabel: '<b>HORA PEDIDO</b>'
@@ -146,25 +147,34 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                                     width: 220,
                                     fieldLabel: '<b>RUT</b>',
                                     itemId: 'rutId',
-                                    name : 'rut'                                         
+                                    name : 'rut',
+                                    hidden: true                                         
                                 },{
                                     xtype: 'displayfield',
-                                    width: 20
+                                    width: 20,
+                                    hidden: true
                                    
                                 },{
-                                    xtype: 'displayfield',
-                                    width: 50
-                                   
+                                    xtype: 'button',
+                                    text: 'Buscar',
+                                    maxHeight: 25,
+                                    width: 80,                                                                        
+                                    action: 'validarut',
+                                    itemId: 'buscarBtn',
+                                    hidden: true
                                 },{
                                     xtype: 'textfield',
                                     fieldCls: 'required',
                                     fieldLabel: '<b>RAZON SOCIAL</b>',
                                     maxHeight: 25,
-                                    labelWidth: 80,
+                                    labelWidth: 120,
                                     width: 885,
                                     itemId: 'nombre_id',
-                                    name : 'nombre',
-                                    readOnly: true                                    
+                                    name : 'nombre'                                   
+                                },{
+                                    xtype: 'displayfield',
+                                    width: 20
+                                   
                                 },{
                                     xtype: 'textfield',
                                     fieldCls: 'required',
@@ -173,9 +183,9 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                                     labelWidth: 80,
                                     width: 200,
                                     itemId: 'TelefonoId',
-                                    name : 'telefono',
-                                    hidden: true                                  
+                                    name : 'telefono'                                   
                                 }
+
                             ]
                         },{
                             xtype: 'fieldcontainer',
@@ -415,7 +425,8 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                                 labelWidth: 40,
                                 fieldLabel: 'Precio',
                                 itemId: 'precioId',
-                                style: 'font-weight: bold;'
+                                style: 'font-weight: bold;',
+                                decimalPrecision:3
                             },{xtype: 'splitter'},
                             {
                                 xtype: 'textfield',
@@ -457,6 +468,7 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                             store: 'Tabladescuento',
                             emptyText : "Seleccione",
                             valueField: 'id',
+                            //disabled : true,
                             displayField: 'nombre'
                             },
                             {xtype: 'splitter'},
@@ -485,12 +497,12 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                             tbar: [{
                                 iconCls: 'icon-delete',
                                 text: 'Eliminar',
-                                action: 'eliminaritem2'
+                                action: 'eliminaritem'
                             },
                             {
                                 iconCls: 'icon-delete',
                                 text: 'Editar',
-                                action: 'editaritem2'
+                                action: 'editaritem'
                             }
                             ],
                             height: 210,
@@ -502,8 +514,8 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                                 { text: 'Bodega',  dataIndex: 'id_bodega', width: 250, hidden:true},
                                 { text: 'Precio Unitario',  dataIndex: 'precio', align: 'right',flex:1, decimalPrecision:3},
                                 { text: 'Cantidad',  dataIndex: 'cantidad', align: 'right',width: 150, decimalPrecision:3},
-                                { text: 'Descuento',  dataIndex: 'descuento', align: 'right',width: 100, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
-                                { text: 'Neto',  dataIndex: 'neto', align: 'right',flex:1, decimalPrecision:3},
+                                { text: 'Descuento',  dataIndex: 'dcto', align: 'right',width: 100, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
+                                { text: 'Neto',  dataIndex: 'neto', align: 'right',flex:1,decimalPrecision:3 },
                                 { text: 'Iva',  dataIndex: 'iva', align: 'right',flex:1,renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
                                 { text: 'Total',  dataIndex: 'total', align: 'right',flex:1, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} }
                                 ]
@@ -539,7 +551,8 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                             valueField: 'id',
                             disabled : true,   
                             labelAlign: 'top',
-                            displayField: 'nombre'
+                            displayField: 'nombre',
+                            hidden: true
                         },{
                             xtype: 'numberfield',
                             fieldCls: 'required',
@@ -560,7 +573,8 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                             itemId: 'descuentovalorId',
                             readOnly: true,
                             fieldLabel: '<b>DESCUENTO $</b>',
-                            labelAlign: 'top'
+                            labelAlign: 'top',
+                            hidden: true
                         },{xtype: 'splitter'},{
                             xtype: 'numberfield',
                             fieldCls: 'required',
@@ -594,6 +608,14 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                             xtype: 'numberfield',
                             itemId: 'finaltotalpostId',
                             hidden: true
+                        },{xtype: 'splitter'},{
+                            xtype: 'numberfield',
+                            fieldCls: 'required',
+                            width: 200,
+                            name : 'neto',
+                            itemId: 'abonoId',
+                            fieldLabel: '<b>ABONO</b>',
+                            labelAlign: 'top'
                         }]
                     }
                     ]
@@ -616,7 +638,7 @@ Ext.define('Infosys_web.view.Pedidos.Editarpedidos', {
                             xtype: 'button',
                             //iconCls: 'icono',
                             scale: 'large',
-                            action: 'observaciones',
+                            action: 'observaciones2',
                             text: 'OBSERVACIONES'
                         },{
                             xtype: 'button',

@@ -241,7 +241,7 @@ Ext.define('Infosys_web.view.ventas.Principalfactura' ,{
                 action:'exportarexcelfacturas'
             },{                
                 xtype: 'button',
-                //iconCls : 'icon-word',
+                iconCls : 'icon-word',
                 text: 'EXPORTAR TXT',
                 action:'exporttxt'
             },{

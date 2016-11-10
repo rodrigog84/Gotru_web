@@ -24,7 +24,7 @@ Ext.application({
                   "Recaudacion", "Notacredito","Caja", "Guiasdespacho",
                   "Comisiones","Notadebito","Tipodocumentocompras", "Precios",
                   "Facturaglosa","Repartidor","Cobradores","Tiponegocio",
-                  "Pedidos","Sectores","Estadisticas"],
+                  "Pedidos","Sectores","Estadisticas","PedidosCaja"],
 	   
     views: [
         'Infosys_web.view.WLogin',

@@ -19,7 +19,7 @@ Ext.application({
                   "Existencias", "Bitacora", "Tipo_movimientos_inventario",
                   "Preventa", "Pago_caja","CuentasCorrientes","Cotizacion",
                   "Recaudacion", "Notacredito","Caja","Guiasdespacho",
-                  "Comisiones"],
+                  "Comisiones", "PedidosCaja"],
     
     views: [
         'Ferrital_web.view.WLogin',

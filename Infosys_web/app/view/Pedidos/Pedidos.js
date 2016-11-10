@@ -163,6 +163,16 @@ Ext.define('Infosys_web.view.Pedidos.Pedidos', {
                                     itemId: 'nombre_id',
                                     name : 'nombre',
                                     readOnly: true                                    
+                                },{
+                                    xtype: 'textfield',
+                                    fieldCls: 'required',
+                                    fieldLabel: '<b>TELEFONO</b>',
+                                    maxHeight: 25,
+                                    labelWidth: 80,
+                                    width: 200,
+                                    itemId: 'TelefonoId',
+                                    name : 'telefono',
+                                    hidden: true                                  
                                 }
                             ]
                         },{
@@ -198,17 +208,20 @@ Ext.define('Infosys_web.view.Pedidos.Pedidos', {
                                 width: 580,
                                 itemId: 'direccionId',
                                 name : 'direccion',                                         
-                                readOnly: true
+                                readOnly: true,
+                                hidden: true
                             },{xtype: 'splitter'},{
                                 xtype: 'button',
                                 text: 'Sucursal',
                                 itemId: 'sucursalId',
                                 maxHeight: 25,
                                 width: 70,
-                                action: 'buscarsucursalfactura'
+                                action: 'buscarsucursalfactura',
+                                hidden: true
                             },{
                                 xtype: 'displayfield',
-                                width: 10                                           
+                                width: 10,
+                                hidden: true                                           
                             },{
                                 xtype: 'combo',
                                 itemId: 'tipoVendedorId',
@@ -250,6 +263,19 @@ Ext.define('Infosys_web.view.Pedidos.Pedidos', {
                                 emptyText : "Seleccione",
                                 store : 'Bodegas',
                                 readOnly: true
+                            },{
+                                xtype: 'displayfield',
+                                width: 10                                           
+                            },{
+                                xtype: 'datefield',
+                                fieldCls: 'required',
+                                maxHeight: 25,
+                                labelWidth: 150,
+                                width: 270,
+                                fieldLabel: '<b>FECHA ELABORACION</b>',
+                                itemId: 'fechaelaboraId',
+                                name: 'fecha_elaboracion',
+                                value: new Date()
                             }
                             ]
                         },{
@@ -448,7 +474,6 @@ Ext.define('Infosys_web.view.Pedidos.Pedidos', {
                     }]
 
                      }
-
                             ]
                         },{
                             xtype: 'grid',
@@ -477,7 +502,7 @@ Ext.define('Infosys_web.view.Pedidos.Pedidos', {
                                 { text: 'Precio Unitario',  dataIndex: 'precio', align: 'right',flex:1, decimalPrecision:3},
                                 { text: 'Cantidad',  dataIndex: 'cantidad', align: 'right',width: 150, decimalPrecision:3},
                                 { text: 'Descuento',  dataIndex: 'dcto', align: 'right',width: 100, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
-                                { text: 'Neto',  dataIndex: 'neto', align: 'right',flex:1,decimalPrecision:3 },
+                                { text: 'Neto',  dataIndex: 'neto', align: 'right',flex:1,renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
                                 { text: 'Iva',  dataIndex: 'iva', align: 'right',flex:1,renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
                                 { text: 'Total',  dataIndex: 'total', align: 'right',flex:1, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} }
                                 ]
