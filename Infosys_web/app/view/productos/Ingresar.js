@@ -155,11 +155,18 @@ Ext.define('Infosys_web.view.productos.Ingresar', {
                 fieldLabel: 'Unidad de Medida',
                 forceSelection : true,
                 editable : false,
+                labelWidth: 120,
                 name : 'id_uni_medida',
                 valueField : 'id',
                 displayField : 'nombre',
                 emptyText : "Seleccione",
                 store : 'Medidas'
+            },{xtype: 'splitter'},{
+                xtype: 'numberfield',
+                labelWidth: 80,
+                width: 150,
+                fieldLabel: 'Equivalencia',
+                name:'equiv_pro'
             }]
         },{
             xtype: 'fieldset',

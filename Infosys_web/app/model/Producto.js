@@ -15,6 +15,7 @@ Ext.define('Infosys_web.model.Producto', {
         {name: 'nom_uni_medida'},
         {name: 'id_marca'},
         {name: 'nom_marca'},
+        {name: 'equiv_pro'},
         {name: 'id_uni_medida'},
         {name: 'nom_medida'},
         {name: 'cantidad_medida', decimalPrecision:3},
