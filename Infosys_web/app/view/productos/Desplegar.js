@@ -7,7 +7,7 @@ Ext.define('Infosys_web.view.productos.Desplegar', {
     title : 'Editar Productos',
     layout: 'fit',
     autoShow: true,
-    width: 850,
+    width: 860,
     modal: true,
     iconCls: 'icon-sheet',
 
