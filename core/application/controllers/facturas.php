@@ -1651,7 +1651,7 @@ public function cargacontribuyentes(){
 		  ->join('caf c','fc.idcaf = c.id')
 		  ->where('c.tipo_caf',$tipo_caf)
 		  ->where('fc.estado','T')
-		  ->where('fc.updated_at <= (now() - interval 4 hour)')
+		  ->where('fc.updated_at <= (now() - interval 1 day)')
 		  ->order_by('fc.folio')
 		  ->limit(1);
 		$query = $this->db->get();
