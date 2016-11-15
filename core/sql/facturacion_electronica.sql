@@ -373,3 +373,8 @@ CREATE TABLE IF NOT EXISTS `sectores` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
+
+/*******************************************************************/
+
+ALTER TABLE `folios_caf`
+	ADD INDEX `idcaf` (`idcaf`);
