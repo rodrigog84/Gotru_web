@@ -128,6 +128,9 @@ Ext.define('Infosys_web.controller.Pago_caja', {
             'pagocajaprincipal button[action=generaticket]': {
                 click: this.generaticket
             },
+            'boletaingresar #codigoId': {
+                specialkey: this.specialBoleta
+            },
             'pagocajaprincipal #nombresId': {
                 specialkey: this.special5
             },
@@ -626,6 +629,12 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         }
     },
 
+    specialBoleta: function(f,e){
+        if (e.getKey() == e.ENTER) {
+            this.buscarproductos()
+        }
+    },
+
     
     aperturacaja: function(){
 
@@ -655,10 +664,6 @@ Ext.define('Infosys_web.controller.Pago_caja', {
                 }else{
 
                      view.down("#efectuvoId").focus();
-                    
-                         
-
-
                 }
             }
            
