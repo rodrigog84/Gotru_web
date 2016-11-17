@@ -304,6 +304,11 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         var descuento = view.down('#totdescuentoId').getValue(); 
         var iddescuento = view.down('#DescuentoproId').getValue();
         var bolEnable = true;
+
+        if(!cantidad){            
+            Ext.Msg.alert('Alerta', 'Debe Agregar Cantidad');
+            return false;
+        }
         
         var tot = ((cantidad * precio) - descuento);
         var neto = (Math.round(tot / 1.19));
@@ -393,7 +398,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         view.down('#DescuentoproId').setValue(cero);
         view.down('#condpagoId').setValue(tipopago);
         view.down('#numboleta2Id').setValue(numdoc);
-        view.down("#buscarproc").focus();
+        view.down("#codigoId").focus();
     },
 
     seleccionarproductos: function(){
@@ -414,13 +419,17 @@ Ext.define('Infosys_web.controller.Pago_caja', {
             Ext.Msg.alert('Alerta', 'Selecciona un registro.');
             return;
         }
+
+        this.buscarproductos();
+       
     },
 
     buscarproductos: function(){
           
         var viewIngresa = this.getBoletaingresar();
         var codigo = viewIngresa.down('#codigoId').getValue()
-        var rut = viewIngresa.down('#rutId').getValue()
+        var rut = viewIngresa.down('#rutId').getValue();
+        var valida = "";
         if(!rut){
              Ext.Msg.alert('Alerta', 'Debe Seleccionar Cliente');
                         return;  
@@ -459,15 +468,29 @@ Ext.define('Infosys_web.controller.Pago_caja', {
                         viewIngresa.down('#cantidadOriginalId').setValue(cliente.stock);
                         viewIngresa.down("#cantidadId").focus();                                             
                     }                    
-                }else{
+                };              
+                                          
+                if(resp.success == false){                
+                  if (resp.cliente){
+                        var cliente = resp.cliente;                        
+                        viewIngresa.down('#productoId').setValue(cliente.id_producto);
+                        viewIngresa.down('#nombreproductoId').setValue(cliente.nombre);
+                        viewIngresa.down('#codigoId').setValue(cliente.codigo_barra);
+                        viewIngresa.down('#precioId').setValue(cliente.valor_lista);
+                        viewIngresa.down('#cantidadOriginalId').setValue(cliente.stock);
+                        viewIngresa.down("#cantidadId").setValue(cliente.cantidad);
+                        viewIngresa.down("#agregarId").focus();
+
+                  }else{
                        Ext.Msg.alert('Alerta', 'Producto no existe');
-                        return;                   
-                }              
-            }
+                        return;
+                };          
+              };
+          }
 
         });
-        }
-        
+        };
+
     },
 
     buscarp: function(){

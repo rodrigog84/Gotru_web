@@ -323,6 +323,7 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
                             {
                                 xtype: 'button',
                                 text: 'Agregar',
+                                itemId: 'agregarId',
                                 iconCls: 'icon-plus',
                                 width: 80,
                                 allowBlank: true,
