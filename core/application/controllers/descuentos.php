@@ -66,10 +66,10 @@ class Descuentos extends CI_Controller {
 
 		if($nombre){
 			$query = $this->db->query('SELECT * FROM tabla_descuento WHERE nombre like "%'.$nombre.'%"
-			limit '.$start.', '.$limit.'');
+			');
 		}else{
 			
-			$query = $this->db->query('SELECT * FROM tabla_descuento limit '.$start.', '.$limit.'');
+			$query = $this->db->query('SELECT * FROM tabla_descuento ');
 			
 		}
 
