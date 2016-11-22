@@ -378,3 +378,9 @@ CREATE TABLE IF NOT EXISTS `sectores` (
 
 ALTER TABLE `folios_caf`
 	ADD INDEX `idcaf` (`idcaf`);
+
+
+/****************************************************************/
+
+ALTER TABLE `folios_caf`
+	ADD INDEX `estado` (`estado`);	
