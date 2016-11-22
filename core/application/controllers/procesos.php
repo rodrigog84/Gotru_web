@@ -150,6 +150,17 @@ class Procesos extends CI_Controller {
 	}		
 
 
+	public function libera_folios(){
+
+			$this->db->where('estado', 'T');
+			$this->db->update('folios_caf',array(
+											'estado' => 'P')); 
+
+
+
+	}	
+
+
 }
 
 
