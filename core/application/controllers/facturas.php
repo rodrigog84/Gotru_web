@@ -1645,42 +1645,25 @@ public function cargacontribuyentes(){
 		}
 
 		$nuevo_folio = 0;
-		//buscar primero si existe algún folio ocupado hace más de 4 horas.
-		$this->db->select('fc.id, fc.folio ')
-		  ->from('folios_caf fc')
-		  ->join('caf c','fc.idcaf = c.id')
-		  ->where('c.tipo_caf',$tipo_caf)
-		  ->where('fc.estado','T')
-		  ->where('fc.updated_at <= (now() - interval 1 day)')
-		  ->order_by('fc.folio')
-		  ->limit(1);
-		$query = $this->db->get();
+
+		$query = $this->db->query('select fc.id, fc.folio from folios_caf 
+						fc inner join caf c on fc.idcaf = c.id
+						where c.tipo_caf = ' . $tipo_caf . '
+						and fc.estado = "P"
+						order by fc.folio limit 1 for update');
+
 		$folios_caf = $query->row();	
 		if(count($folios_caf) > 0){
 			$nuevo_folio = $folios_caf->folio;
 			$id_folio = $folios_caf->id;
-		}else{ // buscar folios pendientes
-			$this->db->select('fc.id, fc.folio ')
-			  ->from('folios_caf fc')
-			  ->join('caf c','fc.idcaf = c.id')
-			  ->where('c.tipo_caf',$tipo_caf)
-			  ->where('fc.estado','P')
-			  ->order_by('fc.folio')
-			  ->limit(1);
-			$query = $this->db->get();
-			$folios_caf = $query->row();	
-			if(count($folios_caf) > 0){
-				$nuevo_folio = $folios_caf->folio;
-				$id_folio = $folios_caf->id;
-			}
 		}
+
 
 
 		if($nuevo_folio != 0){
 			$this->db->where('id', $id_folio);
 			$this->db->update('folios_caf',array(
-											'estado' => 'T',
-											'updated_at' => date('Y-m-d H:i:s'))); 
+											'estado' => 'T')); 
 		}
 
        	$resp['folio'] = $nuevo_folio;

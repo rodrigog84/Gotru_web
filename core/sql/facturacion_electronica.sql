@@ -384,3 +384,9 @@ ALTER TABLE `folios_caf`
 
 ALTER TABLE `folios_caf`
 	ADD INDEX `estado` (`estado`);	
+
+
+/********************************************************************/
+
+ALTER TABLE `folios_caf`
+	ADD INDEX `folio` (`folio`);	
