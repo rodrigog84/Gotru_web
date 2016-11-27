@@ -90,9 +90,9 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
             'pedidoscajaprincipal button[action=cerrarpedidoscaja]': {
                 click: this.cerrarpedidoscaja
             },
-            'buscarclientespedidos button[action=seleccionarcliente]': {
-                click: this.seleccionarcliente
-            },
+            //'buscarclientespedidos button[action=seleccionarcliente]': {
+            //    click: this.seleccionarcliente
+            //},
             'pedidoscajaingresar button[action=buscarproductos]': {
                 click: this.buscarproductos
             },
@@ -1668,7 +1668,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
         st.load();
     },
 
-    seleccionarcliente: function(){
+    /*seleccionarcliente: function(){
 
         var view = this.getBuscarclientespedidos();
         var viewIngresa = this.getPedidoscajaingresar();
@@ -1713,7 +1713,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
             return;
         }
        
-    },
+    },*/
 
     validarut: function(){
 
