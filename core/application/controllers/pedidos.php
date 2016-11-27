@@ -445,7 +445,7 @@ class Pedidos extends CI_Controller {
         echo json_encode($resp);
 	}
 
-	public function exportPDF(){
+	public function exportPDFCaja(){
 		$idpedidos = $this->input->get('idpedidos');
 		$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, v.id as id_vendedor, c.direccion as direccion,
 		c.id_pago as id_pago, suc.direccion as direccion_sucursal, ciu.nombre as ciudad, com.nombre as comuna, cor.nombre as nom_documento, cod.nombre as nom_giro, op.observaciones as observa  FROM pedidos acc
@@ -531,10 +531,230 @@ class Pedidos extends CI_Controller {
 		    	<table width="987px" border="0">
 		    		<tr>
 		    			<td width="197px">Sr.(es):</td>
-		    			<td width="395px">'. $row->nom_cliente.'</td>
+		    			<td width="395px">'. $row->nombre_cliente.'</td>
 		    			<td width="197px">Rut:</td>
 		    			<td width="197px">'. number_format(substr($row->rut_cliente, 0, strlen($row->rut_cliente) - 1),0,".",".")."-".substr($row->rut_cliente,-1).'</td>
 		    		</tr>
+		    		<tr>
+		    		<td width="197px">TELEFONO:</td>
+		    		<td width="197px">'.$row->telefono.'</td>
+		    		<td width="197px">VENDEDOR:</td>
+		    		<td width="197px">'.$row->nom_vendedor.'</td>
+		    		</tr>
+		    		
+		    		<tr>
+		    			<td width="197px">Fecha Despacho:</td>
+		    			<td width="395px">'. $fechadespacho.'</td>
+		    			<td width="197px">Hora Despacho:</td>
+		    			<td width="197px">'.$row->hora_despacho.'</td>
+		    		</tr>
+		    		
+		    	</table>
+			</td>
+		  </tr>
+		  <tr>
+		    <td colspan="3" >
+		    	<table width="987px" cellspacing="0" cellpadding="0" >
+		      <tr>
+		        <td width="148px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;" >Cantidad</td>
+		        <td width="395px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" >Descripci&oacute;n</td>
+		        <td width="148px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;" >Precio/Unidad</td>
+		        <td width="148px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;" >Dcto</td>
+		       
+		        <td width="148px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;" >Neto</td>
+		        <td width="148px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;" >Total</td>
+		      </tr>';
+		$descripciones = '';
+		$i = 0;
+		foreach($items->result() as $v){
+			//$i = 0;
+			//while($i < 30){
+			$this->db->where('id', $v->id_producto);
+			$producto = $this->db->get("productos");	
+			$producto = $producto->result();
+			$producto = $producto[0];
+			
+			$html .= '<tr>
+			<td style="text-align:right">'.$v->cantidad.'&nbsp;&nbsp;</td>			
+			<td style="text-align:left">'.$producto->nombre.'</td>			
+			<td align="right">$ '.number_format($v->precio, 3, '.', ',').'</td>
+			<td align="right">$ '.number_format($v->descuento, 0, '.', ',').'</td>
+			<td align="right">$ '.number_format($v->neto, 0, '.', ',').'</td>			
+			<td align="right">$ '.number_format($v->total, 0, '.', ',').'</td>
+			</tr>';
+			
+			//}
+			$i++;
+		}
+
+		// RELLENA ESPACIO
+		/*while($i < 30){
+			$html .= '<tr><td colspan="5">&nbsp;</td></tr>';
+			$i++;
+		}
+*/
+
+		$html .= '<tr><td colspan="5">&nbsp;</td></tr></table></td>
+		  </tr>
+		  
+		  
+		  <tr>
+		  	<td colspan="2" rowspan="6" style="font-size: 12px;border-bottom:1pt solid black;border-top:1pt solid black;border-left:1pt solid black;border-right:1pt solid black;text-align:left;">Observaciones : '.$observacion.'</td>
+		  	<td>
+				<table width="296px" border="0">
+					<tr>
+						<td width="150px" style="font-size: 20px;text-align:left;">Total</td>
+						<td width="146px" style="text-align:right;">$ '. number_format($subtotal, 0, '.', ',') .'</td>
+					</tr>
+				</table>
+		  	</td>
+		  </tr>
+		  <tr>
+		  	<td>
+				
+		  	</td>		  
+		  </tr>	
+		  <tr>
+		  	<td>
+				
+		  	</td>		  
+		  </tr>	
+		  <tr>
+		  		  
+		  </tr>
+		  <tr>
+		  			  
+		  </tr>
+			  		  	  
+		 
+		  
+		</table>
+		</body>
+		</html>
+		';
+		//==============================================================
+		//==============================================================
+		//==============================================================
+
+		include(dirname(__FILE__)."/../libraries/mpdf60/mpdf.php");
+
+		$mpdf= new mPDF(
+			'',    // mode - default ''
+			'',    // format - A4, for example, default ''
+			0,     // font size - default 0
+			'',    // default font family
+			15,    // margin_left
+			15,    // margin right
+			16,    // margin top
+			16,    // margin bottom
+			9,     // margin header
+			9,     // margin footer
+			'L'    // L - landscape, P - portrait
+			);  
+
+		$mpdf->WriteHTML($html);
+		$mpdf->Output("CF_{$codigo}.pdf", "I");
+		
+		exit;
+	}
+
+	public function exportPDF(){
+		$idpedidos = $this->input->get('idpedidos');
+		$query = $this->db->query('SELECT acc.*, c.nombres as nom_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, v.id as id_vendedor, c.direccion as direccion,
+		c.id_pago as id_pago, suc.direccion as direccion_sucursal, ciu.nombre as ciudad, com.nombre as comuna, cor.nombre as nom_documento, cod.nombre as nom_giro, op.observaciones as observa  FROM pedidos acc
+		left join correlativos cor on (acc.tip_documento = cor.id)
+		left join clientes c on (acc.id_cliente = c.id)
+		left join vendedores v on (acc.id_vendedor = v.id)
+		left join observacion_pedidos op on (acc.num_pedido = op.num_pedidos)
+		left join clientes_sucursales suc on (acc.id_sucursal = suc.id)
+		left join comuna com on (suc.id_comuna = com.id)
+		left join ciudad ciu on (suc.id_ciudad = ciu.id)
+		left join cod_activ_econ cod on (c.id_giro = cod.id)
+		WHERE acc.id = "'.$idpedidos.'"
+		');
+		//cotizacion header
+		$row = $query->result();
+		$row = $row[0];
+		//items
+		$items = $this->db->get_where('pedidos_detalle', array('id_pedido' => $idpedidos));
+		//variables generales
+		$codigo = $row->num_pedido;
+		$nombre_contacto = $row->nombre_cliente;
+		$vendedor = $row->nom_vendedor;
+		$observacion = $row->observa;
+		$fecha = $row->fecha_doc;
+		$datetime = DateTime::createFromFormat('Y-m-d', $fecha);
+		$fecha = $datetime->format('d/m/Y');
+		$fechadespacho = $row->fecha_despacho;
+		$datetime = DateTime::createFromFormat('Y-m-d', $fechadespacho);
+		$fechadespacho = $datetime->format('d/m/Y');
+		$totaliva = 0;
+		$neto = ($row->total / 1.19);
+		$iva = ($row->total - $neto);
+		$subtotal = ($row->total + $row->descuento);
+
+		if($row->direccion_sucursal == " "){
+
+			$direccion = $row->direccion;
+			
+		}else{
+
+			$direccion = $row->direccion_sucursal;
+			
+		};
+
+		$html = '
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+		<html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Untitled Document</title>
+		<style type="text/css">
+		td {
+			font-size: 16px;
+		}
+		p {
+		}
+		</style>
+		</head>
+
+		<body>
+		<table width="987px" height="602" border="0">
+		  <tr>
+		   <td width="197px"><img src="http://localhost/Gotru_web/Infosys_web/resources/images/logo_empresa.png" width="150" height="136" /></td>
+		    <td width="493px" style="font-size: 14px;text-align:center;vertical-align:text-top"	>
+		    <p>GOTRU ALIMENTOS SPA.</p>
+		    <p>RUT:78.549.450-4</p>
+		    <p>8 ORIENTE, TALCA</p>
+		    <p>Fonos: </p>
+		    <p>http://www.gotru.cl</p>
+		    </td>
+	    <td width="296px" style="font-size: 16px;text-align:left;vertical-align:text-top"	>
+	          <p>pedidos N°: '.$codigo.'</p>
+	          <!--p>&nbsp;</p-->
+	          <p>FECHA EMISION : '.$fecha.'</p>
+	          <!--p>&nbsp;</p-->		         
+			</td>
+		  </tr>
+		  <tr>
+			<td style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" colspan="3"><h1>PEDIDOS</h1></td>
+		  </tr>
+		  <tr>
+		    <td colspan="3" width="987px" >
+		    	<table width="987px" border="0">
+		    		<tr>
+		    			<td width="197px">Sr.(es):</td>
+		    			<td width="395px">'. $row->nombre_cliente.'</td>
+		    			<td width="197px">Rut:</td>
+		    			<td width="197px">'. number_format(substr($row->rut_cliente, 0, strlen($row->rut_cliente) - 1),0,".",".")."-".substr($row->rut_cliente,-1).'</td>
+		    		</tr>
+		    		<tr>
+		    		<td width="197px">TELEFONO:</td>
+		    		<td width="197px">'.$row->telefono.'</td>
+		    		<td width="197px">VENDEDOR:</td>
+		    		<td width="197px">'.$row->nom_vendedor.'</td>
+		    		</tr>
+		    		
 		    		<tr>
 		    			<td width="197px">Fecha Despacho:</td>
 		    			<td width="395px">'. $fechadespacho.'</td>
@@ -795,6 +1015,53 @@ class Pedidos extends CI_Controller {
     	$this->db->where('id', $producto);
 
     	$this->db->update('productos', $datos);
+
+    	$general = $this->db->query('SELECT * FROM pedidos_general WHERE id="'.$producto.'"
+    	AND fecha_produccion = "'.$fechaelaboracion.'" ');		
+
+		if($general->num_rows()>0){
+		 		$row = $general->first_row();
+		 	    $id = ($row->id);
+		 	    $cantidad = ($row->cantidad + ($v->cantidad) );
+
+		 	    $this->db->where('id', $v->id_producto);
+				$producto = $this->db->get("productos");	
+				$producto = $producto->result();
+				$producto = $producto[0];
+				$conversion = $producto->equiv_pro;
+		 	    $unidadfisica = ($cantidad * $conversion);
+
+			    $pedidos_update = array(
+		        'cantidad' => $cantidad,
+		        'conversion' => $conversion,
+		        'unidadfisica' => $unidadfisica
+				);
+
+				$this->db->where('id', $id);
+				$this->db->update('pedidos_general', $pedidos_update);
+	    }else{
+
+				$cantidad = ($v->cantidad);
+				$this->db->where('id', $v->id_producto);
+				$producto = $this->db->get("productos");	
+				$producto = $producto->result();
+				$producto = $producto[0];
+				$conversion = $producto->equiv_pro;
+				$unidadfisica = ($cantidad * $conversion);
+
+				$pedidos_general = array(
+				'id_producto' => $v->id_producto,
+				'cantidad' => $v->cantidad,
+				'fecha_produccion' => $fechaelaboracion,
+				'fecha' => $fechapedidos,
+				'conversion' => $conversion,
+				'unidadfisica' => $unidadfisica
+				);
+
+				$this->db->insert('pedidos_general', $pedidos_general);
+
+	    };
+
     	
 		}
 
@@ -836,8 +1103,7 @@ class Pedidos extends CI_Controller {
 		$fiva = $this->input->post('iva');
 		$fafecto = $this->input->post('afecto');
 		$ftotal = $this->input->post('total');
-		$idobserva = $this->input->post('idobserva');
-					
+		$idobserva = $this->input->post('idobserva');					
 						
 		if ($desc){			
 			$desc = $this->input->post('descuento');
@@ -875,7 +1141,53 @@ class Pedidos extends CI_Controller {
 		$producto = $v->id_producto;
 
 	    $this->db->insert('pedidos_detalle', $pedidos_detalle);
+	    
+    	$general = $this->db->query('SELECT * FROM pedidos_general WHERE id="'.$producto.'"
+    	AND AND fecha_produccion = "'.$fechaelaboracion.'" ');		
 
+	    if($general->num_rows()>0){
+
+		 		$row = $general->first_row();
+		 	    $id = ($row->id);
+		 	    $cantidad = ($row->cantidad + ($v->cantidad) );
+
+		 	    $this->db->where('id', $v->id_producto);
+				$producto = $this->db->get("productos");	
+				$producto = $producto->result();
+				$producto = $producto[0];
+				$conversion = $producto->equiv_pro;
+		 	    $unidadfisica = ($cantidad * $conversion);
+
+			    $pedidos_update = array(
+		        'cantidad' => $cantidad,
+		        'conversion' => $conversion,
+		        'unidad_fisica' => $unidadfisica
+				);
+
+				$this->db->where('id', $id);
+				$this->db->update('pedidos_general', $pedidos_update);
+	    }else{
+
+				$cantidad = ($v->cantidad);
+				$this->db->where('id', $v->id_producto);
+				$producto = $this->db->get("productos");	
+				$producto = $producto->result();
+				$producto = $producto[0];
+				$conversion = $producto->equiv_pro;
+				$unidadfisica = ($cantidad * $conversion);
+
+				$pedidos_general = array(
+				'id_producto' => $v->id_producto,
+				'cantidad' => $v->cantidad,
+				'fecha_produccion' => $fechaelaboracion,
+				'fecha' => $fechapedidos,
+				'conversion' => $conversion,
+				'unidad_fisica' => $unidadfisica
+				);
+
+				$this->db->insert('pedidos_general', $pedidos_general);
+
+	    };
 		
     	$resp['detalle'] = false;
     	
@@ -1517,4 +1829,185 @@ class Pedidos extends CI_Controller {
 
         echo json_encode($resp);
 	}
+
+	public function exportarPdfinformeproduccion() {
+            
+		$fecha = $this->input->get('fecha');
+		list($dia, $mes, $anio) = explode("/",$fecha);
+		$fecha2 = $anio ."-". $mes ."-". $dia;
+		$fecha3= $dia ."/". $mes ."/". $anio;
+		$tipo = $this->input->get('tipo');
+		$doc1="";
+		$b=0;
+		$pag=1;
+		$fecha4 = date('d/m/Y');
+		$hora =  date("H:i:s", $time);
+
+		$this->load->database();
+		$pag=1;
+		
+		$query = $this->db->query('SELECT * FROM pedidos_general WHERE fecha_produccion = "'.$fecha2.'"');
+
+        $header = '
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+		<html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>INFORME DE PRODUCCION</title>
+		<style type="text/css">
+		td {
+			font-size: 16px;
+		}
+		p {
+		}
+		</style>
+		</head>
+
+		<body>
+		<table width="987px" height="602" border="0">
+		  <tr>
+		    <td width="197px"><img src="http://localhost/Gotru_web/Infosys_web/resources/images/logo_empresa.png" width="150" height="136" /></td>
+		    <td width="493px" style="font-size: 14px;text-align:center;vertical-align:text-top"	>
+		    <p>GOTRU ALIMENTOS SPA.</p>
+		    <p>RUT:78.549.450-4</p>
+		    <p>8 ORIENTE, TALCA</p>
+		    <p>Fonos: </p>
+		    <p>http://www.gotru.cl</p>
+		    </td>
+		    <td width="296px" style="font-size: 16px;text-align:left;vertical-align:text-top">
+		    <p>FECHA : '.$fecha4.'</p>
+		    </td>
+		  </tr>';              
+              
+		  $header .= '<tr>
+			<td style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;" colspan="3"><h2>Listado de Produccion</h2></td>
+		  </tr>
+		  <tr>
+			<td>HORARIO : '.$hora.'</td>
+			<td>FECHA PRODUCCION : '.$fecha3.'</td>
+		  </tr>
+		  <tr>
+			
+		  </tr>
+			<tr><td colspan="3">&nbsp;</td></tr>		  
+			</table>';     
+		      $i = 0;
+              //$body_detail = '';
+              $users = $query->result_array();
+             
+			  $header .= '
+	    	<table width="987px" cellspacing="0" cellpadding="0" border="0">
+	      <tr>
+	        <td width="160"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;font-size:12px" ><h2>CODIGO</h2></td>
+	        <td width="240px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;font-size:12px" ><h2>DESCRIPCION</h2></td>
+	        <td width="487px"  style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:center;font-size:12px" ><h2>UNIDADES</h2></td>        	        	             
+	       </tr>';	
+	       
+		        $a="ok";
+				$array_detail = array();
+			  
+			foreach($users as $v){
+							
+				$this->db->where('id', $v['id_producto']);
+				$producto = $this->db->get("productos");	
+				$producto = $producto->result();
+				$producto = $producto[0];
+				$codigo = $producto->codigo;
+		 	    $descripcion = $producto->nombre;
+
+		 	    $body_detail = "";	
+	          		
+			if ($a=="ok"){
+				$a="no";
+
+				$body_detail .= '
+				<tr>				
+				<td width="60px" style="text-align:center;font-size:12px"><h2>'.$codigo.'</h2></td>	
+				<td width="440px" style="text-align:rigth;font-size:12px"><h2>'.$descripcion.'</h2></td>
+				<td width="287px" style="text-align:center;font-size:12px"><h2>'.$v['unidadfisica'].'</h2></td>				
+				</tr>
+				';				
+
+			}else{
+
+		    $body_detail .= '
+				<tr>				
+				<td width="60px" style="text-align:center;font-size:12px"><h2>'.$codigo.'</h2></td>	
+				<td width="440px" style="text-align:rigth;font-size:12px"><h2>'.$descripcion.'</h2></td>
+				<td width="287px" style="text-align:center;font-size:12px"><h2>'.$v['unidadfisica'].'</h2></td>				
+				</tr>
+				';
+
+
+			};				
+		
+				$array_detail[] = $body_detail;
+				$i++;
+     		};
+
+     		
+
+
+     $body_totales = '<table width="987px" cellspacing="0" cellpadding="0" border="0"><tr><td colspan="2">&nbsp;</td></tr><tr>
+		<td  colspan="13" style="border-bottom:1pt solid black;border-top:1pt solid black;text-align:right;font-size: 14px;" ><b></b></td>
+		</tr>';
+		$footer = "";
+
+		$fin_tabla = "</table>
+		</body>
+		</html>";
+	    
+	   	              
+        $this->load->library("mpdf");
+			
+			$this->mpdf->mPDF(
+				'',    // mode - default ''
+				'',    // format - A4, for example, default ''
+				6,     // font size - default 0
+				'',    // default font family
+				5,    // margin_left
+				5,    // margin right
+				16,    // margin top
+				16,    // margin bottom
+				9,     // margin header
+				9,     // margin footer
+				'L'    // L - landscape, P - portrait
+				);  
+
+			$cantidad_hoja = 50;
+			$fila = 1;
+			$this->mpdf->SetHeader('Gotru - Informe Produccion');
+			$this->mpdf->setFooter('{PAGENO}');					
+			foreach ($array_detail as $detail) {
+				if($fila == 1){
+					$this->mpdf->WriteHTML($header);		
+					//echo $header.$header2.$body_header;
+				};
+
+				$this->mpdf->WriteHTML($detail);
+				//echo $detail;
+				//exit;
+
+				if(($fila % $cantidad_hoja) == 0 ){  #LLEVA 30 LINEAS EN LA HOJA
+						$this->mpdf->WriteHTML($fin_tabla);					
+					//echo $fin_tabla;
+						$fila = 0;						
+						$this->mpdf->AddPage();
+				};		
+				//echo $fila."<br>";
+				$fila++;
+				$pag++;
+			};
+			$this->mpdf->WriteHTML($fin_tabla);
+			//echo $body_totales.$footer.$fin_tabla; exit;
+			$this->mpdf->WriteHTML($body_totales.$footer.$fin_tabla);
+			//echo $html; exit;
+			//exit;
+			//$this->mpdf->AddPage();
+			//$this->mpdf->WriteHTML($html2);
+			$this->mpdf->Output("Informe_produccion.pdf", "I");
+
+			exit; 
+		
+        }
 }

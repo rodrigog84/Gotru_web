@@ -202,7 +202,29 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
             'facturasingresarpedidos button[action=grabarfactura]': {
                 click: this.grabarfactura
             },
+            'pedidoscajaprincipal button[action=exportarexcelpedidoscaja]': {
+                click: this.exportarlibrorecaudacion
+            },
+            'pedidoscajaprincipal button[action=exportarpedidoscaja]': {
+                click: this.exportarpedidoscaja
+            },
         });
+    },
+
+    exportarpedidoscaja: function(){
+        var view = this.getPedidoscajaprincipal();
+        if (view.getSelectionModel().hasSelection()) {
+            var row = view.getSelectionModel().getSelection()[0];
+            window.open(preurl +'pedidos/exportPDFCaja/?idpedidos=' + row.data.id)
+        }else{
+            Ext.Msg.alert('Alerta', 'Selecciona un registro.');
+            return;
+        }
+    },
+
+    exportarlibrorecaudacion : function(){
+
+        Ext.create('Infosys_web.view.pedidos_caja.Exportar');
     },
 
     selectcod: function(f,e){
@@ -290,7 +312,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
                 var idfactura= resp.idfactura;
                  viewIngresa.close();
                  stFactura.load();
-                 window.open(preurl + 'facturas/exportPDF/?idfactura='+idfactura);
+                 window.open(preurl + 'facturas/exportPDFCaja/?idfactura='+idfactura);
 
             }
            
@@ -457,36 +479,12 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
         
         var jsonCol = new Array()
         var i = 0;
-        var grid =this.getPedidoscajaprincipal()
-        Ext.each(grid.columns, function(col, index){
-          if(!col.hidden){
-              jsonCol[i] = col.dataIndex;
-          }
-          
-          i++;
-        })
-
         var view =this.getFormularioexportarpedidoscaja()
         var viewnew =this.getPedidoscajaprincipal()
 
         var fecha = view.down('#fechaId').getSubmitValue();
-        var opcion = viewnew.down('#tipoPedidoId').getValue()
-        if (!opcion){
-
-              Ext.Msg.alert('Alerta', 'Seleccione Tipo Informe');
-            return;       
-            
-        }
-        var fecha2 = view.down('#fecha2Id').getSubmitValue();
-                
-        if (fecha > fecha2) {
         
-               Ext.Msg.alert('Alerta', 'Fechas Incorrectas');
-            return;          
-
-        };     
-
-        window.open(preurl + 'adminServicesExcel/exportarExcelPedidos?cols='+Ext.JSON.encode(jsonCol)+'&fecha='+fecha+'&fecha2='+fecha2+'&opcion='+opcion);
+        window.open(preurl + 'pedidos/exportarPdfinformeproduccion?fecha='+fecha);
         view.close();    
 
      
