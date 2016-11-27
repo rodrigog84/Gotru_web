@@ -964,7 +964,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
                  var idpedidos= resp.idpedidos;
                  viewIngresa.close();
                  stpedidos.load();
-                 window.open(preurl + 'pedidos/exportPDF/?idpedidos='+idpedidos);
+                 window.open(preurl + 'pedidos/exportPDFCaja/?idpedidos='+idpedidos);
                
             }
            
