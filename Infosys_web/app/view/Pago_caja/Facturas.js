@@ -293,7 +293,7 @@ Ext.define('Infosys_web.view.Pago_caja.Facturas', {
                                 width: 160,
                                 labelWidth: 60,
                                 minValue: 0,
-                                //value: 1,
+                                value: 1,
                                 fieldLabel: 'Cantidad',
                                 itemId: 'cantidadId',
                                 decimalPrecision:3
