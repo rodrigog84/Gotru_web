@@ -78,11 +78,11 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
             'topmenus menuitem[action=mPedidoscaja]': {
                 click: this.mPedidoscaja
             },
-            'pedidoscajaingresar button[action=grabarpedidos]': {
-                click: this.grabarpedidos
+            'pedidoscajaingresar button[action=grabarpedidoscaja]': {
+                click: this.grabarpedidoscaja
             },
-            'editarpedidoscaja button[action=grabarpedidos2]': {
-                click: this.grabarpedidos2
+            'editarpedidoscaja button[action=grabarpedidoscaja2]': {
+                click: this.grabarpedidoscaja2
             },
             'pedidoscajaprincipal button[action=agregarpedidocaja]': {
                 click: this.agregarpedidocaja
@@ -878,7 +878,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
         }
     },
 
-    grabarpedidos2: function(){
+    grabarpedidoscaja2: function(){
 
         var viewIngresa = this.getEditarpedidoscaja();
         var numeropedido = viewIngresa.down('#ticketId').getValue();
@@ -959,7 +959,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
                 afecto: viewIngresa.down('#finalafectoId').getValue(),
                 total: viewIngresa.down('#finaltotalpostId').getValue()
             },
-             success: function(response){
+            success: function(response){
                  var resp = Ext.JSON.decode(response.responseText);
                  var idpedidos= resp.idpedidos;
                  viewIngresa.close();
@@ -1794,7 +1794,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
 
     },
 
-    grabarpedidos: function(){
+    grabarpedidoscaja: function(){
 
         var viewIngresa = this.getPedidoscajaingresar();
         var numeropedido = viewIngresa.down('#ticketId').getValue();
@@ -1889,7 +1889,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
                  var idpedidos= resp.idpedidos;
                  viewIngresa.close();
                  stpedidos.load();
-                 window.open(preurl + 'pedidos/exportPDF/?idpedidos='+idpedidos);
+                 window.open(preurl + 'pedidos/exportPDFCaja/?idpedidos='+idpedidos);
                
             }
            

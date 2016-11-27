@@ -644,10 +644,9 @@ Ext.define('Infosys_web.view.pedidos_caja.Editarpedidos', {
                             xtype: 'button',
                             iconCls: 'icon-save',
                             scale: 'large',
-                            action: 'grabarpedidos2',
+                            action: 'grabarpedidoscaja2',
                             text: 'Grabar / Emitir'
-                        },
-                        {
+                        },{
                             xtype: 'tbseparator'
                         }
                     ]

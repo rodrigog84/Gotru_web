@@ -633,7 +633,7 @@ Ext.define('Infosys_web.view.pedidos_caja.Pedidos', {
                             xtype: 'button',
                             iconCls: 'icon-save',
                             scale: 'large',
-                            action: 'grabarpedidos',
+                            action: 'grabarpedidoscaja',
                             text: 'Grabar / Emitir'
                         },
                         {
