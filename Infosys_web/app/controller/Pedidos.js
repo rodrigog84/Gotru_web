@@ -1123,7 +1123,8 @@ Ext.define('Infosys_web.controller.Pedidos', {
                     view.down("#rutId").setValue(cliente.rut_cliente);                                       
                     view.down("#id_cliente").setValue(cliente.id_cliente);
                     view.down("#tipocondpagoId").setValue(cliente.id_pago);                    
-                    view.down("#nombre_id").setValue(cliente.nom_cliente);
+                    view.down("#nombre_id").setValue(cliente.nombre_cliente);
+                    view.down("#TelefonoId").setValue(cliente.telefono);
                     view.down("#preciosId").setValue(cliente.id_lista);
                     view.down("#tipoVendedorId").setValue(cliente.id_vendedor);
                     view.down("#bodegaId").setValue(id_bodega);

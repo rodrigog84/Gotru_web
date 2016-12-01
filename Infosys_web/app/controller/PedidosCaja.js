@@ -78,11 +78,11 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
             'topmenus menuitem[action=mPedidoscaja]': {
                 click: this.mPedidoscaja
             },
-            'pedidoscajaingresar button[action=grabarpedidos]': {
-                click: this.grabarpedidos
+            'pedidoscajaingresar button[action=grabarpedidoscaja]': {
+                click: this.grabarpedidoscaja
             },
-            'editarpedidoscaja button[action=grabarpedidos2]': {
-                click: this.grabarpedidos2
+            'editarpedidoscaja button[action=grabarpedidoscaja2]': {
+                click: this.grabarpedidoscaja2
             },
             'pedidoscajaprincipal button[action=agregarpedidocaja]': {
                 click: this.agregarpedidocaja
@@ -90,9 +90,9 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
             'pedidoscajaprincipal button[action=cerrarpedidoscaja]': {
                 click: this.cerrarpedidoscaja
             },
-            'buscarclientespedidos button[action=seleccionarcliente]': {
-                click: this.seleccionarcliente
-            },
+            //'buscarclientespedidos button[action=seleccionarcliente]': {
+            //    click: this.seleccionarcliente
+            //},
             'pedidoscajaingresar button[action=buscarproductos]': {
                 click: this.buscarproductos
             },
@@ -202,7 +202,29 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
             'facturasingresarpedidos button[action=grabarfactura]': {
                 click: this.grabarfactura
             },
+            'pedidoscajaprincipal button[action=exportarexcelpedidoscaja]': {
+                click: this.exportarlibrorecaudacion
+            },
+            'pedidoscajaprincipal button[action=exportarpedidoscaja]': {
+                click: this.exportarpedidoscaja
+            },
         });
+    },
+
+    exportarpedidoscaja: function(){
+        var view = this.getPedidoscajaprincipal();
+        if (view.getSelectionModel().hasSelection()) {
+            var row = view.getSelectionModel().getSelection()[0];
+            window.open(preurl +'pedidos/exportPDFCaja/?idpedidos=' + row.data.id)
+        }else{
+            Ext.Msg.alert('Alerta', 'Selecciona un registro.');
+            return;
+        }
+    },
+
+    exportarlibrorecaudacion : function(){
+
+        Ext.create('Infosys_web.view.pedidos_caja.Exportar');
     },
 
     selectcod: function(f,e){
@@ -290,7 +312,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
                 var idfactura= resp.idfactura;
                  viewIngresa.close();
                  stFactura.load();
-                 window.open(preurl + 'facturas/exportPDF/?idfactura='+idfactura);
+                 window.open(preurl + 'facturas/exportPDFCaja/?idfactura='+idfactura);
 
             }
            
@@ -457,36 +479,12 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
         
         var jsonCol = new Array()
         var i = 0;
-        var grid =this.getPedidoscajaprincipal()
-        Ext.each(grid.columns, function(col, index){
-          if(!col.hidden){
-              jsonCol[i] = col.dataIndex;
-          }
-          
-          i++;
-        })
-
         var view =this.getFormularioexportarpedidoscaja()
         var viewnew =this.getPedidoscajaprincipal()
 
         var fecha = view.down('#fechaId').getSubmitValue();
-        var opcion = viewnew.down('#tipoPedidoId').getValue()
-        if (!opcion){
-
-              Ext.Msg.alert('Alerta', 'Seleccione Tipo Informe');
-            return;       
-            
-        }
-        var fecha2 = view.down('#fecha2Id').getSubmitValue();
-                
-        if (fecha > fecha2) {
         
-               Ext.Msg.alert('Alerta', 'Fechas Incorrectas');
-            return;          
-
-        };     
-
-        window.open(preurl + 'adminServicesExcel/exportarExcelPedidos?cols='+Ext.JSON.encode(jsonCol)+'&fecha='+fecha+'&fecha2='+fecha2+'&opcion='+opcion);
+        window.open(preurl + 'pedidos/exportarPdfinformeproduccion?fecha='+fecha);
         view.close();    
 
      
@@ -880,7 +878,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
         }
     },
 
-    grabarpedidos2: function(){
+    grabarpedidoscaja2: function(){
 
         var viewIngresa = this.getEditarpedidoscaja();
         var numeropedido = viewIngresa.down('#ticketId').getValue();
@@ -961,12 +959,12 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
                 afecto: viewIngresa.down('#finalafectoId').getValue(),
                 total: viewIngresa.down('#finaltotalpostId').getValue()
             },
-             success: function(response){
+            success: function(response){
                  var resp = Ext.JSON.decode(response.responseText);
                  var idpedidos= resp.idpedidos;
                  viewIngresa.close();
                  stpedidos.load();
-                 window.open(preurl + 'pedidos/exportPDF/?idpedidos='+idpedidos);
+                 window.open(preurl + 'pedidos/exportPDFCaja/?idpedidos='+idpedidos);
                
             }
            
@@ -1670,7 +1668,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
         st.load();
     },
 
-    seleccionarcliente: function(){
+    /*seleccionarcliente: function(){
 
         var view = this.getBuscarclientespedidos();
         var viewIngresa = this.getPedidoscajaingresar();
@@ -1715,7 +1713,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
             return;
         }
        
-    },
+    },*/
 
     validarut: function(){
 
@@ -1796,7 +1794,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
 
     },
 
-    grabarpedidos: function(){
+    grabarpedidoscaja: function(){
 
         var viewIngresa = this.getPedidoscajaingresar();
         var numeropedido = viewIngresa.down('#ticketId').getValue();
@@ -1891,7 +1889,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
                  var idpedidos= resp.idpedidos;
                  viewIngresa.close();
                  stpedidos.load();
-                 window.open(preurl + 'pedidos/exportPDF/?idpedidos='+idpedidos);
+                 window.open(preurl + 'pedidos/exportPDFCaja/?idpedidos='+idpedidos);
                
             }
            

@@ -4,11 +4,11 @@ Ext.define('Infosys_web.view.pedidos_caja.Exportar', {
 
     requires: ['Ext.form.Panel','Ext.form.field.Text'],
     //y: 50,
-    title : 'Genera Libro Ventas',
+    title : 'Genera Libro produccion',
     layout: 'fit',
     autoShow: true,
     width: 260,
-    height: 180,
+    height: 120,
     modal: true,
     iconCls: 'icon-sheet',
 
@@ -26,7 +26,7 @@ Ext.define('Infosys_web.view.pedidos_caja.Exportar', {
                     labelAlign: 'left',
                     allowBlank: false,
                     combineErrors: false,
-                    labelWidth: 70,
+                    labelWidth: 90,
                     msgTarget: 'side'
                 },
 
@@ -34,7 +34,7 @@ Ext.define('Infosys_web.view.pedidos_caja.Exportar', {
                       {
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
-                        fieldLabel: '<b>DESDE</b>',
+                        fieldLabel: '<b>PRODUCCION</b>',
                         items: [
                         {
                             xtype: 'datefield',
@@ -43,24 +43,6 @@ Ext.define('Infosys_web.view.pedidos_caja.Exportar', {
                             width: 130,
                             allowBlank: false,
                             itemId: 'fechaId',
-                            value: new Date(),
-                            name : 'fecha_ingreso',
-                            renderer: Ext.util.Format.dateRenderer('Y-m-d')
-                            
-                        }
-                        ]
-                    },{
-                        xtype: 'fieldcontainer',
-                        layout: 'hbox',
-                        fieldLabel: '<b>HASTA</b>',
-                        items: [
-                        {
-                            xtype: 'datefield',
-                            fieldCls: 'required',
-                            maxHeight: 25,
-                            width: 130,
-                            allowBlank: false,
-                            itemId: 'fecha2Id',
                             value: new Date(),
                             name : 'fecha_ingreso',
                             renderer: Ext.util.Format.dateRenderer('Y-m-d')

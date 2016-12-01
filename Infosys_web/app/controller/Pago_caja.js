@@ -99,12 +99,12 @@ Ext.define('Infosys_web.controller.Pago_caja', {
             },
             'boletaingresar #valorcancelaId': {
                 specialkey: this.special,
-                blur: this.selectItemcancela                    
+                blur: this.selectItemcancela,
             },
             'generapagoingresar button[action=agregarrecaudacion]': {
                 click: this.agregarrecaudacion
             },
-            'generapagoingresar button[action=eliminaritem]': {
+            'boletaingresar button[action=eliminaritem]': {
                 click: this.eliminaritem
             },
             'boletaingresar button[action=grabarboleta]': {
@@ -129,7 +129,11 @@ Ext.define('Infosys_web.controller.Pago_caja', {
                 click: this.generaticket
             },
             'boletaingresar #codigoId': {
-                specialkey: this.specialBoleta
+                specialkey: this.specialBoleta,
+                change: this.buscarbarra
+            },
+            'boletaingresar #cantidadId': {
+                specialkey: this.special8
             },
             'pagocajaprincipal #nombresId': {
                 specialkey: this.special5
@@ -168,6 +172,17 @@ Ext.define('Infosys_web.controller.Pago_caja', {
                 click: this.agregarItem
             }
         });
+    },
+
+    special8: function(f,e){
+        if (e.getKey() == e.ENTER) {
+            this.agregarItem()
+        }
+    },
+
+
+    specialBoleta: function(f,e){    
+       this.buscarproductos();
     },
 
     mpagocaja2: function(){
@@ -282,6 +297,148 @@ Ext.define('Infosys_web.controller.Pago_caja', {
          
     },
 
+    lectura: function(){
+
+        var viewIngresa = this.getBoletaingresar();
+        var codigo = viewIngresa.down('#codigoId').getValue()
+        var rut = viewIngresa.down('#rutId').getValue();
+        var valida = "";
+        if(!rut){
+             Ext.Msg.alert('Alerta', 'Debe Seleccionar Cliente');
+                        return;  
+            
+        }
+        var lista = 1;
+        var idbodega = 1;
+                  
+        if (!codigo){
+            var st = this.getProductoslistaStore()
+            st.proxy.extraParams = {idlista: lista,
+                                    idbodega: idbodega}
+            st.load();
+            var view = Ext.create('Infosys_web.view.Pago_caja.BuscarProductos').show();
+            view.down('#listaId').setValue(lista);
+            view.down('#bodegaId').setValue(idbodega);
+            view.down("#codigoId").focus();  
+        }else{
+
+            Ext.Ajax.request({
+            url: preurl + 'productosfact/buscacodigoboleta',
+            params: {
+                id: 1,
+                codigo : codigo,
+                idlista : lista
+            },
+            success: function(response){
+                var resp = Ext.JSON.decode(response.responseText);
+                var cero = "";
+                if (resp.success == true){                    
+                    if(resp.cliente){
+                        var cliente = resp.cliente;                        
+                        viewIngresa.down('#productoId').setValue(cliente.id_producto);
+                        viewIngresa.down('#nombreproductoId').setValue(cliente.nombre);
+                        viewIngresa.down('#codigoId').setValue(cliente.codigo_barra);
+                        viewIngresa.down('#precioId').setValue(cliente.valor_lista);
+                        viewIngresa.down('#cantidadOriginalId').setValue(cliente.stock);
+                        viewIngresa.down("#cantidadId").focus();                                             
+                    }                    
+                };              
+                                          
+                if(resp.success == false){                
+                  if (resp.cliente){
+                        var cliente = resp.cliente;                        
+                        viewIngresa.down('#productoId').setValue(cliente.id_producto);
+                        viewIngresa.down('#nombreproductoId').setValue(cliente.nombre);
+                        viewIngresa.down('#codigoId').setValue(cliente.codigo_barra);
+                        viewIngresa.down('#precioId').setValue(cliente.valor_lista);
+                        viewIngresa.down('#cantidadOriginalId').setValue(cliente.stock);
+                        viewIngresa.down("#cantidadId").setValue(cliente.cantidad);
+                        viewIngresa.down("#agregarId").focus();
+                        //this.agregarItem();
+
+                  }else{
+                       Ext.Msg.alert('Alerta', 'Producto no existe');
+                        return;
+                };          
+              };
+          }
+
+        });
+        };
+        
+        var view = this.getBoletaingresar();
+        var tipo_documento = view.down('#tipoDocumentoId');
+        var numdoc = view.down('#numboletaId').getValue();
+        var rut = view.down('#rutId').getValue();
+        var stItem = this.getProductosItemsStore();
+        var producto = view.down('#productoId').getValue();
+        var idbodega = view.down('#bodegaId').getValue();
+        var tipopago = 1;
+        var nombre = view.down('#nombreproductoId').getValue();
+        var cantidad = view.down('#cantidadId').getValue();
+        var codigo = view.down('#codigoId').getValue();
+        var cantidadori = view.down('#cantidadOriginalId').getValue();
+        var precio = ((view.down('#precioId').getValue()));
+        var descuento = view.down('#totdescuentoId').getValue(); 
+        var iddescuento = view.down('#DescuentoproId').getValue();
+        var bolEnable = true;
+        var tot = ((cantidad * precio) - descuento);
+        var neto = (Math.round(tot / 1.19));
+        var exists = 0;
+        var iva = (tot - neto);
+        var neto = (tot - iva);
+        var total = (neto + iva );
+        
+        
+        stItem.each(function(r){
+            if(r.data.id == producto){
+                Ext.Msg.alert('Alerta', 'El registro ya existe.');
+                exists = 1;
+                cero="";
+                view.down('#codigoId').setValue(cero);
+                view.down('#productoId').setValue(cero);
+                view.down('#nombreproductoId').setValue(cero);
+                view.down('#cantidadId').setValue(cero);
+                view.down('#precioId').setValue(cero);
+
+                return; 
+            }
+        });
+        if(exists == 1)
+            return;
+                
+        stItem.add(new Infosys_web.model.Productos.Item({
+            id: producto,
+            id_producto: producto,
+            codigo: codigo,
+            id_descuento: iddescuento,
+            id_bodega: idbodega,
+            nombre: nombre,
+            precio: precio,
+            cantidad: cantidad,
+            neto: neto,
+            total: total,
+            iva: iva,
+            dcto: descuento
+        }));
+        this.recalcularFinal();
+
+        cero="";
+        cero1=0;
+        cero2=1;
+        view.down('#codigoId').setValue(cero);
+        view.down('#productoId').setValue(cero);
+        view.down('#nombreproductoId').setValue(cero);
+        view.down('#cantidadId').setValue(cero);
+        view.down('#precioId').setValue(cero);
+        view.down('#cantidadOriginalId').setValue(cero);
+        view.down('#totdescuentoId').setValue(cero1);
+        view.down('#DescuentoproId').setValue(cero);
+        view.down('#condpagoId').setValue(tipopago);
+        view.down('#numboleta2Id').setValue(numdoc);
+        view.down("#codigoId").focus();
+    },
+
     agregarItem: function() {
 
         var view = this.getBoletaingresar();
@@ -357,10 +514,11 @@ Ext.define('Infosys_web.controller.Pago_caja', {
                 Ext.Msg.alert('Alerta', 'El registro ya existe.');
                 exists = 1;
                 cero="";
+                uno=1;
                 view.down('#codigoId').setValue(cero);
                 view.down('#productoId').setValue(cero);
                 view.down('#nombreproductoId').setValue(cero);
-                view.down('#cantidadId').setValue(cero);
+                view.down('#cantidadId').setValue(uno);
                 view.down('#precioId').setValue(cero);
 
                 return; 
@@ -391,7 +549,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         view.down('#codigoId').setValue(cero);
         view.down('#productoId').setValue(cero);
         view.down('#nombreproductoId').setValue(cero);
-        view.down('#cantidadId').setValue(cero);
+        view.down('#cantidadId').setValue(cero2);
         view.down('#precioId').setValue(cero);
         view.down('#cantidadOriginalId').setValue(cero);
         view.down('#totdescuentoId').setValue(cero1);
@@ -424,6 +582,66 @@ Ext.define('Infosys_web.controller.Pago_caja', {
        
     },
 
+    buscarbarra: function(){
+
+        var viewIngresa = this.getBoletaingresar();
+        var codigo = viewIngresa.down('#codigoId').getValue()
+        var rut = viewIngresa.down('#rutId').getValue();
+        var valida = "";
+        if(!rut){
+            Ext.Msg.alert('Alerta', 'Debe Seleccionar Cliente');
+            return;  
+            
+        }
+        if(codigo){        
+        var lista = 1;
+        var idbodega = 1;
+                  
+        Ext.Ajax.request({
+        url: preurl + 'productosfact/buscacodigoboleta',
+        params: {
+            id: 1,
+            codigo : codigo,
+            idlista : lista
+        },
+        success: function(response){
+            var resp = Ext.JSON.decode(response.responseText);
+            var cero = "";
+            if (resp.success == true){                    
+                if(resp.cliente){
+                    var cliente = resp.cliente;                        
+                    viewIngresa.down('#productoId').setValue(cliente.id_producto);
+                    viewIngresa.down('#nombreproductoId').setValue(cliente.nombre);
+                    viewIngresa.down('#codigoId').setValue(cliente.codigo_barra);
+                    viewIngresa.down('#precioId').setValue(cliente.valor_lista);
+                    viewIngresa.down('#cantidadOriginalId').setValue(cliente.stock);
+                    viewIngresa.down("#cantidadId").focus();                                             
+                }                    
+            };              
+                                      
+            if(resp.success == false){                
+              if (resp.cliente){
+                    var cliente = resp.cliente;                        
+                    viewIngresa.down('#productoId').setValue(cliente.id_producto);
+                    viewIngresa.down('#nombreproductoId').setValue(cliente.nombre);
+                    viewIngresa.down('#codigoId').setValue(cliente.codigo_barra);
+                    viewIngresa.down('#precioId').setValue(cliente.valor_lista);
+                    viewIngresa.down('#cantidadOriginalId').setValue(cliente.stock);
+                    viewIngresa.down("#cantidadId").setValue(cliente.cantidad);
+                    viewIngresa.down("#agregarId").focus();
+                    //this.agregarItem();
+
+              }else{
+                   Ext.Msg.alert('Alerta', 'Producto no existe');
+                    return;
+            };          
+          };
+          }
+        });
+        };
+
+    },
+
     buscarproductos: function(){
           
         var viewIngresa = this.getBoletaingresar();
@@ -431,8 +649,8 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         var rut = viewIngresa.down('#rutId').getValue();
         var valida = "";
         if(!rut){
-             Ext.Msg.alert('Alerta', 'Debe Seleccionar Cliente');
-                        return;  
+            Ext.Msg.alert('Alerta', 'Debe Seleccionar Cliente');
+            return;  
             
         }
         var lista = 1;
@@ -446,6 +664,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
             var view = Ext.create('Infosys_web.view.Pago_caja.BuscarProductos').show();
             view.down('#listaId').setValue(lista);
             view.down('#bodegaId').setValue(idbodega);
+            view.down("#codigoId").focus();
         }else{
 
             Ext.Ajax.request({
@@ -480,6 +699,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
                         viewIngresa.down('#cantidadOriginalId').setValue(cliente.stock);
                         viewIngresa.down("#cantidadId").setValue(cliente.cantidad);
                         viewIngresa.down("#agregarId").focus();
+                        //this.agregarItem();
 
                   }else{
                        Ext.Msg.alert('Alerta', 'Producto no existe');
@@ -524,8 +744,8 @@ Ext.define('Infosys_web.controller.Pago_caja', {
             viewIngresa.down('#rutId').setValue(row.data.rut);
             viewIngresa.down('#bodegaId').setValue(bodega);
             viewIngresa.down('#listaId').setValue(lista);
-            viewIngresa.down('#cajeroId').setValue(idcajero)
-            viewIngresa.down('#cajaId').setValue(idcaja)
+            viewIngresa.down('#cajeroId').setValue(idcajero);
+            viewIngresa.down('#cajaId').setValue(idcaja);
             
             view.close();     
        
@@ -652,11 +872,7 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         }
     },
 
-    specialBoleta: function(f,e){
-        if (e.getKey() == e.ENTER) {
-            this.buscarproductos()
-        }
-    },
+   
 
     
     aperturacaja: function(){
@@ -712,18 +928,19 @@ Ext.define('Infosys_web.controller.Pago_caja', {
        }
       
     },
-
     
     eliminaritem: function() {
-        var view = this.getGenerapagoingresar();
-        var grid  = view.down('#recaudacionId');
+        var view = this.getBoletaingresar();
+        var grid  = view.down('#itemsgridId');
         if (grid.getSelectionModel().hasSelection()) {
             var row = grid.getSelectionModel().getSelection()[0];
             grid.getStore().remove(row);
         }else{
             Ext.Msg.alert('Alerta', 'Selecciona un registro.');
             return;
-        }
+        };
+        view.down("#codigoId").focus();
+
     },
 
     grabarboleta: function() {

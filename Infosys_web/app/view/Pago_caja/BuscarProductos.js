@@ -85,6 +85,11 @@ Ext.define('Infosys_web.view.Pago_caja.BuscarProductos' ,{
             },{
                 width: 450,
                 xtype: 'textfield',
+                itemId: 'codigoId',
+                fieldLabel: 'Codigo'
+            },{
+                width: 450,
+                xtype: 'textfield',
                 itemId: 'listaId',
                 fieldLabel: 'IdLista',
                 hidden: true

@@ -140,7 +140,7 @@ Ext.define('Infosys_web.view.Pedidos.Pedidos', {
                                     name : 'rut'                                         
                                 },{
                                     xtype: 'displayfield',
-                                    width: 20
+                                    width: 10
                                    
                                 },{
                                     xtype: 'button',
@@ -151,18 +151,20 @@ Ext.define('Infosys_web.view.Pedidos.Pedidos', {
                                     itemId: 'buscarBtn'
                                 },{
                                     xtype: 'displayfield',
-                                    width: 50
-                                   
+                                    width: 10                                   
                                 },{
                                     xtype: 'textfield',
                                     fieldCls: 'required',
                                     fieldLabel: '<b>RAZON SOCIAL</b>',
                                     maxHeight: 25,
-                                    labelWidth: 80,
-                                    width: 885,
+                                    labelWidth: 125,
+                                    width: 725,
                                     itemId: 'nombre_id',
                                     name : 'nombre',
                                     readOnly: true                                    
+                                },{
+                                    xtype: 'displayfield',
+                                    width: 10                                   
                                 },{
                                     xtype: 'textfield',
                                     fieldCls: 'required',
@@ -171,8 +173,7 @@ Ext.define('Infosys_web.view.Pedidos.Pedidos', {
                                     labelWidth: 80,
                                     width: 200,
                                     itemId: 'TelefonoId',
-                                    name : 'telefono',
-                                    hidden: true                                  
+                                    name : 'telefono'                             
                                 }
                             ]
                         },{

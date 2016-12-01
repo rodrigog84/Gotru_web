@@ -41,7 +41,7 @@ class Productosfact extends CI_Controller {
 
 				if($query->num_rows()>0){
 			   			$row = $query->first_row();
-			   			$query2 = $this->db->query('SELECT acc.*, c.nombre as nom_bodega FROM existencia acc
+					$query2 = $this->db->query('SELECT acc.*, c.nombre as nom_bodega FROM existencia acc
 					left join bodegas c on (acc.id_bodega = c.id)
 					WHERE acc.id_producto = "'.$id_producto.'" and acc.id_bodega = "'.$idbodega.'" ');
 		            foreach ($query2->result() as $row2)
@@ -57,9 +57,7 @@ class Productosfact extends CI_Controller {
 					   	$resp['cliente'] = $row;
 				        $resp['success'] = true;
 			   	}else{
-
 			   		 $resp['success'] = false;
-
 
 			   	}
 	   	}else{
