@@ -176,6 +176,11 @@ Ext.define('Infosys_web.controller.Facturacion', {
                 click: this.mhistlibrocompraventa
             },                                                 
 
+
+            'librocompraventa': {
+                verEstadoDte: this.verEstadoDte
+            }, 
+            
             'topmenus menuitem[action=memail]': {
                 click: this.memail
             },

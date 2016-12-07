@@ -48,7 +48,7 @@ Ext.define('Infosys_web.view.facturaelectronica.verEstadoEnvioLibro' ,{
 
         response_estado = Ext.Ajax.request({
         async: false,
-        waitMsg    :    'Processing your request',
+        waitMsg    :    'Procesando',
         url: preurl + 'facturas/estado_dte/'+idlibro});
         var obj_estado = Ext.decode(response_estado.responseText);
 
