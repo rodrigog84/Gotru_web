@@ -1885,7 +1885,7 @@ class Pedidos extends CI_Controller {
 		$this->load->database();
 		$pag=1;
 		
-		$query = $this->db->query('SELECT * FROM pedidos_general WHERE fecha_produccion = "'.$fecha2.'" and idsubfamilia = 3 and idhora = "'.$idhora.'" ');
+		$query = $this->db->query('SELECT * FROM pedidos_general WHERE fecha_produccion = "'.$fecha2.'" and idsubfamilia = 13 and idhora = "'.$idhora.'" ');
 
         $header = '
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
