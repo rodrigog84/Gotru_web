@@ -8,7 +8,7 @@ Ext.define('Infosys_web.view.pedidos_caja.Exportar', {
     layout: 'fit',
     autoShow: true,
     width: 260,
-    height: 120,
+    height: 145,
     modal: true,
     iconCls: 'icon-sheet',
 
@@ -34,7 +34,7 @@ Ext.define('Infosys_web.view.pedidos_caja.Exportar', {
                       {
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
-                        fieldLabel: '<b>PRODUCCION</b>',
+                        fieldLabel: '<b>FECHA</b>',
                         items: [
                         {
                             xtype: 'datefield',
@@ -48,6 +48,26 @@ Ext.define('Infosys_web.view.pedidos_caja.Exportar', {
                             renderer: Ext.util.Format.dateRenderer('Y-m-d')
                             
                         }
+                        ]
+                    },{
+                        xtype: 'fieldcontainer',
+                        layout: 'hbox',
+                        fieldLabel: '<b>HORA</b>',
+                        items: [
+                        {
+                            xtype: 'combo',
+                            width: 130,
+                            //labelWidth; 40,
+                            itemId: 'horaId',
+                            fieldLabel: '',
+                            maxHeight: 25,
+                            forceSelection : true,
+                            editable : false,
+                            valueField : 'id',
+                            displayField : 'nombre',
+                            emptyText : "Seleccione",
+                            store : 'Pedidos.Selector2'
+                        },
                         ]
                     }
                 ]

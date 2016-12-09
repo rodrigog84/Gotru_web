@@ -10,6 +10,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
     stores: ['Pedidos.Editar',
             'Pedidos.Items',
             'Pedidos.Selector',
+            'Pedidos.Selector2',
             'Productosf',
             'Productoslista',
             'Pedidos_caja',
@@ -479,15 +480,17 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
         
         var jsonCol = new Array()
         var i = 0;
-        var view =this.getFormularioexportarpedidoscaja()
-        var viewnew =this.getPedidoscajaprincipal()
-
+        var view =this.getFormularioexportarpedidoscaja();
+        var viewnew =this.getPedidoscajaprincipal();
         var fecha = view.down('#fechaId').getSubmitValue();
+        var horaela = view.down('#horaId');
+        var stCombo2 = horaela.getStore();
+        var record2 = stCombo2.findRecord('id', horaela.getValue()).data;
+        var horaelab = record2.nombre;
+        var idhoraelab = record2.id;
         
-        window.open(preurl + 'pedidos/exportarPdfinformeproduccion?fecha='+fecha);
-        view.close();    
-
-     
+        window.open(preurl + 'pedidos/exportarPdfinformeproduccion?fecha='+fecha+'&idhora='+idhoraelab);
+        view.close();     
  
     },
 
@@ -896,6 +899,11 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
         var stCombo = vendedor.getStore();
         var record = stCombo.findRecord('id', vendedor.getValue()).data;
         var finalafectoId = viewIngresa.down('#finaltotalnetoId').getValue();
+        var horaela = viewIngresa.down('#horaelaId');
+        var stCombo2 = horaela.getStore();
+        var record2 = stCombo2.findRecord('id', horaela.getValue()).data;
+        var horaelab = record2.nombre;
+        var idhoraelab = record2.id;
         var vendedor = record.id;
         var fechapedidos = viewIngresa.down('#fechapedidoId').getValue();
         var horapedido = viewIngresa.down('#horapedidoId').getValue();
@@ -914,6 +922,10 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
         var stItem = this.getPedidosEditarStore();
         var stpedidos = this.getPedidos_cajaStore();
 
+        if(!horaela){
+            Ext.Msg.alert('Ingrese Hora Elaboracion');
+            return;   
+        }
      
         if(vendedor==0  && tipo_documento.getValue() == 1){
             Ext.Msg.alert('Ingrese Datos del Vendedor');
@@ -949,6 +961,8 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
                 numeropedido : numeropedido,
                 fechadocum: Ext.Date.format(fechapedidos,'Y-m-d'),
                 fechaelaboracion: Ext.Date.format(fechaelaboracion,'Y-m-d'),
+                horaelab: horaelab,
+                idhoraelab: idhoraelab,
                 fechapedidos: Ext.Date.format(fechapedidos,'Y-m-d'),
                 horapedido:  Ext.Date.format(horapedido,'H:i'),
                 fechadespacho: Ext.Date.format(fechadespacho,'Y-m-d'),
@@ -1810,6 +1824,11 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
         var idpago = viewIngresa.down('#tipocondpagoId').getValue();        
         var fechapedidos = viewIngresa.down('#fechapedidoId').getValue();
         var fechaelaboracion = viewIngresa.down('#fechaelaboraId').getValue();
+        var horaela = viewIngresa.down('#horaelaId');
+        var stCombo2 = horaela.getStore();
+        var record2 = stCombo2.findRecord('id', horaela.getValue()).data;
+        var horaelab = record2.nombre;
+        var idhoraelab = record2.id;
         var horapedido = viewIngresa.down('#horapedidoId').getValue();
         var fechadespacho = viewIngresa.down('#fechadespachoId').getValue();
         var horadespacho = viewIngresa.down('#horadespachoId').getValue();
@@ -1829,6 +1848,11 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
 
         if(!idtipopedido){
             Ext.Msg.alert('Ingrese Tipo Pedido');
+            return;   
+        }
+
+        if(!horaela){
+            Ext.Msg.alert('Ingrese Hora Elaboracion');
             return;   
         }
 
@@ -1875,6 +1899,8 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
                 fechadocum: Ext.Date.format(fechapedidos,'Y-m-d'),
                 fechapedidos: Ext.Date.format(fechapedidos,'Y-m-d'),
                 fechaelaboracion: Ext.Date.format(fechaelaboracion,'Y-m-d'),
+                horaelab: horaelab,
+                idhoraelab: idhoraelab,
                 horapedido:  Ext.Date.format(horapedido,'H:i'),
                 fechadespacho: Ext.Date.format(fechadespacho,'Y-m-d'),
                 horadespacho:  Ext.Date.format(horadespacho,'H:i'),
