@@ -899,11 +899,19 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
         var stCombo = vendedor.getStore();
         var record = stCombo.findRecord('id', vendedor.getValue()).data;
         var finalafectoId = viewIngresa.down('#finaltotalnetoId').getValue();
-        var horaela = viewIngresa.down('#horaelaId');
-        var stCombo2 = horaela.getStore();
-        var record2 = stCombo2.findRecord('id', horaela.getValue()).data;
-        var horaelab = record2.nombre;
-        var idhoraelab = record2.id;
+        var horael = viewIngresa.down('#horaelaId').getValue();
+        if(!horael){
+            Ext.Msg.alert('Ingrese Hora Elaboracion');
+            return;   
+        }else{
+            var horaela = viewIngresa.down('#horaelaId');
+            var stCombo2 = horaela.getStore();
+            var record2 = stCombo2.findRecord('id', horaela.getValue()).data;
+            var horaelab = record2.nombre;
+            var idhoraelab = record2.id;
+            
+        };
+        
         var vendedor = record.id;
         var fechapedidos = viewIngresa.down('#fechapedidoId').getValue();
         var horapedido = viewIngresa.down('#horapedidoId').getValue();
@@ -1824,11 +1832,19 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
         var idpago = viewIngresa.down('#tipocondpagoId').getValue();        
         var fechapedidos = viewIngresa.down('#fechapedidoId').getValue();
         var fechaelaboracion = viewIngresa.down('#fechaelaboraId').getValue();
-        var horaela = viewIngresa.down('#horaelaId');
-        var stCombo2 = horaela.getStore();
-        var record2 = stCombo2.findRecord('id', horaela.getValue()).data;
-        var horaelab = record2.nombre;
-        var idhoraelab = record2.id;
+        var horael = viewIngresa.down('#horaelaId').getValue();
+        if(!horael){
+            Ext.Msg.alert('Ingrese Hora Elaboracion');
+            return;   
+        }else{
+            var horaela = viewIngresa.down('#horaelaId');
+            var stCombo2 = horaela.getStore();
+            var record2 = stCombo2.findRecord('id', horaela.getValue()).data;
+            var horaelab = record2.nombre;
+            var idhoraelab = record2.id;
+            
+        };
+        
         var horapedido = viewIngresa.down('#horapedidoId').getValue();
         var fechadespacho = viewIngresa.down('#fechadespachoId').getValue();
         var horadespacho = viewIngresa.down('#horadespachoId').getValue();
@@ -1848,11 +1864,6 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
 
         if(!idtipopedido){
             Ext.Msg.alert('Ingrese Tipo Pedido');
-            return;   
-        }
-
-        if(!horaela){
-            Ext.Msg.alert('Ingrese Hora Elaboracion');
             return;   
         }
 
