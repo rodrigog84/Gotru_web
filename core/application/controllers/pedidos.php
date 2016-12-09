@@ -699,6 +699,9 @@ class Pedidos extends CI_Controller {
 		$fechadespacho = $row->fecha_despacho;
 		$datetime = DateTime::createFromFormat('Y-m-d', $fechadespacho);
 		$fechadespacho = $datetime->format('d/m/Y');
+		$fechaelabora = $row->fecha_elabora;
+		$fechaelabora = $datetime->format('d/m/Y');
+		$horaelabora = $row->horaelabora;
 		$totaliva = 0;
 		$neto = ($row->total / 1.19);
 		$iva = ($row->total - $neto);
@@ -771,6 +774,12 @@ class Pedidos extends CI_Controller {
 		    			<td width="395px">'. $fechadespacho.'</td>
 		    			<td width="197px">Hora Despacho:</td>
 		    			<td width="197px">'.$row->hora_despacho.'</td>
+		    		</tr>
+		    		<tr>
+		    			<td width="197px">Fecha Elaboracion:</td>
+		    			<td width="395px">'. $fechaelabora.'</td>
+		    			<td width="197px">Hora Elaboracion:</td>
+		    			<td width="197px">'.$horaelabora.'</td>
 		    		</tr>
 		    		
 		    	</table>
@@ -957,7 +966,7 @@ class Pedidos extends CI_Controller {
 	        'fecha_doc' => $fechadoc ,
 	        'id_cliente' => $idcliente,
 	        'abono' => $abono,
-	        'nombre_cliente' => $nomcliente,
+	        'nombre_cliente' => strtoupper($nomcliente),
 	        'telefono' => $telefono,
 	        'id_sucursal' => $sucursal,
 	        'id_pago' => $idpago,
@@ -1231,7 +1240,7 @@ class Pedidos extends CI_Controller {
 	        'fecha_doc' => $fechadoc ,
 	        'abono' => $abono,
 	        'id_cliente' => $idcliente,
-	        'nombre_cliente' => $nomcliente,
+	        'nombre_cliente' => strtoupper($nomcliente),
 	        'telefono' => $telefono,
 	        'id_pago' => $idpago,
 	        'id_bodega' => $idbodega,
@@ -1255,7 +1264,7 @@ class Pedidos extends CI_Controller {
 	        'tip_documento' => $idtipo,
 	        'fecha_doc' => $fechadoc ,
 	        'id_cliente' => $idcliente,
-	        'nombre_cliente' => $nomcliente,
+	        'nombre_cliente' => strtoupper($nomcliente),
 	        'abono' => $abono,
 	        'telefono' => $telefono,
 	        'id_pago' => $idpago,

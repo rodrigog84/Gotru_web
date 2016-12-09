@@ -10,6 +10,7 @@ Ext.define('Infosys_web.controller.Pedidos', {
     stores: ['Pedidos.Editar',
             'Pedidos.Items',
             'Pedidos.Selector',
+            'Pedidos.Selector2',
             'Productosf',
             'Productoslista',
             'Pedidos',
@@ -885,6 +886,18 @@ Ext.define('Infosys_web.controller.Pedidos', {
         var stCombo = vendedor.getStore();
         var record = stCombo.findRecord('id', vendedor.getValue()).data;
         var finalafectoId = viewIngresa.down('#finaltotalnetoId').getValue();
+        var horael = viewIngresa.down('#horaelaId').getValue();
+        if(!horael){
+            Ext.Msg.alert('Ingrese Hora Elaboracion');
+            return;   
+        }else{
+            var horaela = viewIngresa.down('#horaelaId');
+            var stCombo2 = horaela.getStore();
+            var record2 = stCombo2.findRecord('id', horaela.getValue()).data;
+            var horaelab = record2.nombre;
+            var idhoraelab = record2.id;
+            
+        };
         var vendedor = record.id;
         var fechapedidos = viewIngresa.down('#fechapedidoId').getValue();
         var fechaelaboracion = viewIngresa.down('#fechaelaboraId').getValue();
@@ -938,6 +951,8 @@ Ext.define('Infosys_web.controller.Pedidos', {
                 fechadocum: Ext.Date.format(fechapedidos,'Y-m-d'),
                 fechapedidos: Ext.Date.format(fechapedidos,'Y-m-d'),
                 fechaelaboracion: Ext.Date.format(fechaelaboracion,'Y-m-d'),
+                horaelab: horaelab,
+                idhoraelab: idhoraelab,
                 horapedido:  Ext.Date.format(horapedido,'H:i'),
                 fechadespacho: Ext.Date.format(fechadespacho,'Y-m-d'),
                 horadespacho:  Ext.Date.format(horadespacho,'H:i'),
@@ -1788,6 +1803,18 @@ Ext.define('Infosys_web.controller.Pedidos', {
         var stCombo = vendedor.getStore();
         var record = stCombo.findRecord('id', vendedor.getValue()).data;
         var finalafectoId = viewIngresa.down('#finaltotalnetoId').getValue();
+        var horael = viewIngresa.down('#horaelaId').getValue();
+        if(!horael){
+            Ext.Msg.alert('Ingrese Hora Elaboracion');
+            return;   
+        }else{
+            var horaela = viewIngresa.down('#horaelaId');
+            var stCombo2 = horaela.getStore();
+            var record2 = stCombo2.findRecord('id', horaela.getValue()).data;
+            var horaelab = record2.nombre;
+            var idhoraelab = record2.id;
+            
+        };
         var vendedor = record.id;
         var fechapedidos = viewIngresa.down('#fechapedidoId').getValue();
         var fechaelaboracion = viewIngresa.down('#fechaelaboraId').getValue();
@@ -1836,6 +1863,8 @@ Ext.define('Infosys_web.controller.Pedidos', {
                 idtipopedido: idtipopedido,
                 idobserva: idobserva,
                 idbodega: idbodega,
+                horaelab: horaelab,
+                idhoraelab: idhoraelab,
                 numeropedido : numeropedido,
                 fechadocum: Ext.Date.format(fechapedidos,'Y-m-d'),
                 fechapedidos: Ext.Date.format(fechapedidos,'Y-m-d'),
