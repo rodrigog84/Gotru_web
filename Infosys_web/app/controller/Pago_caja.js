@@ -85,6 +85,9 @@ Ext.define('Infosys_web.controller.Pago_caja', {
             'pagocajaprincipal button[action=exportarexcelpagocaja]': {
                 click: this.exportarexcelpagocaja
             },
+            'pagocajaprincipal button[action=agregarpedido]': {
+                click: this.agregarpedidocaja
+            },
             'pagocajaprincipal button[action=cerrarcajaventa]': {
                 click: this.cerrarcajaventa
             },
@@ -172,6 +175,54 @@ Ext.define('Infosys_web.controller.Pago_caja', {
                 click: this.agregarItem
             }
         });
+    },
+
+    agregarpedidocaja: function(){
+
+         var viewIngresa = this.getPagocajaprincipal();
+         var idbodega = "1";
+         var dos = "2";
+         var rut = "19";
+         var idCliente = 1;
+         var pedido = "3";
+         var pago = "1";
+         if(!idbodega){
+            Ext.Msg.alert('Alerta', 'Debe Elegir Bodega');
+            return;    
+         }else{
+         var nombre = "20";    
+         Ext.Ajax.request({
+
+            url: preurl + 'correlativos/genera?valida='+nombre,
+            params: {
+                id: 1
+            },
+            success: function(response){
+                var resp = Ext.JSON.decode(response.responseText);
+
+                if (resp.success == true) {
+                    var view = Ext.create('Infosys_web.view.pedidos_caja.Pedidos').show();                   
+                    var cliente = resp.cliente;
+                    var correlanue = cliente.correlativo;
+                    correlanue = (parseInt(correlanue)+1);
+                    var correlanue = correlanue;
+                    view.down("#ticketId").setValue(correlanue);
+                    view.down("#bodegaId").setValue(idbodega);
+                    view.down("#tipoDocumentoId").setValue(dos);
+                    view.down("#rutId").setValue(rut);
+                    view.down("#id_cliente").setValue(idCliente);
+                    view.down("#tipoPedidoId").setValue(pedido);
+                    view.down("#tipocondpagoId").setValue(pago);
+                    view.down("#nombre_id").focus();
+                }else{
+                    Ext.Msg.alert('Correlativo YA Existe');
+                    return;
+                }
+            }            
+        });
+        
+        };        
+       
     },
 
     special8: function(f,e){

@@ -209,7 +209,15 @@ Ext.define('Infosys_web.controller.Pedidos', {
             'facturasingresarpedidos button[action=grabarfactura]': {
                 click: this.grabarfactura
             },
+            'pedidosprincipal button[action=exportarexcelpedidoscaja]': {
+                click: this.exportarlibrorecaudacion
+            },
         });
+    },
+
+    exportarlibrorecaudacion : function(){
+
+        Ext.create('Infosys_web.view.pedidos_caja.Exportar');
     },
 
     grabarfactura: function() {

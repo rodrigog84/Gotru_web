@@ -228,6 +228,12 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
                 displayField : 'nombre',
                 emptyText : "Seleccione",
                 store : 'Bodegas'
+            },'-',{
+                xtype: 'button',
+                width: 160,
+                iconCls : 'icon-pdf',
+                text: 'Informe Produccion',
+                action:'exportarexcelpedidoscaja'
             }],
         },{
             xtype: 'pagingtoolbar',
