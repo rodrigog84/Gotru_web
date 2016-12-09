@@ -5,8 +5,8 @@ class AdminServicesExcel extends CI_Controller {
 
     public function exportarExcelPedidos(){
 
-          //header("Content-type: application/vnd.ms-excel");
-          //header("Content-disposition: attachment; filename=recaudaciondetalle.xls"); 
+          header("Content-type: application/vnd.ms-excel");
+          header("Content-disposition: attachment; filename=Pedidos.xls"); 
       
           
           $columnas = json_decode($this->input->get('cols'));

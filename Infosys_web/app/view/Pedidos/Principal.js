@@ -96,7 +96,7 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
     },{
         header: "Razon Social",
          width: 390,
-        dataIndex: 'nom_cliente'
+        dataIndex: 'nombre_cliente'
     },{
         header: "Vendedor",
         flex: 1,

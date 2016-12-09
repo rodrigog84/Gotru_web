@@ -18,6 +18,7 @@ class Productosfact extends CI_Controller {
 		$tbarr=0;
 		$ccant=0;
 		$ccant2=0;
+		$ccant1=0;
 		$ccant3=0;
 
 		$query2 = $this->db->query('SELECT acc.*, c.nombre as nom_ubi_prod, ca.nombre as nom_uni_medida, m.nombre as nom_marca, fa.nombre as nom_familia, bo.nombre as nom_bodega, ag.nombre as nom_agrupacion, sb.nombre as nom_subfamilia FROM productos acc
@@ -63,10 +64,10 @@ class Productosfact extends CI_Controller {
 	   	}else{
 
 	   		$tbarr = substr($nombres, 0, 2);
-	   		if ($tbarr=="25"){
+	   		if ($tbarr=="26"){
 	   			
 	   			$cbarr= substr($nombres, 0, 7);
-	   			$ccant= substr($nombres, 7, 3);
+	   			$ccant= substr($nombres, 8, 4);
 				$query2 = $this->db->query('SELECT acc.*, c.nombre as nom_ubi_prod, ca.nombre as nom_uni_medida, m.nombre as nom_marca, fa.nombre as nom_familia, bo.nombre as nom_bodega, ag.nombre as nom_agrupacion, sb.nombre as nom_subfamilia FROM productos acc
 				left join mae_ubica c on (acc.id_ubi_prod = c.id)
 				left join marcas m on (acc.id_marca = m.id)
@@ -114,11 +115,15 @@ class Productosfact extends CI_Controller {
 
 			   }
 			}
-			if ($tbarr=="26"){
+			if ($tbarr=="25"){
 	   			
 	   			$cbarr= substr($nombres, 0, 7);
-	   			$ccant= substr($nombres, 7, 6);
-	   			$ccant2= number_format($ccant, 0, '.', ',');
+	   			$ccant= substr($nombres, 7, 2);
+	   			$ccant1= substr($nombres, 9, 3);
+	   			$ccant2= ($ccant.",".$ccant1);
+	   			//$ccant2= number_format($ccant2, 3, '.', ',');
+
+
 				$query2 = $this->db->query('SELECT acc.*, c.nombre as nom_ubi_prod, ca.nombre as nom_uni_medida, m.nombre as nom_marca, fa.nombre as nom_familia, bo.nombre as nom_bodega, ag.nombre as nom_agrupacion, sb.nombre as nom_subfamilia FROM productos acc
 				left join mae_ubica c on (acc.id_ubi_prod = c.id)
 				left join marcas m on (acc.id_marca = m.id)
@@ -170,7 +175,8 @@ class Productosfact extends CI_Controller {
 
 	   	$resp['cbarr'] = $cbarr;
 	   	$resp['tbarr'] = $tbarr; 
-	   	$resp['ccant2'] = $ccant2;   	
+	   	$resp['ccant2'] = $ccant2; 
+	   	$resp['ccant1'] = $ccant1;   	
 
 	   	
         echo json_encode($resp);

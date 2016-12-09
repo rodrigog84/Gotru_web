@@ -533,10 +533,10 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
 
     buscarDoc: function(){
         
-        var view = this.getpedidoscajaprincipal();
-        var st = this.getPedidosStore();
+        var view = this.getPedidoscajaprincipal();
+        var st = this.getPedidos_cajaStore();
         var opcion = view.down('#tipoSeleccionId').getValue();
-        var tipo = view.down('#tipoPedidoId').getValue();
+        var tipo = 3;
         var nombre = view.down('#nombreId').getValue();
         st.proxy.extraParams = {nombre : nombre,
                                 opcion : opcion,
@@ -1786,7 +1786,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
     buscarpedidos: function(){
         
         var view = this.getPedidoscajaprincipal()
-        var st = this.getPedidosStore()
+        var st = this.getPedidos_cajaStore()
         var nombre = view.down('#nombreId').getValue()
         st.proxy.extraParams = {nombre : nombre}
         st.load();

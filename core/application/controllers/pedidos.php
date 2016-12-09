@@ -470,6 +470,7 @@ class Pedidos extends CI_Controller {
 		$vendedor = $row->nom_vendedor;
 		$observacion = $row->observa;
 		$fecha = $row->fecha_doc;
+		$abono= $row->abono;
 		$datetime = DateTime::createFromFormat('Y-m-d', $fecha);
 		$fecha = $datetime->format('d/m/Y');
 		$fechadespacho = $row->fecha_despacho;
@@ -489,13 +490,14 @@ class Pedidos extends CI_Controller {
 			$direccion = $row->direccion_sucursal;
 			
 		};
+		$saldo=$subtotal - $abono;
 
 		$html = '
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Untitled Document</title>
+		<title>Pedidos pdf</title>
 		<style type="text/css">
 		td {
 			font-size: 16px;
@@ -606,6 +608,14 @@ class Pedidos extends CI_Controller {
 						<td width="150px" style="font-size: 20px;text-align:left;">Total</td>
 						<td width="146px" style="text-align:right;">$ '. number_format($subtotal, 0, '.', ',') .'</td>
 					</tr>
+					<tr>
+						<td width="150px" style="font-size: 20px;text-align:left;">Abono</td>
+						<td width="146px" style="text-align:right;">$ '. number_format($abono, 0, '.', ',') .'</td>
+					</tr>
+					<tr>
+						<td width="150px" style="font-size: 20px;text-align:left;">Saldo</td>
+						<td width="146px" style="text-align:right;">$ '. number_format($saldo, 0, '.', ',') .'</td>
+					</tr>
 				</table>
 		  	</td>
 		  </tr>
@@ -708,7 +718,7 @@ class Pedidos extends CI_Controller {
 		<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Untitled Document</title>
+		<title>Pedidos</title>
 		<style type="text/css">
 		td {
 			font-size: 16px;
@@ -1004,7 +1014,8 @@ class Pedidos extends CI_Controller {
 		if($query->num_rows()>0){
 
 		$row = $query->first_row();
-	 	$saldo = ($row->stock)-($v->cantidad); 
+	 	$saldo = ($row->stock)-($v->cantidad);
+	 	$idsubfamilia = $row->id_subfamilia;
 
         };
 
@@ -1034,8 +1045,10 @@ class Pedidos extends CI_Controller {
 			    $pedidos_update = array(
 		        'cantidad' => $cantidad,
 		        'conversion' => $conversion,
-		        'unidadfisica' => $unidadfisica
+		        'unidadfisica' => $unidadfisica,
+		        'idsubfamilia' => $idsubfamilia
 				);
+
 
 				$this->db->where('id', $id);
 				$this->db->update('pedidos_general', $pedidos_update);
@@ -1055,7 +1068,8 @@ class Pedidos extends CI_Controller {
 				'fecha_produccion' => $fechaelaboracion,
 				'fecha' => $fechapedidos,
 				'conversion' => $conversion,
-				'unidadfisica' => $unidadfisica
+				'unidadfisica' => $unidadfisica,
+				'idsubfamilia' => $idsubfamilia
 				);
 
 				$this->db->insert('pedidos_general', $pedidos_general);
@@ -1157,11 +1171,13 @@ class Pedidos extends CI_Controller {
 				$producto = $producto[0];
 				$conversion = $producto->equiv_pro;
 		 	    $unidadfisica = ($cantidad * $conversion);
+                $idsubfamilia = $producto->id_subfamilia;
 
 			    $pedidos_update = array(
 		        'cantidad' => $cantidad,
 		        'conversion' => $conversion,
-		        'unidad_fisica' => $unidadfisica
+		        'unidad_fisica' => $unidadfisica,
+		        'idsubfamilia' => $idsubfamilia
 				);
 
 				$this->db->where('id', $id);
@@ -1175,6 +1191,7 @@ class Pedidos extends CI_Controller {
 				$producto = $producto[0];
 				$conversion = $producto->equiv_pro;
 				$unidadfisica = ($cantidad * $conversion);
+				$idsubfamilia = $producto->id_subfamilia;
 
 				$pedidos_general = array(
 				'id_producto' => $v->id_producto,
@@ -1182,7 +1199,8 @@ class Pedidos extends CI_Controller {
 				'fecha_produccion' => $fechaelaboracion,
 				'fecha' => $fechapedidos,
 				'conversion' => $conversion,
-				'unidad_fisica' => $unidadfisica
+				'unidad_fisica' => $unidadfisica,
+				'idsubfamilia' => $idsubfamilia
 				);
 
 				$this->db->insert('pedidos_general', $pedidos_general);
@@ -1346,7 +1364,7 @@ class Pedidos extends CI_Controller {
 	        $arrayNombre =  explode(" ",$nombres);
 
 	        foreach ($arrayNombre as $nombre) {
-	        	$sql_nombre .= "and c.nombres like '%".$nombre."%' ";
+	        	$sql_nombre .= "and acc.nombre_cliente like '%".$nombre."%' ";
 	        }
 
 	        $data = array();	        	    	
@@ -1613,7 +1631,7 @@ class Pedidos extends CI_Controller {
 	        $arrayNombre =  explode(" ",$nombres);
 
 	        foreach ($arrayNombre as $nombre) {
-	        	$sql_nombre .= "and c.nombres like '%".$nombre."%' ";
+	        	$sql_nombre .= "and acc.nombre_cliente like '%".$nombre."%' ";
 	        }
 
 	        $data = array();	        	    	
@@ -1846,7 +1864,7 @@ class Pedidos extends CI_Controller {
 		$this->load->database();
 		$pag=1;
 		
-		$query = $this->db->query('SELECT * FROM pedidos_general WHERE fecha_produccion = "'.$fecha2.'"');
+		$query = $this->db->query('SELECT * FROM pedidos_general WHERE fecha_produccion = "'.$fecha2.'" and idsubfamilia = 3');
 
         $header = '
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
