@@ -277,6 +277,21 @@ Ext.define('Infosys_web.view.Pedidos.Pedidos', {
                                 itemId: 'fechaelaboraId',
                                 name: 'fecha_elaboracion',
                                 value: new Date()
+                            },{
+                                xtype: 'displayfield',
+                                width: 10                                           
+                            },{
+                                xtype: 'combo',                                
+                                labelWidth: 40,
+                                width: 160,
+                                maxHeight: 25,
+                                itemId: 'horaelaId',
+                                fieldLabel: 'Hora',
+                                forceSelection : true,
+                                valueField : 'id',
+                                displayField : 'nombre',
+                                emptyText : "Seleccione",
+                                store : 'Pedidos.Selector2'
                             }
                             ]
                         },{

@@ -85,6 +85,9 @@ Ext.define('Infosys_web.controller.Pago_caja', {
             'pagocajaprincipal button[action=exportarexcelpagocaja]': {
                 click: this.exportarexcelpagocaja
             },
+            'pagocajaprincipal button[action=agregarpedido]': {
+                click: this.agregarpedidocaja
+            },
             'pagocajaprincipal button[action=cerrarcajaventa]': {
                 click: this.cerrarcajaventa
             },
@@ -172,6 +175,54 @@ Ext.define('Infosys_web.controller.Pago_caja', {
                 click: this.agregarItem
             }
         });
+    },
+
+    agregarpedidocaja: function(){
+
+         var viewIngresa = this.getPagocajaprincipal();
+         var idbodega = "1";
+         var dos = "2";
+         var rut = "19";
+         var idCliente = 1;
+         var pedido = "3";
+         var pago = "1";
+         if(!idbodega){
+            Ext.Msg.alert('Alerta', 'Debe Elegir Bodega');
+            return;    
+         }else{
+         var nombre = "20";    
+         Ext.Ajax.request({
+
+            url: preurl + 'correlativos/genera?valida='+nombre,
+            params: {
+                id: 1
+            },
+            success: function(response){
+                var resp = Ext.JSON.decode(response.responseText);
+
+                if (resp.success == true) {
+                    var view = Ext.create('Infosys_web.view.pedidos_caja.Pedidos').show();                   
+                    var cliente = resp.cliente;
+                    var correlanue = cliente.correlativo;
+                    correlanue = (parseInt(correlanue)+1);
+                    var correlanue = correlanue;
+                    view.down("#ticketId").setValue(correlanue);
+                    view.down("#bodegaId").setValue(idbodega);
+                    view.down("#tipoDocumentoId").setValue(dos);
+                    view.down("#rutId").setValue(rut);
+                    view.down("#id_cliente").setValue(idCliente);
+                    view.down("#tipoPedidoId").setValue(pedido);
+                    view.down("#tipocondpagoId").setValue(pago);
+                    view.down("#nombre_id").focus();
+                }else{
+                    Ext.Msg.alert('Correlativo YA Existe');
+                    return;
+                }
+            }            
+        });
+        
+        };        
+       
     },
 
     special8: function(f,e){
@@ -297,6 +348,82 @@ Ext.define('Infosys_web.controller.Pago_caja', {
          
     },
 
+    agregarItem3: function() {
+
+        var view = this.getBoletaingresar();
+        var tipo_documento = view.down('#tipoDocumentoId');
+        var numdoc = view.down('#numboletaId').getValue();
+        var rut = view.down('#rutId').getValue();
+        var stItem = this.getProductosItemsStore();
+        var producto = view.down('#productoId').getValue();
+        var idbodega = view.down('#bodegaId').getValue();
+        var tipopago = 1;
+        var nombre = view.down('#nombreproductoId').getValue();
+        var cantidad = view.down('#cantidadId').getValue();
+        var codigo = view.down('#codigoId').getValue();
+        var cantidadori = view.down('#cantidadOriginalId').getValue();
+        var precio = ((view.down('#precioId').getValue()));
+        var descuento = view.down('#totdescuentoId').getValue(); 
+        var iddescuento = view.down('#DescuentoproId').getValue();
+        var bolEnable = true;
+
+        var tot = ((cantidad * precio) - descuento);
+        var neto = (Math.round(tot * 1.19));
+        var exists = 0;
+        var iva = (tot - neto);
+        var neto = (tot - iva);
+        var total = (neto + iva );
+        
+        stItem.each(function(r){
+            if(r.data.id == producto){
+                Ext.Msg.alert('Alerta', 'El registro ya existe.');
+                exists = 1;
+                cero="";
+                uno=1;
+                view.down('#codigoId').setValue(cero);
+                view.down('#productoId').setValue(cero);
+                view.down('#nombreproductoId').setValue(cero);
+                view.down('#cantidadId').setValue(uno);
+                view.down('#precioId').setValue(cero);
+
+                return; 
+            }
+        });
+        if(exists == 1)
+            return;
+                
+        stItem.add(new Infosys_web.model.Productos.Item({
+            id: producto,
+            id_producto: producto,
+            codigo: codigo,
+            id_descuento: iddescuento,
+            id_bodega: idbodega,
+            nombre: nombre,
+            precio: precio,
+            cantidad: cantidad,
+            neto: neto,
+            total: total,
+            iva: iva,
+            dcto: descuento
+        }));
+        this.recalcularFinal();
+
+        cero="";
+        cero1=0;
+        cero2=1;
+        view.down('#codigoId').setValue(cero);
+        view.down('#productoId').setValue(cero);
+        view.down('#nombreproductoId').setValue(cero);
+        view.down('#cantidadId').setValue(cero2);
+        view.down('#precioId').setValue(cero);
+        view.down('#cantidadOriginalId').setValue(cero);
+        view.down('#totdescuentoId').setValue(cero1);
+        view.down('#DescuentoproId').setValue(cero);
+        view.down('#condpagoId').setValue(tipopago);
+        view.down('#numboleta2Id').setValue(numdoc);
+        view.down("#codigoId").focus();
+    },
+
     lectura: function(){
 
         var viewIngresa = this.getBoletaingresar();
@@ -365,78 +492,8 @@ Ext.define('Infosys_web.controller.Pago_caja', {
 
         });
         };
+        //this.agregarItem3();
         
-        var view = this.getBoletaingresar();
-        var tipo_documento = view.down('#tipoDocumentoId');
-        var numdoc = view.down('#numboletaId').getValue();
-        var rut = view.down('#rutId').getValue();
-        var stItem = this.getProductosItemsStore();
-        var producto = view.down('#productoId').getValue();
-        var idbodega = view.down('#bodegaId').getValue();
-        var tipopago = 1;
-        var nombre = view.down('#nombreproductoId').getValue();
-        var cantidad = view.down('#cantidadId').getValue();
-        var codigo = view.down('#codigoId').getValue();
-        var cantidadori = view.down('#cantidadOriginalId').getValue();
-        var precio = ((view.down('#precioId').getValue()));
-        var descuento = view.down('#totdescuentoId').getValue(); 
-        var iddescuento = view.down('#DescuentoproId').getValue();
-        var bolEnable = true;
-        var tot = ((cantidad * precio) - descuento);
-        var neto = (Math.round(tot / 1.19));
-        var exists = 0;
-        var iva = (tot - neto);
-        var neto = (tot - iva);
-        var total = (neto + iva );
-        
-        
-        stItem.each(function(r){
-            if(r.data.id == producto){
-                Ext.Msg.alert('Alerta', 'El registro ya existe.');
-                exists = 1;
-                cero="";
-                view.down('#codigoId').setValue(cero);
-                view.down('#productoId').setValue(cero);
-                view.down('#nombreproductoId').setValue(cero);
-                view.down('#cantidadId').setValue(cero);
-                view.down('#precioId').setValue(cero);
-
-                return; 
-            }
-        });
-        if(exists == 1)
-            return;
-                
-        stItem.add(new Infosys_web.model.Productos.Item({
-            id: producto,
-            id_producto: producto,
-            codigo: codigo,
-            id_descuento: iddescuento,
-            id_bodega: idbodega,
-            nombre: nombre,
-            precio: precio,
-            cantidad: cantidad,
-            neto: neto,
-            total: total,
-            iva: iva,
-            dcto: descuento
-        }));
-        this.recalcularFinal();
-
-        cero="";
-        cero1=0;
-        cero2=1;
-        view.down('#codigoId').setValue(cero);
-        view.down('#productoId').setValue(cero);
-        view.down('#nombreproductoId').setValue(cero);
-        view.down('#cantidadId').setValue(cero);
-        view.down('#precioId').setValue(cero);
-        view.down('#cantidadOriginalId').setValue(cero);
-        view.down('#totdescuentoId').setValue(cero1);
-        view.down('#DescuentoproId').setValue(cero);
-        view.down('#condpagoId').setValue(tipopago);
-        view.down('#numboleta2Id').setValue(numdoc);
-        view.down("#codigoId").focus();
     },
 
     agregarItem: function() {
@@ -467,8 +524,8 @@ Ext.define('Infosys_web.controller.Pago_caja', {
             return false;
         }
         
-        var tot = ((cantidad * precio) - descuento);
-        var neto = (Math.round(tot / 1.19));
+        var neto = ((cantidad * precio) - descuento);
+        var tot = (Math.round(neto * 1.19));
         var exists = 0;
         var iva = (tot - neto);
         var neto = (tot - iva);
@@ -640,6 +697,8 @@ Ext.define('Infosys_web.controller.Pago_caja', {
         });
         };
 
+        //this.agregarItem3();
+
     },
 
     buscarproductos: function(){
@@ -710,6 +769,10 @@ Ext.define('Infosys_web.controller.Pago_caja', {
 
         });
         };
+
+        //this.agregarItem3();
+
+
 
     },
 

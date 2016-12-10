@@ -96,7 +96,7 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
     },{
         header: "Razon Social",
          width: 390,
-        dataIndex: 'nom_cliente'
+        dataIndex: 'nombre_cliente'
     },{
         header: "Vendedor",
         flex: 1,
@@ -228,6 +228,12 @@ Ext.define('Infosys_web.view.Pedidos.Principal' ,{
                 displayField : 'nombre',
                 emptyText : "Seleccione",
                 store : 'Bodegas'
+            },'-',{
+                xtype: 'button',
+                width: 160,
+                iconCls : 'icon-pdf',
+                text: 'Informe Produccion',
+                action:'exportarexcelpedidoscaja'
             }],
         },{
             xtype: 'pagingtoolbar',

@@ -198,6 +198,11 @@ Ext.define('Infosys_web.view.Pago_caja.Principal' ,{
                 fieldLabel: '<b>Fecha</b>',
                 itemId: 'fechaaperturaId',
                 name: 'fecha_apertura'
+            },{
+                xtype: 'button',
+                iconCls: 'icon-add',
+                action: 'agregarpedido',
+                text : 'Genera Pedido'
             },'->',{
                 xtype: 'button',
                 iconCls: 'icon-delete',

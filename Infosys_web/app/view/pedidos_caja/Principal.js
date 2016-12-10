@@ -6,7 +6,7 @@ Ext.define('Infosys_web.view.pedidos_caja.Principal' ,{
     
     iconCls: 'icon-grid',
 
-    title : 'Nota Pedido',
+    title : 'Pedidos Caja',
     store: 'Pedidos_caja',
     height: 300,
     viewConfig: {
@@ -177,9 +177,9 @@ Ext.define('Infosys_web.view.pedidos_caja.Principal' ,{
                 action:'exportarpedidoscaja'
             },{
                 xtype: 'button',
-                width: 120,
-                iconCls : 'icon-exel',
-                text: 'Exportar EXCEL',
+                width: 160,
+                iconCls : 'icon-pdf',
+                text: 'Informe Produccion',
                 action:'exportarexcelpedidoscaja'
             },'->',{
                 xtype: 'combo',
