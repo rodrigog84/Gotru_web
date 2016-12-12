@@ -140,10 +140,10 @@ class Facturaelectronica extends CI_Model
 		  ->from('folios_caf f')
 		  ->join('caf c','f.idcaf = c.id')
 		  ->join('tipo_caf tc','c.tipo_caf = tc.id')
-		  ->join('factura_clientes fc','f.idfactura = fc.id','left')
-		  ->join('clientes cl','fc.id_cliente = cl.id','left')
-		  //->where('left(fc.fecha_factura,7)',$anno."-".$mes);
-		  ->where('left(f.updated_at,7)',$anno."-".$mes) //AUN TENEMOS FACTURAS QUE NO SE EMITEN POR EL SISTEMA
+		  ->join('factura_clientes fc','f.idfactura = fc.id')
+		  ->join('clientes cl','fc.id_cliente = cl.id')
+		  ->where('left(fc.fecha_factura,7)',$anno."-".$mes)
+		  //->where('left(f.updated_at,7)',$anno."-".$mes) //AUN TENEMOS FACTURAS QUE NO SE EMITEN POR EL SISTEMA
 		  ->where('f.estado','O');
 		$query = $this->db->get();
 		return $query->result();

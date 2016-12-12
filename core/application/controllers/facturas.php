@@ -236,6 +236,8 @@ class Facturas extends CI_Controller {
 
 	public function genera_libro(){
 		// respuesta en texto plano
+
+		set_time_limit(0);
 		header('Content-type: text/plain; charset=ISO-8859-1');
 
 
@@ -311,7 +313,7 @@ class Facturas extends CI_Controller {
 											$factura->fecha_factura,
 											'',
 											$factura->rut,
-											substr($factura->nombres,0,45),
+											substr(str_replace(",","",$factura->nombres),0,45),
 											$factura->tipo_caf == 34 ? $factura->neto : '',
 											$factura->tipo_caf == 34 ? '' : $factura->neto,
 											$factura->tipo_caf == 34 ? '' : $factura->iva,
@@ -426,7 +428,7 @@ class Facturas extends CI_Controller {
 		$tipo_envio = $this->facturaelectronica->busca_parametro_fe('envio_sii'); //ver si está configurado para envío manual o automático	
 
 	    if($tipo_envio == 'automatico'){
-		    $track_id = $EnvioDTE->enviar();
+		    $track_id = $LibroCompraVenta->enviar();
 	    }		
 
 	    //unlink('./facturacion_electronica/tmp/libro.csv');  
