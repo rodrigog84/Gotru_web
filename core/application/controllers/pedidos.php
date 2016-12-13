@@ -1040,7 +1040,7 @@ class Pedidos extends CI_Controller {
 
     	$this->db->update('productos', $datos);
 
-    	$general = $this->db->query('SELECT * FROM pedidos_general WHERE id="'.$producto.'"
+    	$general = $this->db->query('SELECT * FROM pedidos_general WHERE id_producto="'.$producto.'"
     	AND fecha_produccion = "'.$fechaelaboracion.'" AND idhora = "'.$idhoraelab.'"');	
 
 		if($general->num_rows()>0){
@@ -1058,9 +1058,7 @@ class Pedidos extends CI_Controller {
 			    $pedidos_update = array(
 		        'cantidad' => $cantidad,
 		        'conversion' => $conversion,
-		        'unidadfisica' => $unidadfisica,
-		        'idsubfamilia' => $idsubfamilia,
-		        'idhora' => $idhoraelab
+		        'unidadfisica' => $unidadfisica
 				);
 
 
@@ -1116,6 +1114,8 @@ class Pedidos extends CI_Controller {
 		$numeropedido = $this->input->post('numeropedido');
 		$idtipo = $this->input->post('idtipo');
 		$idpago = $this->input->post('idpago');
+		$horaelab = $this->input->post('horaelab');
+		$idhoraelab = $this->input->post('idhoraelab');
 		$idbodega = $this->input->post('idbodega');
 		$idtipopedido = $this->input->post('idtipopedido');
 		$fechapedidos = $this->input->post('fechapedidos');
@@ -1171,8 +1171,8 @@ class Pedidos extends CI_Controller {
 
 	    $this->db->insert('pedidos_detalle', $pedidos_detalle);
 	    
-    	$general = $this->db->query('SELECT * FROM pedidos_general WHERE id="'.$producto.'"
-    	AND AND fecha_produccion = "'.$fechaelaboracion.'" ');		
+    	$general = $this->db->query('SELECT * FROM pedidos_general WHERE id_producto="'.$producto.'"
+    	AND fecha_produccion = "'.$fechaelaboracion.'" AND idhora = "'.$idhoraelab.'"');	
 
 	    if($general->num_rows()>0){
 
@@ -1191,8 +1191,7 @@ class Pedidos extends CI_Controller {
 			    $pedidos_update = array(
 		        'cantidad' => $cantidad,
 		        'conversion' => $conversion,
-		        'unidad_fisica' => $unidadfisica,
-		        'idsubfamilia' => $idsubfamilia
+		        'unidadfisica' => $unidadfisica
 				);
 
 				$this->db->where('id', $id);
@@ -1214,8 +1213,10 @@ class Pedidos extends CI_Controller {
 				'fecha_produccion' => $fechaelaboracion,
 				'fecha' => $fechapedidos,
 				'conversion' => $conversion,
-				'unidad_fisica' => $unidadfisica,
-				'idsubfamilia' => $idsubfamilia
+				'unidadfisica' => $unidadfisica,
+				'idsubfamilia' => $idsubfamilia,
+				'idhora' => $idhoraelab
+
 				);
 
 				$this->db->insert('pedidos_general', $pedidos_general);
