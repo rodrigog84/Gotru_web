@@ -31,7 +31,7 @@ Ext.define('Infosys_web.view.notacredito.Notacreditoglosa', {
         var tipoDocumento = Ext.create('Ext.data.Store', {
             fields: ['value', 'nombre'],
             data : [
-                {"value":1, "nombre":"FACTURAS"},
+                {"value":1, "nombre":"FACTURA ELECTRONICA"},
                 {"value":3, "nombre":"BOLETAS"}
             ]
         }); 
