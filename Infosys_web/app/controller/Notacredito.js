@@ -227,6 +227,7 @@ Ext.define('Infosys_web.controller.Notacredito', {
         var docurelacionado = viewIngresa.down('#factId').getValue();
         var valorneto = viewIngresa.down('#finaltotalnetoId').getValue();
         var valoriva = viewIngresa.down('#finaltotalivaId').getValue();
+        var tipoDocNota = viewIngresa.down('#tipoDocNotaId').getValue();
         var totalfactura= valorneto + valoriva;
      
         
@@ -263,7 +264,8 @@ Ext.define('Infosys_web.controller.Notacredito', {
                 netofactura: viewIngresa.down('#finaltotalnetoId').getValue(),
                 ivafactura: viewIngresa.down('#finaltotalivaId').getValue(),
                 afectofactura: viewIngresa.down('#finalafectoId').getValue(),
-                totalfacturas: totalfactura
+                totalfacturas: totalfactura,
+                tipoDocNota: tipoDocNota
             },
              success: function(response){
                 var resp = Ext.JSON.decode(response.responseText);

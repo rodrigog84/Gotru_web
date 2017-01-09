@@ -33,6 +33,7 @@ class Notacredito extends CI_Controller {
 		$ftotal = $this->input->post('totalfacturas');
 		$tipodocumento = $this->input->post('tipodocumento');
 		$id_cond_venta = $this->input->post('idcondventa');
+		$tipoDocNota =  $this->input->post('tipoDocNota');
 		//$tipodocumento = 11;
 
 		$data3 = array(

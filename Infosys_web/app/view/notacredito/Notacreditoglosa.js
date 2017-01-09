@@ -28,6 +28,13 @@ Ext.define('Infosys_web.view.notacredito.Notacreditoglosa', {
         var me = this;
         var stItms = Ext.getStore('notacredito.Items');
         stItms.removeAll();
+        var tipoDocumento = Ext.create('Ext.data.Store', {
+            fields: ['value', 'nombre'],
+            data : [
+                {"value":1, "nombre":"FACTURAS"},
+                {"value":3, "nombre":"BOLETAS"}
+            ]
+        }); 
         Ext.applyIf(me, {
             items: [
                 {
@@ -355,7 +362,23 @@ Ext.define('Infosys_web.view.notacredito.Notacreditoglosa', {
                                             allowBlank: true,
                                             action: 'buscarfactura2'
                                             //,disabled : true  
-                                        }
+                                        },{xtype: 'splitter'},{
+                                            xtype: 'combobox',
+                                            maxHeight: 25,
+                                            labelWidth: 150,
+                                            width: 400,
+                                            store : tipoDocumento,
+                                            fieldLabel: 'TIPO DOCUMENTO',
+                                            labelStyle: ' font-weight:bold',
+                                            emptyText : 'Seleccionar',
+                                            value: 1,//editable: false,
+                                            itemId : 'tipoDocNotaId' ,
+                                            name : 'tipoDocNota' ,
+                                            displayField : 'nombre',
+                                            valueField : 'value'
+                                            //disabled : true,
+                                            
+                                    }
                                     ]
                                     },{
                     xtype: 'fieldset',
