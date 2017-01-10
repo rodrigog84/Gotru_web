@@ -156,8 +156,11 @@ class Notacredito extends CI_Controller {
             $config = $this->facturaelectronica->genera_config();
             include $this->facturaelectronica->ruta_libredte();
 
+            $tipodoc_asoc = $tipoDocNota == 3 ? 35 : 33;
+            $tipodoc_nasoc = $tipoDocNota == 3 ? "boleta" : "factura";
+
             $tipo_nota_credito = 2;
-            $glosa = 'Correccion factura '. $numfactura_asoc;
+            $glosa = 'Correccion ' . $tipodoc_nasoc . ' '. $numfactura_asoc;
 
             $empresa = $this->facturaelectronica->get_empresa();
             $datos_empresa_factura = $this->facturaelectronica->get_empresa_factura($idfactura);
@@ -211,7 +214,7 @@ class Notacredito extends CI_Controller {
                 ],
                 'Detalle' => $lista_detalle,
                 'Referencia' => [
-                    'TpoDocRef' => 33,
+                    'TpoDocRef' => $tipodoc_asoc,
                     'FolioRef' => $numfactura_asoc,
                     'CodRef' => $tipo_nota_credito,
                     'RazonRef' => $glosa,
