@@ -101,7 +101,7 @@ class Notacredito extends CI_Controller {
 	         $query = $this->db->query("SELECT co.idcliente, co.id as idcuentacorriente  FROM cuenta_corriente co
 	                                    WHERE co.idcuentacontable = '$idcuentacontable' and co.idcliente = '" . $idcliente . "' limit 1");
 	         $row = $query->row();
-	         $idcuentacorriente =  $row->idcuentacorriente; 
+	         $idcuentacorriente =  isset($row->idcuentacorriente) ? $row->idcuentacorriente : 0; 
 
 
 	        if($query->num_rows() > 0){ //sólo se realiza la rebaja de cuenta corriente, en caso que exista la cuenta corriente
