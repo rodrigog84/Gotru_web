@@ -89,64 +89,65 @@ class Notacredito extends CI_Controller {
 
 		/******* CUENTAS CORRIENTES ****/
 
-     $query = $this->db->query("SELECT cc.id as idcuentacontable FROM cuenta_contable cc WHERE cc.nombre = 'FACTURAS POR COBRAR'");
-         $row = $query->result();
-         $row = $row[0];
-         $idcuentacontable = $row->idcuentacontable;    
+		if($tipoDocNota != 3){
+	     	$query = $this->db->query("SELECT cc.id as idcuentacontable FROM cuenta_contable cc WHERE cc.nombre = 'FACTURAS POR COBRAR'");
+	         $row = $query->result();
+	         $row = $row[0];
+	         $idcuentacontable = $row->idcuentacontable;    
 
 
 
-            // VERIFICAR SI CLIENTE YA TIENE CUENTA CORRIENTE
-         $query = $this->db->query("SELECT co.idcliente, co.id as idcuentacorriente  FROM cuenta_corriente co
-                                    WHERE co.idcuentacontable = '$idcuentacontable' and co.idcliente = '" . $idcliente . "' limit 1");
-         $row = $query->row();
-         $idcuentacorriente =  $row->idcuentacorriente; 
+	            // VERIFICAR SI CLIENTE YA TIENE CUENTA CORRIENTE
+	         $query = $this->db->query("SELECT co.idcliente, co.id as idcuentacorriente  FROM cuenta_corriente co
+	                                    WHERE co.idcuentacontable = '$idcuentacontable' and co.idcliente = '" . $idcliente . "' limit 1");
+	         $row = $query->row();
+	         $idcuentacorriente =  $row->idcuentacorriente; 
 
 
-        if($query->num_rows() > 0){ //sólo se realiza la rebaja de cuenta corriente, en caso que exista la cuenta corriente
+	        if($query->num_rows() > 0){ //sólo se realiza la rebaja de cuenta corriente, en caso que exista la cuenta corriente
 
-			// se rebaja detalle
-			$query = $this->db->query("UPDATE detalle_cuenta_corriente SET saldo = saldo - " . $ftotal . " where idctacte = " .  $row->idcuentacorriente . " and numdocumento = " . $numfactura_asoc);
-			//$idcuentacorriente =  $row->idcuentacorriente;
-			 $query_factura = $this->db->query("SELECT tipo_documento  FROM factura_clientes 
-			 							WHERE num_factura = " . $numfactura_asoc . " and id_cliente = " . $idcliente . " limit 1");
-			 $tipodocumento_asoc = $query_factura->row()->tipo_documento;
+				// se rebaja detalle
+				$query = $this->db->query("UPDATE detalle_cuenta_corriente SET saldo = saldo - " . $ftotal . " where idctacte = " .  $row->idcuentacorriente . " and numdocumento = " . $numfactura_asoc);
+				//$idcuentacorriente =  $row->idcuentacorriente;
+				 $query_factura = $this->db->query("SELECT tipo_documento  FROM factura_clientes 
+				 							WHERE num_factura = " . $numfactura_asoc . " and id_cliente = " . $idcliente . " limit 1");
+				 $tipodocumento_asoc = $query_factura->row()->tipo_documento;
 
 
 
-            $query = $this->db->query("UPDATE cuenta_corriente SET saldo = saldo - " . $ftotal . " where id = " .  $row->idcuentacorriente );
-            $idcuentacorriente =  $row->idcuentacorriente;
-        
-            /*$detalle_cuenta_corriente = array(
-                'idctacte' => $idcuentacorriente,
-                'tipodocumento' => $tipodocumento,
-                'numdocumento' => $numdocuemnto,
-                'saldoinicial' => $ftotal,
-                'saldo' => $ftotal,
-                'fechavencimiento' => $fechavenc,
-                'fecha' => date('Y-m-d H:i:s')
-            );
+	            $query = $this->db->query("UPDATE cuenta_corriente SET saldo = saldo - " . $ftotal . " where id = " .  $row->idcuentacorriente );
+	            $idcuentacorriente =  $row->idcuentacorriente;
+	        
+	            /*$detalle_cuenta_corriente = array(
+	                'idctacte' => $idcuentacorriente,
+	                'tipodocumento' => $tipodocumento,
+	                'numdocumento' => $numdocuemnto,
+	                'saldoinicial' => $ftotal,
+	                'saldo' => $ftotal,
+	                'fechavencimiento' => $fechavenc,
+	                'fecha' => date('Y-m-d H:i:s')
+	            );
 
-            $this->db->insert('detalle_cuenta_corriente', $detalle_cuenta_corriente);   */
+	            $this->db->insert('detalle_cuenta_corriente', $detalle_cuenta_corriente);   */
 
-            $cartola_cuenta_corriente = array(
-                'idctacte' => $idcuentacorriente,
-                'idcuenta' => $idcuentacontable,
-                'tipodocumento' => $tipodocumento,
-                'numdocumento' => $numdocuemnto,
-                'tipodocumento_asoc' => $tipodocumento_asoc,
-                'numdocumento_asoc' => $numfactura_asoc,
-                'glosa' => 'Registro de Nota de Crédito en Cuenta Corriente',
-                'fecvencimiento' => $fechavenc,
-                'valor' => $ftotal,
-                'origen' => 'VENTA',
-                'fecha' => date('Y-m-d H:i:s')
-            );
+	            $cartola_cuenta_corriente = array(
+	                'idctacte' => $idcuentacorriente,
+	                'idcuenta' => $idcuentacontable,
+	                'tipodocumento' => $tipodocumento,
+	                'numdocumento' => $numdocuemnto,
+	                'tipodocumento_asoc' => $tipodocumento_asoc,
+	                'numdocumento_asoc' => $numfactura_asoc,
+	                'glosa' => 'Registro de Nota de Crédito en Cuenta Corriente',
+	                'fecvencimiento' => $fechavenc,
+	                'valor' => $ftotal,
+	                'origen' => 'VENTA',
+	                'fecha' => date('Y-m-d H:i:s')
+	            );
 
-            $this->db->insert('cartola_cuenta_corriente', $cartola_cuenta_corriente); 
-        }  		
+	            $this->db->insert('cartola_cuenta_corriente', $cartola_cuenta_corriente); 
+	        }  		
 
-	
+		}
 
         /*****************************************/
 
