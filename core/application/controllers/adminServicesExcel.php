@@ -91,7 +91,7 @@ class AdminServicesExcel extends CI_Controller {
 
                           
         $data = array();
-        $query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, t.descripcion as nomdocumento, t.id as tipdocumento, con.nombre as nomcondventa, c.id_pago as codigo_con_pago, cob.id as id_cobrador, rep.id as id_repartidor, tip.codigo as cod_tipo_negocio FROM factura_clientes acc
+        $query = $this->db->query('SELECT acc.*, c.nombres as nombre_cliente, c.rut as rut_cliente, v.nombre as nom_vendedor, t.descripcion as nomdocumento, t.id as tipdocumento, con.nombre as nomcondventa, c.id_pago as codigo_con_pago, cob.id as id_cobrador, rep.id as id_repartidor, tip.codigo as cod_tipo_negocio, ciu.nombre as ciudad, c.direccion as direccion FROM factura_clientes acc
         left join clientes c on (acc.id_cliente = c.id)
         left join tipo_documento t on (acc.tipo_documento = t.id)
         left join cond_pago con on (c.id_pago = con.id)
@@ -99,6 +99,7 @@ class AdminServicesExcel extends CI_Controller {
         left join cobradores cob on (c.id_cobrador = cob.id)
         left join tiponegocio tip on (c.id_tiponegocio = tip.id)        
         left join vendedores v on (acc.id_vendedor = v.id)
+        left join ciudad ciu on (c.id_ciudad = ciu.id)
         WHERE acc.fecha_factura between "'.$fecha3.'"  AND "'.$fecha4.'"
         ' 
         );
@@ -152,6 +153,9 @@ class AdminServicesExcel extends CI_Controller {
         echo "TIPO NEGOCIO";
         echo ";";
         echo "ID BODEGA";
+        echo "NOMBRE PRODUCTO";
+        echo "DIRECCION";
+        echo "CIUDAD";
 
         //$users = $query->result_array();
                       
@@ -168,6 +172,8 @@ class AdminServicesExcel extends CI_Controller {
             $codcondventa = $v->codigo_con_pago;
             $vendedor = $v->nom_vendedor;
             $codvendedor = $v->id_vendedor;
+            $ciudad = $v->ciudad;
+            $direccion = $v->direccion;
             if ($v->tipdocumento==102){
                 $neto = (round($v->totalfactura /1.19) / -1);
                 $iva = (($v->totalfactura - $neto) / -1);
@@ -185,7 +191,7 @@ class AdminServicesExcel extends CI_Controller {
 
             
             $query2 = $this->db->query('SELECT acc.*, c.codigo as codigo,
-            b.codigo as cod_bodega FROM detalle_factura_cliente acc
+            b.codigo as cod_bodega, c.nombre as nom_producto FROM detalle_factura_cliente acc
             left join productos c on (acc.id_producto = c.id)
             left join bodegas b on (acc.id_bodega = b.id)
             WHERE acc.id_factura = "'.$id.'"');                     
@@ -249,7 +255,10 @@ class AdminServicesExcel extends CI_Controller {
             echo ";";
             echo $idtiponegocio;
             echo ";";
-            echo $z->cod_bodega;            
+            echo $z->cod_bodega;
+            echo $z->nom_producto;
+            echo $direccion;
+            echo $ciudad;          
             //echo chr(13).chr(10);     
             }
             //echo chr(13).chr(10);
