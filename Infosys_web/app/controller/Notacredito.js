@@ -875,26 +875,15 @@ Ext.define('Infosys_web.controller.Notacredito', {
         var precioun = ((view.down('#precioId').getValue())/1.19);
         var descuento = (parseInt(view.down('#descuentoId').getValue()));
 
-        var tot = ((cantidad * preciou) - descuento);
-        var neto  = ((tot / 1.19));
+        var neto = ((cantidad * precio) - descuento);
+        var total  = (Math.round(neto * 1.19));
+
 
         var exists = 0;
-        var iva = (tot - neto );
-        var totaliva = (Math.round(neto + iva));
-
-        console.log("cantidad: "+cantidad);
-        console.log("precio: "+precio);
-        console.log("neto: "+neto);
-        console.log("iva: "+iva);
-        console.log("totaliva: "+totaliva);
+        var iva = (total - neto);
+        var totaliva = ((neto + iva));
 
         
-        /*var total = ((cantidad * precio)- descuento);
-        var neto = ((total / 1.19));
-        var exists = 0;
-        var iva = (total - neto );
-        var totaliva = (total);*/
-       
         var totalfin = view.down('#finaltotalpostId').getValue();
         var netofin = view.down('#finalafectoId').getValue();
         var ivafin = view.down('#finaltotalivaId').getValue();
@@ -1043,7 +1032,6 @@ Ext.define('Infosys_web.controller.Notacredito', {
                         totaliva: totaliva,
                         iva: iva          
                     }));
-
             
                     cero="";
                     cero2=0;
