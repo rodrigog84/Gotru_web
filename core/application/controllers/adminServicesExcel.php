@@ -153,8 +153,11 @@ class AdminServicesExcel extends CI_Controller {
         echo "TIPO NEGOCIO";
         echo ";";
         echo "ID BODEGA";
+        echo ";";
         echo "NOMBRE PRODUCTO";
+        echo ";";
         echo "DIRECCION";
+        echo ";";
         echo "CIUDAD";
 
         //$users = $query->result_array();
@@ -256,8 +259,11 @@ class AdminServicesExcel extends CI_Controller {
             echo $idtiponegocio;
             echo ";";
             echo $z->cod_bodega;
+            echo ";";
             echo $z->nom_producto;
+            echo ";";
             echo $direccion;
+            echo ";";
             echo $ciudad;          
             //echo chr(13).chr(10);     
             }
