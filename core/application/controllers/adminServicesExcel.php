@@ -163,7 +163,6 @@ class AdminServicesExcel extends CI_Controller {
         //$users = $query->result_array();
                       
         foreach ($query->result() as $v){
-
             
             $nomdocumento = $v->nomdocumento;
             $fechafactura = $v->fecha_factura;
@@ -191,13 +190,89 @@ class AdminServicesExcel extends CI_Controller {
             $idcobrador = $v->id_cobrador;
             $idtiponegocio = $v->cod_tipo_negocio;
             $id = $v->id;
+            $tipo = $v->forma;
+
+            if ($tipo==1){
+
+            $query2 = $this->db->get_where('detalle_factura_glosa', array('id_factura' => $id));
+
+            foreach ($query2->result() as $z){
+            if ($v->tipdocumento==102){
+            $netop = (round($z->total / 1.19)/ -1);
+            $ivap = (($z->total - $netop) /-1);
+            $totalproductop = ($z->total / -1);
+            }else{
+            $netop = (round($z->total / 1.19));
+            $ivap = ($z->total - $netop);
+            $total = ($z->total);                
+            };
+            echo chr(13).chr(10);
+            echo $numdocumento;
+            echo ";";
+            echo $fechafactura;
+            echo ";";
+            echo $fechavenc;
+            echo ";";
+            echo $nomdocumento;
+            echo ";";
+            echo $rutcliente;
+            echo ";";
+            echo $nomcliente;
+            echo ";";
+            echo $condventa;
+            echo ";";
+            echo $codcondventa;
+            echo ";";
+            echo $vendedor;
+            echo ";";
+            echo $codvendedor;
+            echo ";";
+            echo $neto;
+            echo ";";
+            echo $iva;
+            echo ";";
+            echo $total;   
+            echo ";";
+            echo "ZZZZZZZZZZ";
+            echo ";";
+            echo "ZZ";
+            echo ";";
+            echo $netop;
+            echo ";";
+            echo "1";
+            echo ";";
+            echo "0000";
+            echo ";";
+            echo $netop;
+            echo ";";
+            echo $ivap;
+            echo ";";
+            echo $total;
+            echo ";";
+            echo $idrepartidor;
+            echo ";";
+            echo $idcobrador;
+            echo ";";
+            echo $idtiponegocio;
+            echo ";";
+            echo "Z";
+            echo ";";
+            echo $z->glosa;
+            echo ";";
+            echo $direccion;
+            echo ";";
+            echo $ciudad;          
+            //echo chr(13).chr(10);     
+            }
+                
+            }else{
 
             
             $query2 = $this->db->query('SELECT acc.*, c.codigo as codigo,
             b.codigo as cod_bodega, c.nombre as nom_producto FROM detalle_factura_cliente acc
             left join productos c on (acc.id_producto = c.id)
             left join bodegas b on (acc.id_bodega = b.id)
-            WHERE acc.id_factura = "'.$id.'"');                     
+            WHERE acc.id_factura = "'.$id.'"');
 
             foreach ($query2->result() as $z){
             if ($v->tipdocumento==102){
@@ -267,6 +342,10 @@ class AdminServicesExcel extends CI_Controller {
             echo $ciudad;          
             //echo chr(13).chr(10);     
             }
+            
+            };             
+
+            
             //echo chr(13).chr(10);
           }
           
