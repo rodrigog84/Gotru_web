@@ -152,6 +152,9 @@ Ext.define('Infosys_web.controller.Notadebito', {
             'buscarfacturasdebito button[action=seleccionarfactura]': {
                 click: this.seleccionarfactura
             },
+            'buscarfacturasdebito button[action=buscar]': {
+                click: this.buscarfac
+            },
             'notadebitoprincipal button[action=exportarexcelnotadebito]': {
                 click: this.exportarexcelnotadebito
             },
@@ -165,6 +168,16 @@ Ext.define('Infosys_web.controller.Notadebito', {
 
             
         });
+    },
+
+    buscarfac: function(){
+        
+        var view = this.getBuscarfacturasdebito();
+        var st = this.getFactura2Store()
+        var nombre = view.down('#nombreId').getValue()
+        st.proxy.extraParams = {nombre : nombre,
+                                opcion : "Numero"}
+        st.load();
     },
 
     special: function(f,e){
@@ -256,7 +269,7 @@ Ext.define('Infosys_web.controller.Notadebito', {
         var grid  = view.down('#itemsgridId');        
         grid.getStore().removeAll();  
         //var controller = this.getController('Productos');
-        this.recalcularFinal();
+        //this.recalcularFinal();
 
     },
     
@@ -314,30 +327,6 @@ Ext.define('Infosys_web.controller.Notadebito', {
         window.open(preurl + 'adminServicesExcel/exportarExcelnotadebito?cols='+Ext.JSON.encode(jsonCol)+'&fecha='+fecha+'&fecha2='+fecha2+'&opcion='+opcion+'&nombre='+nombre);
         view.close();
  
-    },
-
-    recalcularFinal: function(){
-        var view = this.getNotadebitoingresar();
-        var stItem = this.getProductosItemsStore();
-        var pretotal = 0;
-        var total = 0;
-        
-        stItem.each(function(r){
-            pretotal = (parseInt(pretotal) + parseInt(r.data.totaliva))
-          
-        });
-        total = pretotal;
-        neto = (total / 1.19);
-        afecto = neto;
-        iva = total - neto;
-        
-        //iva = (total - afecto);
-        view.down('#finaltotalId').setValue(Ext.util.Format.number(total, '0,000'));
-        view.down('#finaltotalpostId').setValue(Ext.util.Format.number(total, '0'));
-        view.down('#finaltotalnetoId').setValue(Ext.util.Format.number(neto, '0'));
-        view.down('#finaltotalivaId').setValue(Ext.util.Format.number(iva, '0'));
-        view.down('#finalafectoId').setValue(Ext.util.Format.number(afecto, '0'));
-          
     },
 
     changedctofinal: function(){
@@ -505,7 +494,8 @@ Ext.define('Infosys_web.controller.Notadebito', {
        if (nombre){
           var edit =  Ext.create('Infosys_web.view.notadebito.BuscarFacturas').show();
           var st = this.getFactura2Store();
-          st.proxy.extraParams = {nombre : nombre};
+          st.proxy.extraParams = {nombre : nombre,
+                                  opcion : "Cliente"};
           st.load();
        }else {
           Ext.Msg.alert('Alerta', 'Debe seleccionar Cliente.');
