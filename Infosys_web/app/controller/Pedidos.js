@@ -91,6 +91,10 @@ Ext.define('Infosys_web.controller.Pedidos', {
             'topmenus menuitem[action=mPedidos]': {
                 click: this.mPedidos
             },
+
+            'topmenus menuitem[action=mInforme]': {
+                click: this.exportarlibrorecaudacion
+            },            
             'pedidosingresar button[action=grabarpedidos]': {
                 click: this.grabarpedidos
             },
