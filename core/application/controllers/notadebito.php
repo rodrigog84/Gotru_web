@@ -12,7 +12,7 @@ class Notadebito extends CI_Controller {
 	}
 
 	public function save(){
-		
+
 		$resp = array();
 
 		$numfactura_asoc = $this->input->post('numfactura_asoc'); //ID OBTENIDO PARA AUMENTAR EN CUENTA CORRIENTE
@@ -150,9 +150,11 @@ class Notadebito extends CI_Controller {
             $this->load->model('facturaelectronica');
             $config = $this->facturaelectronica->genera_config();
             include $this->facturaelectronica->ruta_libredte();
-
-            $tipo_nota_debito = 2; //tenemos sólo nota de crédito glosa
+            $tipo_nota_debito = $this->input->post('tipo_nota_debito');
+            //$tipo_nota_debito = 3; //si es corrección de montos por una nc, debería ser 3
+            //$tipo_nota_debito = 2; //tenemos sólo nota de crédito glosa
             $glosa = 'Correccion factura '. $numfactura_asoc;
+            //$glosa = $tipo_nota_debito == 1 ? 'Anula factura '. $numfactura_asoc : 'Correccion factura '. $numfactura_asoc;
 
             $empresa = $this->facturaelectronica->get_empresa();
             $datos_empresa_factura = $this->facturaelectronica->get_empresa_factura($idfactura);
@@ -206,7 +208,7 @@ class Notadebito extends CI_Controller {
                 'Detalle' => $lista_detalle,
                 'Referencia' => [
                     'TpoDocRef' => 33,
-                    'FolioRef' => $numfactura,
+                    'FolioRef' => $numfactura_asoc,
                     'CodRef' => $tipo_nota_debito,
                     'RazonRef' => $glosa,
                 ]               

@@ -455,6 +455,11 @@ Ext.define('Infosys_web.controller.Notadebito', {
             viewIngresa.down('#numfactId').setValue(row.data.num_factura);
             viewIngresa.down('#totfactId').setValue(row.data.totalfactura);
             viewIngresa.down('#factId').setValue(row.data.id);
+            var tipo_documento = viewIngresa.down('#tipodocumentoId').getValue();
+            if(tipo_documento == 104){
+                viewIngresa.down('#tipoNotaDebito').setDisabled(false);
+            }  
+
             view.close();
         }else{
             Ext.Msg.alert('Alerta', 'Selecciona un registro.');
@@ -675,6 +680,18 @@ Ext.define('Infosys_web.controller.Notadebito', {
             return;   
             }
 
+
+        var tipo_nota_debito = 0;
+        if(tipo_documento == 104){
+            var tipo_nota_debito = viewIngresa.down('#tipoNotaDebito').getValue();
+            if(tipo_nota_debito==0 || tipo_nota_debito == null || tipo_nota_debito == ''){
+                Ext.Msg.alert('Atención','Debe seleccionar tipo de nota de débito');
+                return;   
+                }
+
+
+        }              
+
         var dataItems = new Array();
         stItem.each(function(r){
             dataItems.push(r.data)
@@ -701,7 +718,8 @@ Ext.define('Infosys_web.controller.Notadebito', {
                 netofactura: viewIngresa.down('#finaltotalnetoId').getValue(),
                 ivafactura: viewIngresa.down('#finaltotalivaId').getValue(),
                 afectofactura: viewIngresa.down('#finalafectoId').getValue(),
-                totalfacturas: viewIngresa.down('#finaltotalpostId').getValue()
+                totalfacturas: viewIngresa.down('#finaltotalpostId').getValue(),
+                tipo_nota_debito : tipo_nota_debito
             },
              success: function(response){
                 var resp = Ext.JSON.decode(response.responseText);

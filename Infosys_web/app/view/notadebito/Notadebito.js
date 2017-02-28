@@ -26,6 +26,13 @@ Ext.define('Infosys_web.view.notadebito.Notadebito', {
 
     initComponent: function() {
         var me = this;
+         var tipoNotaDebito = Ext.create('Ext.data.Store', {
+            fields: ['value', 'nombre'],
+            data : [
+                {"value":2, "nombre":"CORRECCIÓN DE TEXTOS"},
+                {"value":3, "nombre":"CORRECCIÓN DE MONTOS"}
+            ]
+        });         
         var stItms = Ext.getStore('notadebito.Items');
         stItms.removeAll();
         Ext.applyIf(me, {
@@ -371,6 +378,21 @@ Ext.define('Infosys_web.view.notadebito.Notadebito', {
                                             allowBlank: true,
                                             action: 'buscarfactura'
                                             //,disabled : true  
+                                        },{xtype: 'splitter'},{
+                                            xtype: 'combobox',
+                                            width: 400,
+                                            store : tipoNotaDebito,
+                                            fieldLabel: 'TIPO NOTA DE D&Eacute;BITO',
+                                            labelStyle: ' font-weight:bold',
+                                            labelWidth: 200,
+                                            emptyText : 'Seleccionar',
+                                            editable: false,
+                                            itemId : 'tipoNotaDebito' ,
+                                            name : 'tipoNotaDebito' ,
+                                            displayField : 'nombre',
+                                            valueField : 'value',
+                                            disabled : true,
+
                                         }
                                     ]
                                     },{
