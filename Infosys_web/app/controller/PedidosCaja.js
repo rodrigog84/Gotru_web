@@ -170,8 +170,8 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
             'editarpedidoscaja button[action=editaritem2]': {
                 click: this.editaritem2
             },
-            'buscarsucursalesclientes button[action=seleccionarsucursalcliente]': {
-                click: this.seleccionarsucursalcliente
+            'buscarsucursalesclientes button[action=seleccionarsucursalclientepedidoscaja]': {
+                click: this.seleccionarsucursalclientepedidoscaja
             },
             'pedidoscajaingresar button[action=observaciones]': {
                 click: this.agregarobserva
@@ -791,7 +791,7 @@ Ext.define('Infosys_web.controller.PedidosCaja', {
       
     },
 
-    seleccionarsucursalcliente: function(){
+    seleccionarsucursalclientepedidoscaja: function(){
 
         var view = this.getBuscarsucursalesclientes();
         var viewIngresa = this.getpedidoscajaingresar();

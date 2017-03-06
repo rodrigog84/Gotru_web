@@ -107,6 +107,11 @@ Ext.define('Infosys_web.view.clientes.EditarSucursales', {
                         itemId: 'fonoId',
                         name : 'fono_contacto',
                         fieldLabel: 'Telefono Contacto'
+                    },{
+                        xtype: 'textfield',
+                        itemId: 'siglaId',
+                        name : 'sigla_sucursales',
+                        fieldLabel: 'Sigla'
                     }
                 ]
             }

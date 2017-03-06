@@ -8,6 +8,7 @@ Ext.define('Infosys_web.controller.Clientes', {
             'Sucursales_clientes',
             'clientes.Clientes',
             'clientes.Selector',
+            'clientes.Selector2',
             'Contacto_clientes',
             'clientes.Activo',
             'Sectores'
@@ -363,6 +364,7 @@ Ext.define('Infosys_web.controller.Clientes', {
         var contacto = viewIngresa.down('#contactoId').getValue();
         var fono = viewIngresa.down('#fonoId').getValue();
         var lista = viewIngresa.down('#listadoId').getValue();
+        var sigla = viewIngresa.down('#siglaId').getValue();
 
         Ext.Ajax.request({
             url: preurl + 'sucursales_clientes/save',
@@ -374,7 +376,8 @@ Ext.define('Infosys_web.controller.Clientes', {
                 email: email,
                 contacto: contacto,
                 lista: lista,
-                fono: fono
+                fono: fono,
+                sigla: sigla
             },
             success: function(response){
                 var text = response.responseText;
@@ -403,6 +406,7 @@ Ext.define('Infosys_web.controller.Clientes', {
         var contacto = viewIngresa.down('#contactoId').getValue();
         var fono = viewIngresa.down('#fonoId').getValue();
         var lista = viewIngresa.down('#listadoId').getValue();
+        var sigla = viewIngresa.down('#siglaId').getValue();
 
         Ext.Ajax.request({
             url: preurl + 'sucursales_clientes/update',
@@ -415,7 +419,8 @@ Ext.define('Infosys_web.controller.Clientes', {
                 email: email,
                 contacto: contacto,
                 lista: lista,
-                fono: fono
+                fono: fono,
+                sigla: sigla
             },
             success: function(response){
                 var text = response.responseText;
@@ -445,7 +450,8 @@ Ext.define('Infosys_web.controller.Clientes', {
             edit.down("#listadoId").setValue(row.data.id_lista);
             edit.down("#emailId").setValue(row.data.mail_contacto);
             edit.down("#contactoId").setValue(row.data.nombre_contacto);
-            edit.down("#fonoId").setValue(row.data.fono_contacto);                 
+            edit.down("#fonoId").setValue(row.data.fono_contacto); 
+            edit.down("#siglaId").setValue(row.data.sigla);                 
         }else{
             Ext.Msg.alert('Alerta', 'Selecciona un registro.');
             return;

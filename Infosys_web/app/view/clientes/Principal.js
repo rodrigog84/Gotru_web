@@ -194,7 +194,7 @@ Ext.define('Infosys_web.view.clientes.Principal' ,{
                 valueField : 'id',
                 displayField : 'nombre',
                 emptyText : "Seleccione",
-                store : 'clientes.Selector'
+                store : 'clientes.Selector2'
             },{
                 width: 250,
                 xtype: 'textfield',

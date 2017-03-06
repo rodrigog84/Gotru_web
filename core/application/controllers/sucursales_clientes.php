@@ -43,6 +43,7 @@ class Sucursales_clientes extends CI_Controller {
 		$contacto = $this->input->post('contacto');
 		$fono = $this->input->post('fono');
 		$lista = $this->input->post('lista');
+		$sigla = $this->input->post('sigla');
 
 		$data = array(
 	        'id_cliente' => $idcliente,
@@ -52,7 +53,8 @@ class Sucursales_clientes extends CI_Controller {
 	        'id_comuna' => $idcomuna,
 	        'mail_contacto' => $mail,
 	        'fono_contacto' => $fono,
-          	'nombre_contacto' => $contacto              
+          	'nombre_contacto' => $contacto,
+          	'sigla' => $sigla             
 		);
 
 		
@@ -77,6 +79,8 @@ class Sucursales_clientes extends CI_Controller {
 		$contacto = $this->input->post('contacto');
 		$fono = $this->input->post('fono');
 		$lista = $this->input->post('lista');
+		$sigla = $this->input->post('sigla');
+
 		$data = array(
 			'id_cliente' => $id_cliente,
 	        'direccion' => strtoupper($direccion),
@@ -85,7 +89,8 @@ class Sucursales_clientes extends CI_Controller {
 	        'id_comuna' => $idcomuna,
 	        'mail_contacto' => $mail,
 	        'fono_contacto' => $fono,
-          	'nombre_contacto' => $contacto    
+          	'nombre_contacto' => $contacto,
+          	'sigla' => $sigla   
               
 	    );
 		$this->db->where('id', $id);
