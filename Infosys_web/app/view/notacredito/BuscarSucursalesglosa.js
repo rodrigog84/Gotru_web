@@ -1,6 +1,6 @@
-Ext.define('Infosys_web.view.notadebito.BuscarSucursales' ,{
+Ext.define('Infosys_web.view.notacredito.BuscarSucursalesglosa' ,{
     extend: 'Ext.window.Window',
-    alias : 'widget.buscarsucursalesclientesnotadebito',
+    alias : 'widget.buscarsucursalesclientesnotacreditoglosa',
     
     requires: ['Ext.toolbar.Paging'],
     title : 'Busqueda Sucursales',
@@ -66,7 +66,7 @@ Ext.define('Infosys_web.view.notadebito.BuscarSucursales' ,{
         },{
             xtype: 'button',
             margin: 5,
-            action: 'seleccionarsucursalcliente',
+            action: 'seleccionarsucursalclienteglosa',
             dock: 'bottom',
             text : 'Seleccionar'
         },

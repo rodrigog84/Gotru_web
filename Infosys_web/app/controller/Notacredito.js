@@ -29,6 +29,7 @@ Ext.define('Infosys_web.controller.Notacredito', {
             'notacredito.BuscarClientes',
             'notacredito.BuscarProductos',
             'notacredito.BuscarSucursales',
+            'notacredito.BuscarSucursalesglosa',
             'notacredito.BuscarFacturas',
             'notacredito.BuscarFacturas2',
             'notacredito.Exportar',
@@ -60,6 +61,9 @@ Ext.define('Infosys_web.controller.Notacredito', {
         ref: 'buscarsucursalesclientesnotacredito',
         selector: 'buscarsucursalesclientesnotacredito'
     },{
+        ref: 'buscarsucursalesclientesnotacreditoglosa',
+        selector: 'buscarsucursalesclientesnotacreditoglosa'
+    },{        
         ref: 'buscarfacturas',
         selector: 'buscarfacturas'
     },{
@@ -111,6 +115,11 @@ Ext.define('Infosys_web.controller.Notacredito', {
             'notacreditoingresar button[action=buscarsucursalnotacredito]': {
                 click: this.buscarsucursalnotacredito
             },
+
+            'notacreditoglosa button[action=buscarsucursalnotacredito]': {
+                click: this.buscarsucursalnotacreditoglosa
+            },
+
             'notacreditoingresar #tipodocumentoId': {
                 select: this.selectItemdocuemento
             },
@@ -155,6 +164,9 @@ Ext.define('Infosys_web.controller.Notacredito', {
             'buscarsucursalesclientesnotacredito button[action=seleccionarsucursalcliente]': {
                 click: this.seleccionarsucursalcliente
             },
+            'buscarsucursalesclientesnotacreditoglosa button[action=seleccionarsucursalclienteglosa]': {
+                click: this.seleccionarsucursalclienteglosa
+            },            
             'notacreditoingresar #tipocondpagoId': {
                 select: this.selecttipocondpago
             },
@@ -1244,6 +1256,26 @@ Ext.define('Infosys_web.controller.Notacredito', {
        
     },
 
+
+    seleccionarsucursalclienteglosa: function(){
+
+        var view = this.getBuscarsucursalesclientesnotacreditoglosa();
+        var viewIngresa = this.getNotacreditoglosa();
+        var grid  = view.down('grid');
+        if (grid.getSelectionModel().hasSelection()) {
+            var row = grid.getSelectionModel().getSelection()[0];
+            viewIngresa.down('#id_sucursalID').setValue(row.data.id);
+            viewIngresa.down('#direccionId').setValue(row.data.direccion);
+            viewIngresa.down('#tipoCiudadId').setValue(row.data.nombre_ciudad);
+            viewIngresa.down('#tipoComunaId').setValue(row.data.nombre_comuna);
+            view.close();
+        }else{
+            Ext.Msg.alert('Alerta', 'Selecciona un registro.');
+            return;
+        }
+       
+    },    
+
     buscar: function(){
 
         var view = this.getNotacreditobuscarclientes()
@@ -1260,7 +1292,7 @@ Ext.define('Infosys_web.controller.Notacredito', {
        var nombre = busca.down('#id_cliente').getValue();
        
        if (nombre){
-         var edit = Ext.create('Infosys_web.view.ventas.BuscarSucursales').show();
+         var edit = Ext.create('Infosys_web.view.notacredito.BuscarSucursales').show();
           var st = this.getSucursales_clientesStore();
           st.proxy.extraParams = {nombre : nombre};
           st.load();
@@ -1270,6 +1302,24 @@ Ext.define('Infosys_web.controller.Notacredito', {
        }
       
     },
+
+
+    buscarsucursalnotacreditoglosa: function(){
+
+       var busca = this.getNotacreditoglosa()
+       var nombre = busca.down('#id_cliente').getValue();
+       
+       if (nombre){
+         var edit = Ext.create('Infosys_web.view.notacredito.BuscarSucursalesglosa').show();
+          var st = this.getSucursales_clientesStore();
+          st.proxy.extraParams = {nombre : nombre};
+          st.load();
+       }else {
+          Ext.Msg.alert('Alerta', 'Debe seleccionar Cliente.');
+            return;
+       }
+      
+    },    
 
     seleccionarcliente: function(){
 

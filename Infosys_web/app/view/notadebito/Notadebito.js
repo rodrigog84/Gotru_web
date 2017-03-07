@@ -231,7 +231,7 @@ Ext.define('Infosys_web.view.notadebito.Notadebito', {
                                             maxHeight: 25,
                                             width: 70,
                                             allowBlank: true,
-                                            action: 'buscarsucursalnotacredito'
+                                            action: 'buscarsucursalnotadebito'
                                             //,disabled : true  
                                         },{xtype: 'splitter'},{
                                             xtype: 'textfield',

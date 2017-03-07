@@ -578,9 +578,8 @@ Ext.define('Infosys_web.controller.Notadebito', {
 
        var busca = this.getNotadebitoingresar()
        var nombre = busca.down('#id_cliente').getValue();
-       
        if (nombre){
-         var edit = Ext.create('Infosys_web.view.ventas.BuscarSucursales').show();
+         var edit = Ext.create('Infosys_web.view.notadebito.BuscarSucursales').show();
           var st = this.getSucursales_clientesStore();
           st.proxy.extraParams = {nombre : nombre};
           st.load();

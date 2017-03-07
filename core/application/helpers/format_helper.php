@@ -398,4 +398,20 @@ if (!function_exists('date2string'))
 
            
 
+if (!function_exists('permite_alfanumerico'))
+{
+
+  function permite_alfanumerico($string)
+  {
+
+
+    $conservar = '0-9a-z#, '; // juego de caracteres a conservar
+    $regex = sprintf('~[^%s]++~i', $conservar); // case insensitive
+    $string = preg_replace($regex, '', $string);
+ 
+    return $string;
+
+    
+  }
+}
       
