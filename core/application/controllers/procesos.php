@@ -254,6 +254,14 @@ class Procesos extends CI_Controller {
 
 	}	
 
+	public function get_contribuyentes(){
+
+		set_time_limit(0);
+		$this->load->model('facturaelectronica');
+		$this->facturaelectronica->get_contribuyentes();
+	}		
+	
+
 }
 
 
