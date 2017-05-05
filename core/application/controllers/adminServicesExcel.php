@@ -276,9 +276,9 @@ class AdminServicesExcel extends CI_Controller {
 
             foreach ($query2->result() as $z){
             if ($v->tipdocumento==102){
-            $netop = (round($z->totalproducto / 1.19)/ -1);
-            $ivap = (($z->totalproducto - $netop) /-1);
-            $totalproductop = ($z->totalproducto / -1);
+            $netop = (round($z->neto)/ -1);
+            $ivap = (($z->iva) /-1);
+            $totalproductop = (($z->neto + $z->iva) / -1);
             }else{
             $netop = (round($z->totalproducto / 1.19));
             $ivap = ($z->totalproducto - $netop);
