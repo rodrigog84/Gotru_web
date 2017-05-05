@@ -177,9 +177,9 @@ class AdminServicesExcel extends CI_Controller {
             $ciudad = $v->ciudad;
             $direccion = $v->direccion;
             if ($v->tipdocumento==102){
-                $neto = (round($v->totalfactura /1.19) / -1);
-                $iva = (($v->totalfactura - $neto) / -1);
-                $total = ($v->totalfactura / -1);                
+                $neto = (round($v->neto)/ -1);
+                $iva = (($v->iva) /-1);
+                $total = (($v->neto + $v->iva) / -1);               
             }else{
                 $neto = (round($v->totalfactura /1.19));
                 $iva = ($v->totalfactura - $neto);
