@@ -306,6 +306,7 @@ class Facturas extends CI_Controller {
 
 				// generar cada DTE y agregar su resumen al detalle del libro
 				foreach ($lista_facturas as $factura) {
+
 					$lineas_archivo = array(
 											$factura->tipo_caf,
 											$factura->folio,
@@ -313,7 +314,7 @@ class Facturas extends CI_Controller {
 											$factura->fecha_factura,
 											'',
 											$factura->rut,
-											substr(str_replace(",","",$factura->nombres),0,45),
+											substr(str_replace(",","",permite_alfanumerico($factura->nombres)),0,45),
 											$factura->tipo_caf == 34 ? $factura->neto : '',
 											$factura->tipo_caf == 34 ? '' : $factura->neto,
 											$factura->tipo_caf == 34 ? '' : $factura->iva,
@@ -322,8 +323,8 @@ class Facturas extends CI_Controller {
 											'',
 											$factura->totalfactura
 										);
-					fputcsv($fp, $lineas_archivo,";");
 
+					fputcsv($fp, $lineas_archivo,";");
 				}
 				fclose($fp);
 
@@ -676,14 +677,12 @@ exit;
 		$rut_consultante = explode("-",$rut);
 		$RutEnvia = $rut_consultante[0]."-".$rut_consultante[1];
 
-		$xml = $libro->xml_libro;
-
+		$xml = file_get_contents('./facturacion_electronica/libros/' . $libro->archivo);
+		//$xml = $libro->xml_libro;
 		$empresa = $this->facturaelectronica->get_empresa();
 		$RutEmisor = $empresa->rut."-".$empresa->dv; 
-
 		// enviar DTE
 		$result_envio = \sasco\LibreDTE\Sii::enviar($RutEnvia, $RutEmisor, $xml, $token);
-
 		// si hubo algún error al enviar al servidor mostrar
 		if ($result_envio===false) {
 		    foreach (\sasco\LibreDTE\Log::readAll() as $error){
