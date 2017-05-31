@@ -183,7 +183,7 @@ Ext.define('Infosys_web.controller.Tipo_movimientos', {
             values = form.getValues();
 
         var st = this.getTipo_movimientoStore();
-        var bodega = view.down('#nombreId').getValue()
+        //var bodega = view.down('#nombreId').getValue()
 
        
        
