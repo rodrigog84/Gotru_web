@@ -179,7 +179,7 @@ class LibroCompraVenta extends \sasco\LibreDTE\Sii\Base\Libro
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
      * @version 2015-12-29
      */
-    public function agregarComprasCSV($archivo, $separador = ';')
+     public function agregarComprasCSV($archivo, $separador = ';')
     {
         $data = \sasco\LibreDTE\CSV::read($archivo);
         $n_data = count($data);
@@ -191,19 +191,29 @@ class LibroCompraVenta extends \sasco\LibreDTE\Sii\Base\Libro
                 'NroDoc' => $data[$i][1],
                 'RUTDoc' => $data[$i][2],
                 'TasaImp' => !empty($data[$i][3]) ? $data[$i][3] : false,
-                'RznSoc' => !empty($data[$i][4]) ? $data[$i][4] : false,
-                'TpoImp' => !empty($data[$i][5]) ? $data[$i][5] : 1,
+                'RznSoc' => !empty($data[$i][4]) ? permite_alfanumerico($data[$i][4]) : false,
+                'TpoImp' => !empty($data[$i][5]) ? permite_alfanumerico($data[$i][5]) : 1,
                 'FchDoc' => $data[$i][6],
                 'Anulado' => !empty($data[$i][7]) ? $data[$i][7] : false,
                 'MntExe' => !empty($data[$i][8]) ? $data[$i][8] : false,
                 'MntNeto' => !empty($data[$i][9]) ? $data[$i][9] : false,
                 'MntIVA' => !empty($data[$i][10]) ? $data[$i][10] : 0,
+                'IVANoRec' => false, // 11 y 12
                 'IVAUsoComun' => !empty($data[$i][13]) ? $data[$i][13] : false,
-                'MntSinCred' => !empty($data[$i][19]) ? $data[$i][19] : false,
-                'MntActivoFijo' => !empty($data[$i][20]) ? $data[$i][20] : false,
-                'MntIVAActivoFijo' => !empty($data[$i][21]) ? $data[$i][21] : false,
-                'IVANoRetenido' => !empty($data[$i][22]) ? $data[$i][22] : false,
-                'CdgSIISucur' => !empty($data[$i][23]) ? $data[$i][23] : false,
+                'OtrosImp' => false, // 14 al 16
+                'MntSinCred' => !empty($data[$i][17]) ? $data[$i][17] : false,
+                'MntActivoFijo' => !empty($data[$i][18]) ? $data[$i][18] : false,
+                'MntIVAActivoFijo' => !empty($data[$i][19]) ? $data[$i][19] : false,
+                'IVANoRetenido' => !empty($data[$i][20]) ? $data[$i][20] : false,
+                'TabPuros' => !empty($data[$i][21]) ? $data[$i][21] : false,
+                'TabCigarrillos' => !empty($data[$i][22]) ? $data[$i][22] : false,
+                'TabElaborado' => !empty($data[$i][23]) ? $data[$i][23] : false,
+                'ImpVehiculo' => !empty($data[$i][24]) ? $data[$i][24] : false,
+                'CdgSIISucur' => !empty($data[$i][25]) ? $data[$i][25] : false,
+                'NumInt' => !empty($data[$i][26]) ? $data[$i][26] : false,
+                'Emisor' => !empty($data[$i][27]) ? $data[$i][27] : false,
+                //'MntTotal' => !empty($data[$i][28]) ? $data[$i][28] : false,
+                //'FctProp' => !empty($data[$i][29]) ? $data[$i][29] : false,
             ];
             // agregar código y monto de iva no recuperable si existe
             if (!empty($data[$i][11])) {
@@ -212,21 +222,21 @@ class LibroCompraVenta extends \sasco\LibreDTE\Sii\Base\Libro
                     'MntIVANoRec' => !empty($data[$i][12]) ? $data[$i][12] : round($detalle['MntNeto'] * ($detalle['TasaImp']/100)),
                 ];
             }
-            // si hay factor de proporcionalidad se agrega
-            if (!empty($data[$i][14])) {
-                $detalle['FctProp'] = $data[$i][14];
-            }
             // agregar código y monto de otros impuestos
-            if (!empty($data[$i][15]) and !empty($data[$i][16])) {
+            if (!empty($data[$i][14]) and (!empty($data[$i][15]) or !empty($data[$i][16]))) {
                 $detalle['OtrosImp'] = [
-                    'CodImp' => $data[$i][15],
-                    'TasaImp' => $data[$i][16],
-                    'MntImp' => !empty($data[$i][17]) ? $data[$i][17] : round($detalle['MntNeto'] * ($data[$i][16]/100)),
+                    'CodImp' => $data[$i][14],
+                    'TasaImp' => !empty($data[$i][15]) ? $data[$i][15] : 0,
+                    'MntImp' => !empty($data[$i][16]) ? $data[$i][16] : round($detalle['MntNeto'] * ($data[$i][15]/100)),
                 ];
             }
             // si hay monto total se agrega
-            if (!empty($data[$i][18])) {
-                $detalle['MntTotal'] = $data[$i][18];
+            if (!empty($data[$i][28])) {
+                $detalle['MntTotal'] = $data[$i][28];
+            }
+            // si hay factor de proporcionalidad se agrega
+            if (!empty($data[$i][29])) {
+                $detalle['FctProp'] = $data[$i][29];
             }
             // agregar a los detalles
             $this->agregar($detalle);
