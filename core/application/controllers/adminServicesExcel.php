@@ -1929,35 +1929,39 @@ class AdminServicesExcel extends CI_Controller {
             $this->load->database();
                  
             if($nombre){
-               $query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,
-                ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago FROM clientes acc
-                left join ciudad c on (acc.id_ciudad = c.id)
-                left join cod_activ_econ g on (acc.id_giro = g.id)
-                left join comuna com on (acc.id_comuna = com.id)
-                left join vendedores ven on (acc.id_vendedor = ven.id)
-                left join cond_pago con on (acc.id_pago = con.id)
-                WHERE acc.nombres like "%'.$nombres.'%"');
+                    $query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,rep.nombre as nom_repartidor, cob.nombre as nom_cobrador,ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago, tip.descripcion as nom_tiponegocio FROM clientes acc
+                    left join ciudad c on (acc.id_ciudad = c.id)
+                    left join cod_activ_econ g on (acc.id_giro = g.codigo)
+                    left join comuna com on (acc.id_comuna = com.id)
+                    left join vendedores ven on (acc.id_vendedor = ven.id)
+                    left join cond_pago con on (acc.id_pago = con.id)
+                    left join repartidor rep on (acc.id_repartidor = rep.id)
+                    left join cobradores cob on (acc.id_cobrador = cob.id)
+                    left join tiponegocio tip on (acc.id_tiponegocio = tip.id)
+                    WHERE acc.nombres like "%'.$nombres.'%"');
 
         
                 }else if($tipo) {
-              $query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,
-                ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago FROM clientes acc
-                left join ciudad c on (acc.id_ciudad = c.id)
-                left join cod_activ_econ g on (acc.id_giro = g.id)
-                left join comuna com on (acc.id_comuna = com.id)
-                left join vendedores ven on (acc.id_vendedor = ven.id)
-                left join cond_pago con on (acc.id_pago = con.id)
-                WHERE estado ='.$tipo);
-                } 
-                else
-                {
-                $query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,
-                ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago FROM clientes acc
-                left join ciudad c on (acc.id_ciudad = c.id)
-                left join cod_activ_econ g on (acc.id_giro = g.id)
-                left join comuna com on (acc.id_comuna = com.id)
-                left join vendedores ven on (acc.id_vendedor = ven.id)
-                left join cond_pago con on (acc.id_pago = con.id)');
+                    $query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,rep.nombre as nom_repartidor, cob.nombre as nom_cobrador,ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago, tip.descripcion as nom_tiponegocio FROM clientes acc
+                    left join ciudad c on (acc.id_ciudad = c.id)
+                    left join cod_activ_econ g on (acc.id_giro = g.codigo)
+                    left join comuna com on (acc.id_comuna = com.id)
+                    left join vendedores ven on (acc.id_vendedor = ven.id)
+                    left join cond_pago con on (acc.id_pago = con.id)
+                    left join repartidor rep on (acc.id_repartidor = rep.id)
+                    left join cobradores cob on (acc.id_cobrador = cob.id)
+                    left join tiponegocio tip on (acc.id_tiponegocio = tip.id)
+                    WHERE estado ='.$tipo);
+                }else{
+                    $query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,rep.nombre as nom_repartidor, cob.nombre as nom_cobrador,ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago, tip.descripcion as nom_tiponegocio FROM clientes acc
+                    left join ciudad c on (acc.id_ciudad = c.id)
+                    left join cod_activ_econ g on (acc.id_giro = g.codigo)
+                    left join comuna com on (acc.id_comuna = com.id)
+                    left join vendedores ven on (acc.id_vendedor = ven.id)
+                    left join cond_pago con on (acc.id_pago = con.id)
+                    left join repartidor rep on (acc.id_repartidor = rep.id)
+                    left join cobradores cob on (acc.id_cobrador = cob.id)
+                    left join tiponegocio tip on (acc.id_tiponegocio = tip.id)');
           }
             
                  
@@ -2013,13 +2017,21 @@ class AdminServicesExcel extends CI_Controller {
                 if (in_array("imp_adicional", $columnas)):
                      echo "<td>IMP. ADICIONAL</td>";
                 endif;
+                if (in_array("nom_cobrador", $columnas)):
+                     echo "<td>COBRADOR</td>";
+                endif;
+                if (in_array("nom_repartidor", $columnas)):
+                     echo "<td>REPARTIDOR</td>";
+                endif;
+                if (in_array("nom_tiponegocio", $columnas)):
+                     echo "<td>TIPO NEGOCIO</td>";
+                endif;
             
                 foreach($users as $v){
                  echo "<tr>";
                     if (in_array("id", $columnas)) :
                         echo "<td>".$v['id']."</td>";
-                    endif;
-                  
+                    endif;                  
                     if (in_array("rut", $columnas)):
                         echo "<td>".$v['rut']."</td>";
                     endif;
@@ -2058,6 +2070,15 @@ class AdminServicesExcel extends CI_Controller {
                     endif;
                     if (in_array("imp_adicional", $columnas)):
                         echo "<td>".$v['imp_adicional']."</td>";
+                    endif;
+                    if (in_array("nom_cobrador", $columnas)):
+                        echo "<td>".$v['nom_cobrador']."</td>";
+                    endif;
+                    if (in_array("nom_repartidor", $columnas)):
+                        echo "<td>".$v['nom_repartidor']."</td>";
+                    endif;
+                    if (in_array("nom_tiponegocio", $columnas)):
+                        echo "<td>".$v['nom_tiponegocio']."</td>";
                     endif;
 
                  }

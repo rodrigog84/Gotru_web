@@ -265,13 +265,15 @@ class Clientes extends CI_Controller {
 		$tipo = $this->input->get('fTipo');
 		$opcion = $this->input->get('opcion');
 
-		$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,
-		ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago FROM clientes acc
+		$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,rep.nombre as nom_repartidor, cob.nombre as nom_cobrador,ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago, tip.descripcion as nom_tiponegocio FROM clientes acc
 		left join ciudad c on (acc.id_ciudad = c.id)
 		left join cod_activ_econ g on (acc.id_giro = g.codigo)
 		left join comuna com on (acc.id_comuna = com.id)
 		left join vendedores ven on (acc.id_vendedor = ven.id)
-		left join cond_pago con on (acc.id_pago = con.id) 
+		left join cond_pago con on (acc.id_pago = con.id)
+		left join repartidor rep on (acc.id_repartidor = rep.id)
+		left join cobradores cob on (acc.id_cobrador = cob.id)
+		left join tiponegocio tip on (acc.id_tiponegocio = tip.id) 
 		WHERE acc.tipo = 1 or acc.tipo = 3' );
 
 		$total = 0;
@@ -288,13 +290,15 @@ class Clientes extends CI_Controller {
 		//$countAll = $this->db->count_all_results("clientes");
         
 		if($opcion == "Rut"){
-			$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,
-			ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago FROM clientes acc
+			$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,rep.nombre as nom_repartidor, cob.nombre as nom_cobrador,ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago, tip.descripcion as nom_tiponegocio FROM clientes acc
 			left join ciudad c on (acc.id_ciudad = c.id)
 			left join cod_activ_econ g on (acc.id_giro = g.codigo)
 			left join comuna com on (acc.id_comuna = com.id)
 			left join vendedores ven on (acc.id_vendedor = ven.id)
 			left join cond_pago con on (acc.id_pago = con.id)
+			left join repartidor rep on (acc.id_repartidor = rep.id)
+			left join cobradores cob on (acc.id_cobrador = cob.id)
+			left join tiponegocio tip on (acc.id_tiponegocio = tip.id)			
 			WHERE acc.rut = "'.$nombres.'" AND acc.tipo = 1 OR acc.rut = "'.$nombres.'" AND acc.tipo = 3  ');
 
 			$total = 0;
@@ -318,13 +322,15 @@ class Clientes extends CI_Controller {
 	        	$sql_nombre .= "acc.nombres like '%".$nombre."%' and ";
 	        }
 
-	         $query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,
-			ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago FROM clientes acc
+	         $query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,rep.nombre as nom_repartidor, cob.nombre as nom_cobrador,ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago, tip.descripcion as nom_tiponegocio FROM clientes acc
 			left join ciudad c on (acc.id_ciudad = c.id)
 			left join cod_activ_econ g on (acc.id_giro = g.codigo)
 			left join comuna com on (acc.id_comuna = com.id)
 			left join vendedores ven on (acc.id_vendedor = ven.id)
 			left join cond_pago con on (acc.id_pago = con.id)
+			left join repartidor rep on (acc.id_repartidor = rep.id)
+			left join cobradores cob on (acc.id_cobrador = cob.id)
+			left join tiponegocio tip on (acc.id_tiponegocio = tip.id)
 			WHERE ' . $sql_nombre . ' 1 = 1');
 
 			foreach ($query->result() as $row)		    
@@ -336,13 +342,15 @@ class Clientes extends CI_Controller {
 
 			$countAll = $total;
 	        
-			$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,
-			ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago FROM clientes acc
+			$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,rep.nombre as nom_repartidor, cob.nombre as nom_cobrador,ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago, tip.descripcion as nom_tiponegocio FROM clientes acc
 			left join ciudad c on (acc.id_ciudad = c.id)
 			left join cod_activ_econ g on (acc.id_giro = g.codigo)
 			left join comuna com on (acc.id_comuna = com.id)
 			left join vendedores ven on (acc.id_vendedor = ven.id)
 			left join cond_pago con on (acc.id_pago = con.id)
+			left join repartidor rep on (acc.id_repartidor = rep.id)
+			left join cobradores cob on (acc.id_cobrador = cob.id)
+			left join tiponegocio tip on (acc.id_tiponegocio = tip.id)
 			WHERE ' . $sql_nombre . ' 1 = 1
 			limit '.$start.', '.$limit.'');
 					
@@ -358,13 +366,15 @@ class Clientes extends CI_Controller {
 
 	        $total = 0;
 
-	        $query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,
-			ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago FROM clientes acc
+	        $query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,rep.nombre as nom_repartidor, cob.nombre as nom_cobrador,ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago, tip.descripcion as nom_tiponegocio FROM clientes acc
 			left join ciudad c on (acc.id_ciudad = c.id)
 			left join cod_activ_econ g on (acc.id_giro = g.codigo)
 			left join comuna com on (acc.id_comuna = com.id)
 			left join vendedores ven on (acc.id_vendedor = ven.id)
 			left join cond_pago con on (acc.id_pago = con.id)
+			left join repartidor rep on (acc.id_repartidor = rep.id)
+			left join cobradores cob on (acc.id_cobrador = cob.id)
+			left join tiponegocio tip on (acc.id_tiponegocio = tip.id)
 			WHERE ' . $sql_nombre . ' 1 = 1');
 
 			foreach ($query->result() as $row)		    
@@ -375,39 +385,86 @@ class Clientes extends CI_Controller {
 			$countAll = $total;
 			
 	        
-			$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,
-			ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago FROM clientes acc
+			$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,rep.nombre as nom_repartidor, cob.nombre as nom_cobrador,ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago, tip.descripcion as nom_tiponegocio FROM clientes acc
 			left join ciudad c on (acc.id_ciudad = c.id)
 			left join cod_activ_econ g on (acc.id_giro = g.codigo)
 			left join comuna com on (acc.id_comuna = com.id)
 			left join vendedores ven on (acc.id_vendedor = ven.id)
 			left join cond_pago con on (acc.id_pago = con.id)
+			left join repartidor rep on (acc.id_repartidor = rep.id)
+			left join cobradores cob on (acc.id_cobrador = cob.id)
+			left join tiponegocio tip on (acc.id_tiponegocio = tip.id)
 			WHERE ' . $sql_nombre . ' 1 = 1
 			limit '.$start.', '.$limit.'');
 
 		 
 		
 		}else if($opcion == "Todos"){
-			$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,
-			ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago FROM clientes acc
+
+			$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,rep.nombre as nom_repartidor, cob.nombre as nom_cobrador,ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago, tip.descripcion as nom_tiponegocio FROM clientes acc
 			left join ciudad c on (acc.id_ciudad = c.id)
 			left join cod_activ_econ g on (acc.id_giro = g.codigo)
 			left join comuna com on (acc.id_comuna = com.id)
 			left join vendedores ven on (acc.id_vendedor = ven.id)
-			left join cond_pago con on (acc.id_pago = con.id) 
+			left join cond_pago con on (acc.id_pago = con.id)
+			left join repartidor rep on (acc.id_repartidor = rep.id)
+			left join cobradores cob on (acc.id_cobrador = cob.id)
+			left join tiponegocio tip on (acc.id_tiponegocio = tip.id) 
+			WHERE acc.tipo = 1 or acc.tipo = 3
+			order by acc.nombres asc'
+			);
+
+			foreach ($query->result() as $row)		    
+			{
+			$total = $total +1;		
+			}
+			
+			$countAll = $total;
+
+			$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,rep.nombre as nom_repartidor, cob.nombre as nom_cobrador,ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago, tip.descripcion as nom_tiponegocio FROM clientes acc
+			left join ciudad c on (acc.id_ciudad = c.id)
+			left join cod_activ_econ g on (acc.id_giro = g.codigo)
+			left join comuna com on (acc.id_comuna = com.id)
+			left join vendedores ven on (acc.id_vendedor = ven.id)
+			left join cond_pago con on (acc.id_pago = con.id)
+			left join repartidor rep on (acc.id_repartidor = rep.id)
+			left join cobradores cob on (acc.id_cobrador = cob.id)
+			left join tiponegocio tip on (acc.id_tiponegocio = tip.id) 
 			WHERE acc.tipo = 1 or acc.tipo = 3
 			order by acc.nombres asc
             limit '.$start.', '.$limit.'
             '
 			);
 		}else{
-			$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,
-			ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago FROM clientes acc
+			$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,rep.nombre as nom_repartidor, cob.nombre as nom_cobrador,ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago, tip.descripcion as nom_tiponegocio FROM clientes acc
 			left join ciudad c on (acc.id_ciudad = c.id)
 			left join cod_activ_econ g on (acc.id_giro = g.codigo)
 			left join comuna com on (acc.id_comuna = com.id)
 			left join vendedores ven on (acc.id_vendedor = ven.id)
-			left join cond_pago con on (acc.id_pago = con.id) 
+			left join cond_pago con on (acc.id_pago = con.id)
+			left join repartidor rep on (acc.id_repartidor = rep.id)
+			left join cobradores cob on (acc.id_cobrador = cob.id)
+			left join tiponegocio tip on (acc.id_tiponegocio = tip.id) 
+			WHERE acc.tipo = 1 or acc.tipo = 3
+			order by acc.nombres asc'
+			);
+
+			foreach ($query->result() as $row)		    
+			{
+			$total = $total +1;		
+			}
+			
+			$countAll = $total;
+
+			$query = $this->db->query('SELECT acc.*, c.nombre as nombre_ciudad, com.nombre as nombre_comuna,rep.nombre as nom_repartidor, cob.nombre as nom_cobrador,ven.nombre as nombre_vendedor, g.nombre as giro, con.nombre as nom_id_pago, tip.descripcion as nom_tiponegocio FROM clientes acc
+			left join ciudad c on (acc.id_ciudad = c.id)
+			left join cod_activ_econ g on (acc.id_giro = g.codigo)
+			left join comuna com on (acc.id_comuna = com.id)
+			left join vendedores ven on (acc.id_vendedor = ven.id)
+			left join cond_pago con on (acc.id_pago = con.id)
+			left join repartidor rep on (acc.id_repartidor = rep.id)
+			left join cobradores cob on (acc.id_cobrador = cob.id)
+			left join tiponegocio tip on (acc.id_tiponegocio = tip.id) 
 			WHERE acc.tipo = 1 or acc.tipo = 3
 			order by acc.nombres asc
             limit '.$start.', '.$limit.''
