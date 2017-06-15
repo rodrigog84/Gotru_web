@@ -77,8 +77,7 @@ class Agrupaciones extends CI_Controller {
 		}else{
 			$query = $this->db->query('SELECT agg.*, fa.nombre as nom_familia, sb.nombre as nom_subfamilia FROM agrupacion agg
 			left join familias fa on (agg.id_familia = fa.id)
-			left join subfamilias sb on (agg.id_subfamilia = sb.id)
- 			limit '.$start.', '.$limit.'');
+			left join subfamilias sb on (agg.id_subfamilia = sb.id)');
 		}
 
 		$data = array();

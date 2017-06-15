@@ -64,10 +64,9 @@ class Familias extends CI_Controller {
 		$countAll = $this->db->count_all_results("familias");
 
 		if($nombre){
-			$query = $this->db->query('SELECT * FROM familias WHERE nombre like "%'.$nombre.'%" 
-			limit '.$start.', '.$limit.'');
+			$query = $this->db->query('SELECT * FROM familias WHERE nombre like "%'.$nombre.'%" ');
 		}else{
-			$query = $this->db->query('SELECT * FROM familias limit '.$start.', '.$limit.'');
+			$query = $this->db->query('SELECT * FROM familias ');
 		}
 
 		$data = array();
