@@ -31,6 +31,10 @@ Ext.define('Infosys_web.controller.Facturacion', {
              'ventas.Exportar',
              'ventas.Exportartxt',
              'ventas.Observaciones',
+             'ventas.ResumenVentas',
+             'ventas.EstadisticasVentas',
+             'ventas.InformeStock',
+             'ventas.VerDetalleProductoStock',             
              'notacredito.Principal',
              'facturaelectronica.CargaCertificadoDigital',
              'facturaelectronica.CargaManualCaf',
@@ -144,6 +148,21 @@ Ext.define('Infosys_web.controller.Facturacion', {
                 click: this.mejemplo
             },
 
+
+
+            'topmenus menuitem[action=resumenventas]': {
+                click: this.resumenventas
+            },
+
+            'topmenus menuitem[action=estadisticasventas]': {
+                click: this.estadisticasventas
+            },
+
+            'topmenus menuitem[action=informestock]': {
+                click: this.informestock
+            },
+
+
             'topmenus menuitem[action=mregempresa]': {
                 click: this.mregempresa
             }, 
@@ -202,6 +221,26 @@ Ext.define('Infosys_web.controller.Facturacion', {
             'facturasprincipal button[action=cerrarfactura]': {
                 click: this.cerrarfactura
             },
+
+            'resumenventas button[action=cerrarfactura]': {
+                click: this.cerrarfactura
+            },
+
+            'informestock button[action=cerrarfactura]': {
+                click: this.cerrarfactura
+            },
+
+
+            'estadisticasventas button[action=cerrarfactura]': {
+                click: this.cerrarfactura
+            },
+
+
+            'informestock': {
+                verDetalleProductoStock: this.verDetalleProductoStock
+            },     
+
+
             'facturasprincipal button[action=generarfacturapdf]': {
                 click: this.generarfacturapdf
             },
@@ -1370,6 +1409,34 @@ cargar_listado_contribuyentes: function(){
         viewport.add({xtype: 'facturasprincipal'});
     },
 
+
+
+    resumenventas: function(){
+//
+        var viewport = this.getPanelprincipal();
+        viewport.removeAll();
+        viewport.add({xtype: 'resumenventas'});
+        
+    },  
+    
+    informestock: function(){
+//
+        var viewport = this.getPanelprincipal();
+        viewport.removeAll();
+        viewport.add({xtype: 'informestock'});
+        
+    },  
+
+
+
+    estadisticasventas: function(){
+//
+        var viewport = this.getPanelprincipal();
+        viewport.removeAll();
+        viewport.add({xtype: 'estadisticasventas'});
+        
+    },     
+
     buscarvendedor: function(){
         Ext.create('Infosys_web.view.vendedores.BuscarVendedor').show();
     },
@@ -1476,6 +1543,11 @@ cargar_listado_contribuyentes: function(){
                                 opcion : opcion}
         st.load();
     },
+
+    verDetalleProductoStock: function(r){
+          Ext.create('Infosys_web.view.ventas.VerDetalleProductoStock', {id_producto: r.data.id});            
+
+    },        
   
 });
 
