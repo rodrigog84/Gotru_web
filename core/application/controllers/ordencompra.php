@@ -1170,9 +1170,11 @@ class Ordencompra extends CI_Controller {
 		$neto = $this->input->post('neto');
 		$iva = $this->input->post('iva');
 		$total = $this->input->post('total');
+		$desc = $this->input->post('desc');
 		$fecharecepcion = $this->input->post('fecharecepcion');
 		$fecha = $this->input->post('fecha');
 		$descuento = $this->input->post('descuento');
+		$desc = $this->input->post('desc');
 		$afecto = $this->input->post('afecto');		
 		$emitida = "SI";
 		$semi = "NO";
@@ -1237,9 +1239,18 @@ class Ordencompra extends CI_Controller {
 
 		$this->db->insert('ordencompra_original', $orden_compra2); 
 		$idordencompra = $this->db->insert_id();
+		$dcto3=0;
 
 		foreach($items as $v){
 
+			if($desc){
+				$dcto3 = (($v->neto * $desc) /100);
+				$v->neto = (($v->neto) - $dcto3);
+				$v->iva = (($v->neto * 19) /100);
+				$v->total = ($v->neto + $v->iva);			
+			}
+
+			
 			$orden_compra_item = array(
 
 		        'id_producto' => $v->id_producto,
@@ -1249,11 +1260,13 @@ class Ordencompra extends CI_Controller {
 		        'cant_medida' => $v->cant_medida,
 		        'total' => $v->total,
 		        'descuento' => $v->dcto,
+		        'descuento2' => $v->dcto2,
+		        'descuento3' => $dcto3,
 		        'afecto' => $v->neto,
 		        'total' => $v->total,
 		        'neto' => $v->neto,
 		        'iva' => $v->iva,
-		        'valor_prom' => $v->precio
+		        'valor_prom' => (($v->precio - ($v->dcto + $v->dcto2 + $dcto3 ))/ $v->cantidad) 
 
 			);
 
@@ -1268,6 +1281,8 @@ class Ordencompra extends CI_Controller {
 		        'cant_medida' => $v->cant_medida,
 		        'total' => $v->total,
 		        'descuento' => $v->dcto,
+		        'descuento2' => $v->dcto2,
+		        'descuento3' => $dcto3,
 		        'afecto' => $v->neto,
 		        'total' => $v->total,
 		        'neto' => $v->neto,
@@ -1426,8 +1441,8 @@ class Ordencompra extends CI_Controller {
 			$html .= '<tr>
 			<td style="text-align:right">'.number_format($v->cantidad,0,'.',',').'&nbsp;&nbsp;</td>			
 			<td style="text-align:left">'.$producto->nombre.'</td>			
-			<td align="right">$ '.number_format($v->neto, 0, '.', ',').'</td>
-			<td align="right">$ '.number_format($v->neto - ($v->descuento/$v->cantidad), 0, '.', ',').'</td>
+			<td align="right">$ '.number_format(($v->precio / $v->cantidad) , 0, '.', ',').'</td>
+			<td align="right">$ '.number_format(($v->neto - ($v->descuento + $v->descuento2)/$v->cantidad), 0, '.', ',').'</td>
 
 			<td align="right">$ '.number_format($v->total, 0, '.', ',').'</td>
 			</tr>';
@@ -2229,6 +2244,7 @@ class Ordencompra extends CI_Controller {
 		      </tr>';
 		$descripciones = '';
 		$i = 0;
+		$descuentof = 0;
 		foreach($items->result() as $v){
 			//$i = 0;
 			//while($i < 30){
@@ -2244,14 +2260,16 @@ class Ordencompra extends CI_Controller {
 			//$descuento = $descuento + $v->descuento;
 			$iva = $neto + $v->iva;
 			$total = $total + $v->total;
+			$descuento = ($v->descuento + $v->descuento2 +$v->descuento3);
+			$descuentof = ($descuentof + $descuento);
 
 
 
 			$html .= '<tr>
 			<td style="text-align:right">'.number_format($v->cantidad,0,'.',',').'&nbsp;&nbsp;</td>			
 			<td style="text-align:left">'.$producto->nombre.'</td>			
-			<td align="right">$ '.number_format($v->neto, 0, '.', ',').'</td>
-			<td align="right">$ '.number_format($v->neto - ($v->descuento/$v->cantidad), 0, '.', ',').'</td>
+			<td align="right">$ '.number_format($v->precio, 0, '.', ',').'</td>
+			<td align="right">$ '.number_format((($v->neto )/$v->cantidad), 0, '.', ',').'</td>
 
 			<td align="right">$ '.number_format($v->total, 0, '.', ',').'</td>
 			</tr>';
@@ -2281,7 +2299,7 @@ class Ordencompra extends CI_Controller {
 				<table width="296px" border="0">
 					<tr>
 						<td width="150px" style="font-size: 20px;text-align:left;">Afecto</td>
-						<td width="146px" style="text-align:right;">$ '. number_format($neto, 0, '.', ',') .'</td>
+						<td width="146px" style="text-align:right;">$ '. number_format($neto + $descuentof, 0, '.', ',') .'</td>
 					</tr>
 				</table>
 		  	</td>
@@ -2291,7 +2309,7 @@ class Ordencompra extends CI_Controller {
 				<table width="296px" border="0">
 					<tr>
 						<td width="150px" style="font-size: 20px;text-align:left;">Descuento</td>
-						<td width="146px" style="text-align:right;">$ '. number_format($row->descuento, 0, ',', '.') .'</td>
+						<td width="146px" style="text-align:right;">$ '. number_format($descuentof, 0, ',', '.') .'</td>
 					</tr>
 				</table>
 		  	</td>		  
@@ -2311,7 +2329,7 @@ class Ordencompra extends CI_Controller {
 				<table width="296px" border="0">
 					<tr>
 						<td width="150px" style="font-size: 20px;text-align:left;">IVA</td>
-						<td width="146px" style="text-align:right;">$ '.number_format($iva, 0, '.', ',').'</td>
+	<td width="146px" style="text-align:right;">$ '.number_format((($afecto * 19)/100), 0, '.', ',').'</td>
 					</tr>
 				</table>
 		  	</td>		  

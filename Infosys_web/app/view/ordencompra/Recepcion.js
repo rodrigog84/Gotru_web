@@ -287,9 +287,7 @@ Ext.define('Infosys_web.view.ordencompra.Recepcion', {
                         listeners : {
                             checkchange : function(column, recordIndex, checked) {
                                 var store = this.up('ordencomprarecepcion').down('#itemsgridId').getStore()
-                                var record = store.getAt(recordIndex);
-
-                                
+                                var record = store.getAt(recordIndex);                                
                                 if(checked){
                                     record.set({stock: record.get('cantidad')})
                                     if((record.get('total'))>0 && (record.get('cantidad'))>0){

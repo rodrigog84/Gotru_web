@@ -14,6 +14,7 @@ Ext.define('Infosys_web.model.ordencompra.Item', {
         {name: 'neto'},
         {name: 'totaliva'},
         {name: 'dcto'},
+        {name: 'dcto2'},
     	{name: 'descripcion'},
     	{name: 'requisitos'},
     	{name: 'cantidad', decimalPrecision:3},
