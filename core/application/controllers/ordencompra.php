@@ -80,6 +80,7 @@ class Ordencompra extends CI_Controller {
 			$item->cantidad = $item->cantidad;
 			$item->id_producto = $item->id_producto;
 			$item->dcto = $item->descuento;	
+			$item->dcto2 = $item->descuento2;	
 			$data[] = $item;
 		}
 	     	
@@ -1069,6 +1070,7 @@ class Ordencompra extends CI_Controller {
 		$iva = $this->input->post('iva');
 		$total = $this->input->post('total');
 		$descuento = $this->input->post('descuento');
+		$iddescuento = $this->input->post('iddescuento');
 		$semi = "NO";
         $emitida = "SI";
 				
@@ -1089,7 +1091,8 @@ class Ordencompra extends CI_Controller {
 				'fecha' => $fecha,
 				'fecha_recepcion' => $fecharecepcion,
 				'emitida' => $emitida,
-				'semicumplida' => $semi
+				'semicumplida' => $semi,
+				'id_descuento' => $iddescuento
 		);
 
 		$this->db->where('id', $idorden);
@@ -1107,7 +1110,8 @@ class Ordencompra extends CI_Controller {
 	        'total' => $total,
 			'fecha' => $fecha,
 			'fecha_recepcion' => $fecharecepcion,
-			'emitida' => $emitida			
+			'emitida' => $emitida,
+			'id_descuento' => $iddescuento			
 		);
 
 		$this->db->where('id', $idorden);
@@ -1119,10 +1123,13 @@ class Ordencompra extends CI_Controller {
 			$orden_compra_item = array(
 				'id_producto' => $v->id_producto,
 		        'id_ordencompra' => $idorden,
+		        'id_descuento' => $v->id_descuento,
+		        'id_descuento2' => $v->id_descuento2,
 		        'subtotal' => $v->precio,
 		        'cantidad' => $v->cantidad,
 		        'total' => $v->total,
 		        'descuento' => $v->dcto,
+		        'descuento2' => $v->dcto2,
 		        'afecto' => $v->neto,
 		        'total' => $v->total,
 		        'neto' => $v->neto,
@@ -1136,11 +1143,14 @@ class Ordencompra extends CI_Controller {
 
 		        'id_producto' => $v->id_producto,
 		        'id_ordencompra' => $idorden,
+		        'id_descuento' => $v->id_descuento,
+		        'id_descuento2' => $v->id_descuento2,
 		        'precio' => $v->precio,
 		        'cantidad' => $v->cantidad,
 		        'cant_medida' => $v->cant_medida,
 		        'total' => $v->total,
 		        'descuento' => $v->dcto,
+		        'descuento2' => $v->dcto2,
 		        'afecto' => $v->neto,
 		        'total' => $v->total,
 		        'neto' => $v->neto,
@@ -1175,7 +1185,8 @@ class Ordencompra extends CI_Controller {
 		$fecha = $this->input->post('fecha');
 		$descuento = $this->input->post('descuento');
 		$desc = $this->input->post('desc');
-		$afecto = $this->input->post('afecto');		
+		$afecto = $this->input->post('afecto');
+		$iddescuento = $this->input->post('iddescuento');		
 		$emitida = "SI";
 		$semi = "NO";
 		$orden = 4;
@@ -1214,7 +1225,8 @@ class Ordencompra extends CI_Controller {
 			'emitida' => $emitida,
 			'semicumplida' => $semi,
 			'cumplida' => $semi,
-			'incumplida' => $semi
+			'incumplida' => $semi,
+			'id_descuento' => $iddescuento		
 		);
 
 
@@ -1234,7 +1246,8 @@ class Ordencompra extends CI_Controller {
 	        'total' => $total,
 			'fecha' => $fecha,
 			'fecha_recepcion' => $fecharecepcion,
-			'emitida' => $emitida			
+			'emitida' => $emitida,
+			'id_descuento' => $iddescuento				
 		);
 
 		$this->db->insert('ordencompra_original', $orden_compra2); 
@@ -1255,6 +1268,8 @@ class Ordencompra extends CI_Controller {
 
 		        'id_producto' => $v->id_producto,
 		        'id_ordencompra' => $idordencompra,
+		        'id_descuento' => $v->id_descuento,
+		        'id_descuento2' => $v->id_descuento2,
 		        'subtotal' => $v->precio,
 		        'cantidad' => $v->cantidad,
 		        'cant_medida' => $v->cant_medida,
@@ -1276,6 +1291,8 @@ class Ordencompra extends CI_Controller {
 
 		        'id_producto' => $v->id_producto,
 		        'id_ordencompra' => $idordencompra,
+		        'id_descuento' => $v->id_descuento,
+		        'id_descuento2' => $v->id_descuento2,
 		        'precio' => $v->precio,
 		        'cantidad' => $v->cantidad,
 		        'cant_medida' => $v->cant_medida,

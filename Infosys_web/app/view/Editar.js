@@ -1,11 +1,11 @@
-Ext.define('Infosys_web.view.ordencompra.Ingresar', {
+Ext.define('Infosys_web.view.ordencompra.Editar', {
     extend: 'Ext.window.Window',
-    alias : 'widget.ordencompraingresar',
+    alias : 'widget.ordencompraeditar',
 
     requires: ['Ext.form.Panel','Ext.form.field.Text',
                'Ext.grid.plugin.CellEditing'],
 
-    title : 'Crear Orden de Compra',
+    title : 'Editar Orden de Compra',
     layout: 'fit',
     autoShow: true,
     height: 660,
@@ -58,31 +58,25 @@ Ext.define('Infosys_web.view.ordencompra.Ingresar', {
                                 name : 'idproveedor',
                                 itemId: 'idproveedor',
                                 hidden: true
-                            },    
-                            {
+                            },{
+                                xtype: 'textfield',
+                                name : 'idId',
+                                itemId: 'idId',
+                                hidden: true
+                            },{
                                 xtype: 'fieldcontainer',
                                 layout: 'hbox',
                                 items: [{
-                                    xtype: 'button',
-                                    iconCls: 'icon-search',
-                                    text: 'Buscar Proveedor',
-                                    width: 250,
-                                    allowBlank: true,
-                                    action: 'wbuscarproveedor2'
-                                },{
-                                    xtype: 'displayfield',
-                                    width: 265                                          
-                                },{xtype: 'splitter'},{
+                                    msgTarget: 'side',
+                                    fieldLabel: 'Numero',
                                     xtype: 'textfield',
-                                    width: 155,
-                                    labelWidth: 40,
-                                    fieldLabel: 'Rut',
-                                    name : 'rut',
-                                    itemId: 'rutId',
-                                    readOnly : true                                  
+                                    width: 240,
+                                    name : 'numorden',
+                                    itemId: 'num_ordenId',
+                                    readOnly : true  
                                 },{
                                     xtype: 'displayfield',
-                                    width: 40                                          
+                                    width: 190                                          
                                 },{
                                     xtype: 'datefield',
                                     fieldCls: 'required',
@@ -113,13 +107,23 @@ Ext.define('Infosys_web.view.ordencompra.Ingresar', {
                                 xtype: 'fieldcontainer',
                                 layout: 'hbox',
                                 items: [{
+                                    msgTarget: 'side',
                                     fieldLabel: 'Nombre Empresa',
                                     xtype: 'textfield',
-                                    width: 795,
-                                    labelWidth: 120,
+                                    width: 895,
                                     name : 'nombres',
                                     itemId: 'nombreId',
                                     readOnly : true
+                                   
+                                },{
+                                    msgTarget: 'side',
+                                    fieldLabel: 'Rut',
+                                    xtype: 'textfield',
+                                    width: 895,
+                                    name : 'rut',
+                                    itemId: 'rutId',
+                                    readOnly : true,
+                                    hidden: true
                                    
                                 }
                                 ]
@@ -129,36 +133,32 @@ Ext.define('Infosys_web.view.ordencompra.Ingresar', {
                                 layout: 'hbox',
                                 items: [{
                                     xtype: 'textfield',
-                                    width: 795,
-                                    labelWidth: 120,
+                                    width: 895,
                                     name : 'direccion',
                                     itemId: 'direccionId',
                                     fieldLabel: 'Direccion Empresa',
                                     readOnly : true
-                                },{
-                                    xtype: 'displayfield',
-                                    width: 20                                          
-                                },{
-                                    xtype: 'textfield',
-                                    width: 395,
-                                    labelWidth: 40,
-                                    name : 'nom_giro',
-                                    itemId: 'nom_giroId',
-                                    fieldLabel: 'Giro',
-                                    readOnly : true
-                                },{
-                                    xtype: 'textfield',
-                                    width: 295,
-                                    name : 'id_giro',
-                                    itemId: 'giroId',
-                                    fieldLabel: 'Giro',
-                                    hidden: true
                                 }]
                             },
                             {
                                 xtype: 'fieldcontainer',
                                 layout: 'hbox',
                                 items: [{
+                                xtype: 'textfield',
+                                name : 'id_giro',
+                                itemId: 'giroId',
+                                hidden: true
+                                },
+                                {
+                                    xtype: 'textfield',
+                                    width: 450,
+                                    name : 'nom_giro',
+                                    itemId: 'nom_giroId',
+                                    fieldLabel: 'Giro Empresa',
+                                    readOnly : true
+                                },
+                                    {xtype: 'splitter'},
+                                {
                                     xtype: 'textfield',
                                     width: 240,
                                     name : 'fono',
@@ -166,6 +166,8 @@ Ext.define('Infosys_web.view.ordencompra.Ingresar', {
                                     fieldLabel: 'Telefono Empresa',
                                     readOnly : true
                                 }
+                                
+                               
                                 ]
                             },
                             {
@@ -206,7 +208,7 @@ Ext.define('Infosys_web.view.ordencompra.Ingresar', {
                 },
                 {
                     xtype: 'fieldset',
-                    title: 'Detalle Ordencompra',
+                    title: 'Items Ordencompra',
                     fieldDefaults: {
                         labelWidth: 70
                     },
@@ -226,15 +228,14 @@ Ext.define('Infosys_web.view.ordencompra.Ingresar', {
                             layout: 'hbox',
                             items: [{
                                 xtype: 'textfield',
-                                width: 240,
-                                labelWidth: 50,
+                                width: 140,
+                                labelWidth: 40,
                                 fieldLabel: 'Codigo',
                                 itemId: 'codigoId',
                                 style: 'font-weight: bold;'
                             }, {xtype: 'splitter'},{
                                 xtype: 'textfield',
                                 align: 'center',
-                                width: 660,
                                 labelWidth: 55,
                                 itemId: 'nombreproductoId',
                                 fieldLabel: 'Producto',
@@ -248,32 +249,34 @@ Ext.define('Infosys_web.view.ordencompra.Ingresar', {
                                 fieldLabel: 'Producto',
                                 name: 'Productos',                                
                                 hidden: true
-                            },{
-                                xtype: 'numberfield',
-                                align: 'center',
-                                labelWidth: 60,
-                                itemId: 'cantmedId',
-                                fieldLabel: 'Cantidad medidad',
-                                name: 'cant_medidad',                                
-                                hidden: true
                             },
                             {xtype: 'splitter'},
                             {
                                 xtype: 'button',
                                 text: 'Buscar',
-                                maxHeight: 25,
+                                 maxHeight: 25,
                                 width: 140,
                                 allowBlank: true,
                                 icon: gbl_site + 'Infosys_web/resources/images/search.png',
                                 tooltip: 'Buscar',
                                 handler: function (grid, rowIndex, colIndex, id) {
-                                    var view = Ext.create('Infosys_web.view.ordencompra.BuscarProductos');
+                                    var view = Ext.create('Infosys_web.view.ordencompra.BuscarProductos2');
                                     view.down("#nombreId").focus();
                                 }
+                            },
+                            {xtype: 'splitter'},
+                            {
+                                xtype: 'numberfield',
+                                width: 140,
+                                labelWidth: 40,
+                                fieldLabel: 'Precio',
+                                itemId: 'precioId',
+                                style: 'font-weight: bold;',
+                                decimalPrecision: 3
                             },{xtype: 'splitter'},
                             {
                                 xtype: 'textfield',
-                                width: 120,
+                                width: 130,
                                 labelWidth: 40,
                                 minValue: 0,
                                 fieldLabel: 'Stock',
@@ -281,63 +284,23 @@ Ext.define('Infosys_web.view.ordencompra.Ingresar', {
                                 itemId: 'cantidadOriginalId',
                                 style: 'font-weight: bold;'
 
-                            }]
-                        }
-
-                        ]
-                    },{
-                        xtype: 'container',
-                        layout: {
-                            type: 'vbox'
-                        },
-                        defaults: {
-                            flex: 1
-                        },
-                        items: [
-
-                        {
-                            xtype: 'fieldcontainer',
-                            layout: 'hbox',
-                            items: [{
-                                xtype: 'numberfield',
-                                width: 240,
-                                labelWidth: 50,
-                                fieldLabel: 'Precio',
-                                itemId: 'precioId',
-                                style: 'font-weight: bold;',
-                                decimalPrecision: 3
                             },
                             {xtype: 'splitter'},
                             {
                                 xtype: 'numberfield',
-                                width: 150,
-                                labelWidth: 70,
+                                width: 140,
+                                labelWidth: 60,
                                 minValue: 0,
                                 value: 1,
                                 fieldLabel: 'Cantidad',
                                 itemId: 'cantidadId',
                                 decimalPrecision: 3
-
-                            },
-                            {xtype: 'splitter'},
-                            {
-                                xtype: 'numberfield',
-                                width: 150,
-                                labelWidth: 70,
-                                minValue: 0,
-                                value: 1,
-                                fieldLabel: 'Conversion',
-                                itemId: 'conversionId',
-                                decimalPrecision: 3
-
-                            },
-                            {xtype: 'splitter'},
-                            {
+                            },{
                                 xtype: 'numberfield',
                                 width: 120,
-                                labelWidth: 80,
+                                labelWidth: 60,
                                 minValue: 0,
-                                //value: 1,
+                                value: 1,
                                 fieldLabel: 'Descuento Pro',
                                 itemId: 'totdescuentoId',
                                 hidden: true
@@ -353,28 +316,7 @@ Ext.define('Infosys_web.view.ordencompra.Ingresar', {
                                 emptyText : "Seleccione",
                                 valueField: 'id',
                                 displayField: 'nombre'
-                                },{xtype: 'splitter'},
-                            {
-                                xtype: 'combo',
-                                width: 230,
-                                labelWidth: 80,
-                                queryMode: 'local',
-                                itemId: 'Descuentopro2Id',
-                                fieldLabel: 'Descto 2 %',
-                                store: 'Tabladescuento',
-                                emptyText : "Seleccione",
-                                valueField: 'id',
-                                displayField: 'nombre'
-                                }, {
-                                xtype: 'numberfield',
-                                width: 120,
-                                labelWidth: 80,
-                                minValue: 0,
-                                //value: 1,
-                                fieldLabel: 'Descuento Pro2',
-                                itemId: 'totdescuento2Id',
-                                hidden: true
-                            },
+                                },
                             {xtype: 'splitter'},
                             {
                                 xtype: 'button',
@@ -382,45 +324,50 @@ Ext.define('Infosys_web.view.ordencompra.Ingresar', {
                                 iconCls: 'icon-plus',
                                 width: 80,
                                 allowBlank: true,
-                                action: 'agregarItem'
+                                action: 'agregarItem2'
+                            },{
+                                xtype: 'numberfield',
+                                align: 'center',
+                                labelWidth: 60,
+                                itemId: 'cantmedId',
+                                fieldLabel: 'Cantidad medidad',
+                                name: 'cant_medidad',                                
+                                hidden: true
                             }]
                         }
 
                         ]
-                   }]
+                    }]
 
-                },{
+                },
+                {
                     xtype: 'grid',
                     itemId: 'itemsgridId',
-                    title: 'Detalle',
-                    store: 'ordencompra.Items',                  
-                    
+                    title: 'Items',
+                    store: 'Ordeneditar',
                     tbar: [{
                         iconCls: 'icon-delete',
                         text: 'Eliminar',
-                        action: 'eliminaritem'
-                    },
-                    {
+                        action: 'eliminaritem2'
+                        },{
                         iconCls: 'icon-delete',
                         text: 'Editar',
-                        action: 'editaritem'
-                    }
+                        action: 'editaritem2'
+                        }
                     ],
-                    height: 230,
+                    height: 250,
                     columns: [
                             {text: 'Id producto',  dataIndex: 'id_producto', width: 250, hidden : true },
                             { text: 'Id descuento',  dataIndex: 'id_descuento', width: 250, hidden : true },
-                            { text: 'Id descuento2',  dataIndex: 'id_descuento2', width: 250, hidden : true },
                             { text: 'codigo',  dataIndex: 'codigo', width: 250, hidden : true },
                             { text: 'Producto',  dataIndex: 'nombre', width: 250 },
-                            { text: 'Precio Unitario',  dataIndex: 'precio', align: 'right',flex:1, decimalPrecision: 3},
-                            { text: 'Cantidad',  dataIndex: 'cantidad', align: 'right',width: 120, decimalPrecision: 3},
+                            { text: 'Precio Unitario',  dataIndex: 'precio', align: 'right', width: 120, decimalPrecision: 3 },
+                            { text: 'Cantidad',  dataIndex: 'cantidad', align: 'right', width: 100, decimalPrecision: 3},
                             { text: 'Cant Medidad',  dataIndex: 'cant_medida', align: 'right',width: 100, hidden: true, decimalPrecision: 3},
-                            { text: 'Descuento',  dataIndex: 'dcto', align: 'right',flex:1, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
-                            { text: 'Descuento2',  dataIndex: 'dcto2', align: 'right',flex:1, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
-                            { text: 'Neto',  dataIndex: 'neto', align: 'right',flex:1,renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
-                            { text: 'Iva',  dataIndex: 'iva', align: 'right',flex:1,renderer: function(valor){return Ext.util.Format.number((valor),"0,000")}, hidden: true },
-                            { text: 'Total',  dataIndex: 'total', align: 'right',flex:1, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")}, hidden: true }
+                            { text: 'Descuento',  dataIndex: 'dcto', align: 'right', flex:1, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
+                            { text: 'Neto',  dataIndex: 'neto', align: 'right', flex:1,renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
+                            { text: 'Iva',  dataIndex: 'iva', align: 'right', flex:1,renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} },
+                            { text: 'Total',  dataIndex: 'total', align: 'right', flex:1, renderer: function(valor){return Ext.util.Format.number((valor),"0,000")} }
                     ]
                 },
                 {
@@ -494,7 +441,7 @@ Ext.define('Infosys_web.view.ordencompra.Ingresar', {
                             readOnly: true,
                             fieldLabel: '<b>IVA</b>',
                             labelAlign: 'top'
-                            //renderer: function(valor){return Ext.util.Format.number((iva),"0.000")} 
+                            //renderer: function(valor){return Ext.util.Format.number(parseInt(iva),"0.000")} 
                         },{xtype: 'splitter'},{
                             xtype: 'textfield',
                             fieldCls: 'required',
@@ -524,7 +471,7 @@ Ext.define('Infosys_web.view.ordencompra.Ingresar', {
             items: ['->', {
                 iconCls: 'icon-save',
                 text: 'Grabar',
-                action: 'grabar'
+                action: 'grabareditar'
             },'-',{
                 iconCls: 'icon-reset',
                 text: 'Cancelar',
@@ -532,6 +479,7 @@ Ext.define('Infosys_web.view.ordencompra.Ingresar', {
                 handler: this.close
             }]
         }];
+
         this.callParent(arguments);
     }
 });
