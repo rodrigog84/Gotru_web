@@ -865,6 +865,7 @@ Ext.define('Infosys_web.controller.Ordencompra', {
             var precio_un = row.data.precio;
             var cantmedida = row.data.cant_medida;
             var cantidad = row.data.cantidad;
+            var cantidad2 = ((row.data.cantidad) / (row.data.cant_medida));
             
             Ext.Ajax.request({
             url: preurl + 'productos/buscarp?nombre='+id_producto,
@@ -881,8 +882,8 @@ Ext.define('Infosys_web.controller.Ordencompra', {
                         view.down('#nombreproductoId').setValue(row.data.nombre);
                         view.down('#codigoId').setValue(cliente.codigo);
                         view.down('#cantidadOriginalId').setValue(cliente.stock);
-                        view.down('#cantidadId').setValue(cantidad);
-                        view.down('#cantmedId').setValue(cantmedida);
+                        view.down('#cantidadId').setValue(cantmedida);
+                        view.down('#conversionId').setValue(cantidad2);
                         view.down('#totdescuentoId').setValue(row.data.dcto);
                         view.down('#totdescuento2Id').setValue(row.data.dcto2);
                         if ((row.data.id_descuento)==0){
@@ -1907,6 +1908,7 @@ Ext.define('Infosys_web.controller.Ordencompra', {
         var iddescuento = view.down('#DescuentoproId').getValue();
         var iddescuento2 = view.down('#Descuentopro2Id').getValue();
         var precio = (precio / (cantidad * conversion));
+        var cantidad2 = (cantidad);
         var cantidad = (cantidad * conversion);
         var bolEnable = true;
         cero="";
@@ -1979,7 +1981,7 @@ Ext.define('Infosys_web.controller.Ordencompra', {
             id_producto: producto,
             id_descuento: iddescuento,
             id_descuento2: iddescuento2,
-            cant_medida: cantmedidad,
+            cant_medida: cantidad2,
             nombre: nombre,
             precio: precio,
             cantidad: cantidad,
