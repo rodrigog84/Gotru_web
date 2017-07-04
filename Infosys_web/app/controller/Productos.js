@@ -52,10 +52,6 @@ Ext.define('Infosys_web.controller.Productos', {
         selector: 'eliminarproductos'
     }
 
-
-
-
-
     ],
     //init es lo primero que se ejecuta en el controller
     //especia de constructor
@@ -91,6 +87,18 @@ Ext.define('Infosys_web.controller.Productos', {
             },
             'facturasingresar #productoId': {
                 select: this.selectItem
+            },
+            'productosdesplegar #tipounimedidaId': {
+                select: this.selectItem5
+            },
+            'productosdesplegar #tipounimedidacomprasId': {
+                select: this.selectItem6
+            },
+            'productosingresar #tipounimedidaId': {
+                select: this.selectItem7
+            },
+            'productosingresar #tipounimedidacomprasId': {
+                select: this.selectItem8
             },
             'facturasingresar #buscarproductos': {
                 select: this.selectCodigo
@@ -447,6 +455,38 @@ Ext.define('Infosys_web.controller.Productos', {
         view.down('#codigoId').setValue(record.codigo);
         view.down('#cantidadOriginalId').setValue(record.stock);
           
+    },
+
+    selectItem5: function() {
+        var view = this.getProductosdesplegar();
+        var unimedidad = view.down('#tipounimedidaId');
+        var stCombo = unimedidad.getStore();
+        var record = stCombo.findRecord('id', unimedidad.getValue()).data;
+        view.down('#equivproId').setValue(record.cantidad);
+    },
+
+    selectItem6: function() {
+        var view = this.getProductosdesplegar();
+        var unimedidad = view.down('#tipounimedidacomprasId');
+        var stCombo = unimedidad.getStore();
+        var record = stCombo.findRecord('id', unimedidad.getValue()).data;
+        view.down('#equivprocompraId').setValue(record.cant_compra);
+    },
+
+    selectItem7: function() {
+        var view = this.getProductosingresar();
+        var unimedidad = view.down('#tipounimedidaId');
+        var stCombo = unimedidad.getStore();
+        var record = stCombo.findRecord('id', unimedidad.getValue()).data;
+        view.down('#equivproId').setValue(record.cantidad);
+    },
+
+    selectItem8: function() {
+        var view = this.getProductosingresar();
+        var unimedidad = view.down('#tipounimedidacomprasId');
+        var stCombo = unimedidad.getStore();
+        var record = stCombo.findRecord('id', unimedidad.getValue()).data;
+        view.down('#equivprocompraId').setValue(record.cant_compra);
     },
 
     selectCodigo: function() {

@@ -8,9 +8,9 @@ Ext.define('Infosys_web.view.productos.Desplegar', {
     layout: 'fit',
     autoShow: true,
     width: 860,
+    height: 645,
     modal: true,
     iconCls: 'icon-sheet',
-
     layout: {
                 type: 'fit'
             },
@@ -133,7 +133,7 @@ Ext.define('Infosys_web.view.productos.Desplegar', {
             displayField : 'nombre',
             emptyText : "Seleccione",
             store : 'Subfamilia'
-                    },{
+        },{
             xtype: 'fieldcontainer',
             layout: 'hbox',
             items: [
@@ -149,10 +149,15 @@ Ext.define('Infosys_web.view.productos.Desplegar', {
                 displayField : 'nombre',
                 emptyText : "Seleccione",
                 store : 'Ubicas'
-            },{xtype: 'splitter'},{
+            }]
+        },{
+            xtype: 'fieldcontainer',
+            layout: 'hbox',
+            items: [
+            {
                 xtype: 'combo',
                 itemId: 'tipounimedidaId',
-                fieldLabel: 'Unidad de Medida',
+                fieldLabel: 'Unidad de Medida Ventas',
                 forceSelection : true,
                 editable : false,
                 labelWidth: 120,
@@ -165,8 +170,35 @@ Ext.define('Infosys_web.view.productos.Desplegar', {
                 xtype: 'numberfield',
                 labelWidth: 80,
                 width: 150,
+                itemId: 'equivproId',
                 fieldLabel: 'Equivalencia',
-                name:'equiv_pro'
+                name:'equiv_pro',
+                readOnly: true
+            }]
+        },{
+            xtype: 'fieldcontainer',
+            layout: 'hbox',
+            items: [
+            {
+                xtype: 'combo',
+                itemId: 'tipounimedidacomprasId',
+                fieldLabel: 'Unidad de Medida Compras',
+                forceSelection : true,
+                editable : false,
+                labelWidth: 120,
+                name : 'id_unimedida_compra',
+                valueField : 'id',
+                displayField : 'nombre',
+                emptyText : "Seleccione",
+                store : 'Medidas'
+            },{xtype: 'splitter'},{
+                xtype: 'numberfield',
+                labelWidth: 80,
+                width: 150,
+                fieldLabel: 'Equivalencia',
+                itemId: 'equivprocompraId',
+                name:'equiv_pro_compra',
+                readOnly: true
             }]
         },{
             xtype: 'fieldset',
@@ -216,7 +248,7 @@ Ext.define('Infosys_web.view.productos.Desplegar', {
                 }
 
                 ]
-            },,{
+            },{
                 xtype: 'fieldcontainer',
                 layout: 'hbox',
                 items: [

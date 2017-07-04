@@ -650,6 +650,7 @@ Ext.define('Infosys_web.controller.Ordencompra', {
             viewIngresa.down('#cantmedId').setValue(row.data.cantidad_medida);
             viewIngresa.down('#precioId').setValue(cero);
             viewIngresa.down('#cantidadOriginalId').setValue(row.data.stock);
+            viewIngresa.down('#conversionId').setValue(row.data.cant_compra);
             view.close();
         }else{
             Ext.Msg.alert('Alerta', 'Selecciona un registro.');
@@ -1463,6 +1464,7 @@ Ext.define('Infosys_web.controller.Ordencompra', {
             viewIngresa.down('#cantmedId').setValue(row.data.cantidad_medida);
             viewIngresa.down('#precioId').setValue(cero);
             viewIngresa.down('#cantidadOriginalId').setValue(row.data.stock);
+            viewIngresa.down('#conversionId').setValue(row.data.cant_compra);
             view.close();
         }else{
             Ext.Msg.alert('Alerta', 'Selecciona un registro.');

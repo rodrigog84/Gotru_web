@@ -19,6 +19,7 @@ Ext.define('Infosys_web.model.Producto', {
         {name: 'id_uni_medida'},
         {name: 'nom_medida'},
         {name: 'cantidad_medida', decimalPrecision:3},
+        {name: 'cant_compra', decimalPrecision:3},
         {name: 'nom_ubi_prod'},
         {name: 'id_ubi_prod'},
         {name: 'p_promedio'},

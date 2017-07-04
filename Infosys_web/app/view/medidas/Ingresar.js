@@ -43,9 +43,15 @@ Ext.define('Infosys_web.view.medidas.Ingresar', {
                     {
                         xtype: 'numberfield',
                         name : 'cantidad',
-                        fieldLabel: 'Cantidad',
+                        fieldLabel: 'Cantidad Venta',
                         //value      : 2.15,
-                        stepValue  : .01
+                        //stepValue  : .01
+                    },{
+                        xtype: 'numberfield',
+                        name : 'cant_compra',
+                        fieldLabel: 'Cantidad Compra',
+                        //value      : 2.15,
+                        //stepValue  : .01
                     }
                 ]
             }

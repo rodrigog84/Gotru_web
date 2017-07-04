@@ -42,9 +42,9 @@ Ext.define('Infosys_web.view.ordencompra.BuscarProductos' ,{
                  width: 100,
                 dataIndex: 'nom_medida',
             },{
-                header: "id Unidad Medida",
+                header: "Cantidad compra",
                  width: 100,
-                dataIndex: 'cantidad_medida',
+                dataIndex: 'cant_compra',
                 hidden : true
             },{
                 header: "Ubicacion Fisica",

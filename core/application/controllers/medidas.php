@@ -17,7 +17,8 @@ class Medidas extends CI_Controller {
 
 		$data = array(
 	        'nombre' => strtoupper($data->nombre),
-	        'cantidad' =>($data->cantidad)
+	        'cantidad' =>($data->cantidad),
+	        'cant_compra' =>($data->cant_compra)
 		);
 
 		$this->db->insert('mae_medida', $data); 
@@ -32,22 +33,17 @@ class Medidas extends CI_Controller {
 
 	public function update(){
 		$resp = array();
-
 		$data = json_decode($this->input->post('data'));
 		$id = $data->id;
 		$data = array(
 	        'nombre' => strtoupper($data->nombre),
-	        'cantidad' =>($data->cantidad)
+	        'cantidad' =>($data->cantidad),
+	        'cant_compra' =>($data->cant_compra)
 	    );
-		$this->db->where('id', $id);
-		
-		$this->db->update('mae_medida', $data); 
-
-        $resp['success'] = true;
-          
+		$this->db->where('id', $id);		
+		$this->db->update('mae_medida', $data);
+        $resp['success'] = true;          
         $this->Bitacora->logger("M", 'mae_medida', $id);
-
-
         echo json_encode($resp);
 
 	}

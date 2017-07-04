@@ -23,9 +23,13 @@ Ext.define('Infosys_web.view.medidas.Principal' ,{
         flex: 1,
         dataIndex: 'nombre'
     },{
-        header: "Cantidad",
+        header: "Cantidad Ventas",
         flex: 1,
         dataIndex: 'cantidad'
+    },{
+        header: "Cantidad Compras",
+        flex: 1,
+        dataIndex: 'cant_compra'
     }],
     
     initComponent: function() {
