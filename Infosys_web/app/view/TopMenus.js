@@ -547,11 +547,11 @@ Ext.define('Infosys_web.view.TopMenus' ,{
                         disabled: true,
                         iconCls: '',
                         action: 'mcomisiones'
-                },{
+                },/*{
                         text: 'Ventas',
                         iconCls: '',
                         action: 'mestadisticas',
-                },{
+                },*/{
                         text: 'Recaudaciones',
                         itemId: 'vyf_eds_recaudaciones',
                         disabled: true,

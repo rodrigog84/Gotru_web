@@ -10,6 +10,8 @@ Ext.define('Infosys_web.controller.Estadisticas', {
     views: ['estadisticas.Estadisticas',
             'estadisticas.Estadisticas'],
 
+ views: [],
+
     //referencias, es un alias interno para el controller
     //podemos dejar el alias de la vista en el ref y en el selector
     //tambien, asi evitamos enredarnos
@@ -34,9 +36,9 @@ Ext.define('Infosys_web.controller.Estadisticas', {
     	//del controller
         this.control({           
            
-            'topmenus menuitem[action=mestadisticas]': {
+           /* 'topmenus menuitem[action=mestadisticas]': {
                 click: this.mestadisticas
-            },
+            },*/
 
             'buscarclientesestadisticas button[action=seleccionarclienteest]': {
                 click: this.seleccionarcliente
