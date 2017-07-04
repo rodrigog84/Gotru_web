@@ -282,10 +282,16 @@ Ext.define('Infosys_web.controller.Ordencompra', {
                 change: this.changedctofinal5
             },
             'ordencompraeditar #Descuentopro2Id': {
+                change: this.changedctofinal6
+            },
+            'ordencompraeditar #DescuentoproId': {
                 change: this.changedctofinal4
             },
             'ordencompraingresar #tipoDescuentoId': {
                 change: this.changedctofinal
+            },
+            'ordencompraeditar #tipoDescuentoId': {
+                change: this.changedctofinal7
             },
             'ordencompraprincipal button[action=enviaremail]': {
                 click: this.enviaremail
@@ -439,6 +445,37 @@ Ext.define('Infosys_web.controller.Ordencompra', {
         var stCombo = descuento.getStore();
         var record = stCombo.findRecord('id', descuento.getValue()).data;
         var dcto = (record.porcentaje);
+
+        
+       
+        afecto = (total / 1.19);
+        descuentopesos = ((neto * dcto) / 100);
+        afecto = neto - descuentopesos;
+        pretotal = (((afecto * 19) / 100) + afecto);
+        iva = (pretotal - afecto);
+        afecto = afecto;
+        neto = neto;
+        pretotalfinal = afecto + iva;
+
+        view.down('#finaltotalId').setValue(Ext.util.Format.number(pretotalfinal, '0,000'));
+        view.down('#finaltotalpostId').setValue(Ext.util.Format.number(pretotalfinal, '0'));
+        view.down('#finaltotalnetoId').setValue(Ext.util.Format.number(neto, '0'));
+        view.down('#finaltotalivaId').setValue(Ext.util.Format.number(iva, '0'));
+        view.down('#finalafectoId').setValue(Ext.util.Format.number(afecto, '0'));
+        view.down('#descuentovalorId').setValue(Ext.util.Format.number(descuentopesos, '0'));
+    },
+
+    recalculardescuento7: function(){
+
+        var view = this.getOrdencompraeditar();
+        var pretotal = view.down('#finalafectoId').getValue();
+        var total = view.down('#finaltotalpostId').getValue();
+        var iva = view.down('#finaltotalivaId').getValue();
+        var neto = view.down('#finaltotalnetoId').getValue();
+        var descuento = view.down('#tipoDescuentoId');
+        var stCombo = descuento.getStore();
+        var record = stCombo.findRecord('id', descuento.getValue()).data;
+        var dcto = (record.porcentaje);
        
         afecto = (total / 1.19);
         descuentopesos = ((neto * dcto) / 100);
@@ -461,12 +498,19 @@ Ext.define('Infosys_web.controller.Ordencompra', {
         this.recalculardescuento();
     },
 
+    changedctofinal7: function(){
+        this.recalculardescuento7();
+    },
+
     changedctofinal3: function(){
         this.recalculardescuentopro();
     },
 
     changedctofinal5: function(){
         this.recalculardescuentopro4();
+    },
+    changedctofinal6: function(){
+        this.recalculardescuentopro5();
     },
     changedctofinal4: function(){
         this.recalculardescuentopro2();
@@ -477,7 +521,9 @@ Ext.define('Infosys_web.controller.Ordencompra', {
         var view = this.getOrdencompraeditar();
         var precio = view.down('#precioId').getValue();
         var cantidad = view.down('#cantidadId').getValue();
-        var total = (precio * cantidad);
+        var conversion = view.down('#conversionId').getValue();
+        var precio2 = (precio / (cantidad * conversion));
+        var total = (precio2 * (cantidad * conversion));
         var desc = view.down('#DescuentoproId').getValue();
         if (desc){
         var descuento = view.down('#DescuentoproId');
@@ -486,7 +532,7 @@ Ext.define('Infosys_web.controller.Ordencompra', {
         var dcto = (record.porcentaje);
         totaldescuento = (((total * dcto)  / 100));
         view.down('#totdescuentoId').setValue(totaldescuento);
-        };      
+        }; 
     },
 
     recalculardescuentopro: function(){
@@ -511,6 +557,47 @@ Ext.define('Infosys_web.controller.Ordencompra', {
     recalculardescuentopro4: function(){
 
         var view = this.getOrdencompraingresar();
+        var precio = view.down('#precioId').getValue();
+        var cantidad = view.down('#cantidadId').getValue();
+        var conversion = view.down('#conversionId').getValue();
+        var descuento = view.down('#totdescuentoId').getValue();
+        cero="";
+        cero1=0;
+        console.log(descuento);
+        if(descuento > 0){  
+        console.log(precio)
+        var cantidad2 = (cantidad * conversion);    
+        console.log(cantidad2)       
+        var precio2 = (precio - descuento);
+        var precio3 = (precio2 / cantidad2);
+        console.log(precio3)  
+        var total = (precio3 * cantidad2);
+        var desc = view.down('#Descuentopro2Id').getValue();
+        console.log(total)       
+        if (desc){
+            var descuento = view.down('#Descuentopro2Id');
+            var stCombo = descuento.getStore();
+            var record = stCombo.findRecord('id', descuento.getValue()).data;
+            var dcto = (record.porcentaje);
+            var totaldescuento2 = (((total * dcto)  / 100));
+            view.down('#totdescuento2Id').setValue(totaldescuento2);
+            console.log(totaldescuento2)
+        };      
+        
+        }else{
+
+            view.down('#Descuentopro2Id').setValue(cero);
+            view.down('#totdescuento2Id').setValue(cero1);
+                      
+
+        }
+        
+        
+    },
+
+    recalculardescuentopro5: function(){
+
+        var view = this.getOrdencompraeditar();
         var precio = view.down('#precioId').getValue();
         var cantidad = view.down('#cantidadId').getValue();
         var conversion = view.down('#conversionId').getValue();
@@ -584,16 +671,23 @@ Ext.define('Infosys_web.controller.Ordencompra', {
         var precio = ((view.down('#precioId').getValue()));
         var precioun = ((view.down('#precioId').getValue())/ 1.19);
         var descuento = view.down('#totdescuentoId').getValue(); 
+        var descuento2 = view.down('#totdescuento2Id').getValue(); 
         var iddescuento = view.down('#DescuentoproId').getValue();
+        var iddescuento2 = view.down('#Descuentopro2Id').getValue();
         var bolEnable = true;
         var totalnue = view.down('#finaltotalpostId').getValue();
         var netonue = view.down('#finaltotalnetoId').getValue();
         var ivanue = view.down('#finaltotalivaId').getValue();
         var afectonue = view.down('#finalafectoId').getValue();
         
-        if (descuento == 1){            
+        if (!descuento){            
             var descuento = 0;
             var iddescuento = 0;
+        };
+
+        if (!descuento2){            
+            var descuento2 = 0;
+            var iddescuento2 = 0;
         };
               
         var tot = ((cantidad * precio) - descuento);
@@ -637,7 +731,9 @@ Ext.define('Infosys_web.controller.Ordencompra', {
                 view.down('#precioId').setValue(cero);
                 view.down('#cantidadOriginalId').setValue(cero);
                 view.down('#totdescuentoId').setValue(cero1);
+                view.down('#totdescuento2Id').setValue(cero1);
                 view.down('#DescuentoproId').setValue(cero);
+                view.down('#Descuentopro2Id').setValue(cero);
                 return; 
             }
         });
@@ -648,6 +744,7 @@ Ext.define('Infosys_web.controller.Ordencompra', {
             id: producto,
             id_producto: producto,
             id_descuento: iddescuento,
+            id_descuento2: iddescuento2,
             nombre: nombre,
             precio: precio,
             cantidad: cantidad,
@@ -655,7 +752,8 @@ Ext.define('Infosys_web.controller.Ordencompra', {
             neto: neto,
             total: total,
             iva: iva,
-            dcto: descuento
+            dcto: descuento,
+            dcto2: descuento2
         }));
         
         var totalnue = totalnue + total;
@@ -721,10 +819,15 @@ Ext.define('Infosys_web.controller.Ordencompra', {
                         view.down('#cantidadId').setValue(cantidad);
                         view.down('#cantmedId').setValue(cantidad_un);
                         view.down('#totdescuentoId').setValue(row.data.dcto);
-                        if ((row.data.id_descuento)==0){
+                         if ((row.data.id_descuento)==0){
                             view.down('#DescuentoproId').setValue(cero);
                         }else{
                             view.down('#DescuentoproId').setValue(row.data.id_descuento);
+                        } 
+                        if ((row.data.id_descuento2)==0){
+                            view.down('#Descuentopro2Id').setValue(cero);
+                        }else{
+                            view.down('#Descuentopro2Id').setValue(row.data.id_descuento2);
                         }
                         
                         view.down('#finaltotalId').setValue(Ext.util.Format.number(totalnue, '0,000'));
@@ -780,10 +883,16 @@ Ext.define('Infosys_web.controller.Ordencompra', {
                         view.down('#cantidadId').setValue(cantidad);
                         view.down('#cantmedId').setValue(cantmedida);
                         view.down('#totdescuentoId').setValue(row.data.dcto);
+                        view.down('#totdescuento2Id').setValue(row.data.dcto2);
                         if ((row.data.id_descuento)==0){
                             view.down('#DescuentoproId').setValue(cero);
                         }else{
                             view.down('#DescuentoproId').setValue(row.data.id_descuento);
+                        } 
+                        if ((row.data.id_descuento2)==0){
+                            view.down('#Descuentopro2Id').setValue(cero);
+                        }else{
+                            view.down('#Descuentopro2Id').setValue(row.data.id_descuento2);
                         }       
                     }
                 }
@@ -808,6 +917,7 @@ Ext.define('Infosys_web.controller.Ordencompra', {
         var total = view.down('#finaltotalpostId').getValue();
         var afecto = view.down('#finalafectoId').getValue();
         var descuentofinal = view.down('#descuentovalorId').getValue();
+        var iddescuentofinal = view.down('#tipoDescuentoId').getValue();
         var fecha = view.down('#fechaordenId').getValue();
         var fecharecepcion = view.down('#fecharecepcionId').getValue();
 
@@ -819,6 +929,11 @@ Ext.define('Infosys_web.controller.Ordencompra', {
         if (!idproveedor){            
              Ext.Msg.alert('Debe Ingresar Datos del Proveedor');
              return;
+        }
+
+        if (!iddescuentofinal){
+            
+            var iddescuentofinal=0;
         }
 
         var dataproveedor = {
@@ -851,6 +966,7 @@ Ext.define('Infosys_web.controller.Ordencompra', {
                 neto: neto,
                 iva: iva,
                 descuento: descuentofinal,
+                iddescuento: iddescuentofinal,
                 fecha: Ext.Date.format(fecha,'Y-m-d'),
                 fecharecepcion: Ext.Date.format(fecharecepcion,'Y-m-d'),
                 total: view.down('#finaltotalpostId').getValue()
@@ -916,14 +1032,15 @@ Ext.define('Infosys_web.controller.Ordencompra', {
                     view.down('#mail_contactoId').setValue(cliente.mail_contacto);
                     var total = (cliente.total);
                     var neto = (cliente.neto);
-                    var iva = (cliente.total - cliente.neto);
+                    var iva = (cliente.total - cliente.afecto);
                     view.down('#finaltotalId').setValue(Ext.util.Format.number(total, '0,000'));
                     view.down('#finaltotalpostId').setValue(Ext.util.Format.number(total, '0'));
                     view.down('#finaltotalnetoId').setValue(Ext.util.Format.number(neto, '0'));
                     view.down('#finaltotalivaId').setValue(Ext.util.Format.number(iva, '0'));
-                    view.down('#finalafectoId').setValue(Ext.util.Format.number(neto, '0'));
-                    view.down('#descuentovalorId').setValue(Ext.util.Format.number(cliente.desc, '0'));
-                    //view.down('#observacionesId').setValue(cliente.observaciones);
+                    view.down('#finalafectoId').setValue(Ext.util.Format.number(afecto, '0'));
+                    view.down('#finaldescuentoId').setValue(Ext.util.Format.number(cliente.descuento, '0'));
+                    view.down('#tipoDescuentoId').setValue(cliente.id_descuento);
+                    view.down('#descuentovalorId').setValue(Ext.util.Format.number(cliente.descuento, '0'));
                                                        
                 }
             }
@@ -1786,6 +1903,7 @@ Ext.define('Infosys_web.controller.Ordencompra', {
         var descuento = view.down('#totdescuentoId').getValue();
         var descuento2 = view.down('#totdescuento2Id').getValue(); 
         var iddescuento = view.down('#DescuentoproId').getValue();
+        var iddescuento2 = view.down('#Descuentopro2Id').getValue();
         var precio = (precio / (cantidad * conversion));
         var cantidad = (cantidad * conversion);
         var bolEnable = true;
@@ -1800,6 +1918,7 @@ Ext.define('Infosys_web.controller.Ordencompra', {
 
         if (!descuento2){            
             var descuento2 = 0;
+            var iddescuento2 = 0;
         };
               
         var neto = ((cantidad * precio) - (descuento + descuento2));
@@ -1857,6 +1976,7 @@ Ext.define('Infosys_web.controller.Ordencompra', {
             id: producto,
             id_producto: producto,
             id_descuento: iddescuento,
+            id_descuento2: iddescuento2,
             cant_medida: cantmedidad,
             nombre: nombre,
             precio: precio,
@@ -1947,8 +2067,14 @@ Ext.define('Infosys_web.controller.Ordencompra', {
         var fecharecepcion = view.down('#fecharecepcionId').getValue();
         var fecha = view.down('#fechaordenId').getValue();
         var descuentofinal = view.down('#descuentovalorId').getValue();
+        var iddescuentofinal = view.down('#tipoDescuentoId').getValue();
         var stItem = this.getOrdencompraItemsStore();
         var stCotiz = this.getOrdencompra_originalStore();
+
+        if (!iddescuentofinal){
+            
+            var iddescuentofinal=0;
+        }
 
         if (!idproveedor){            
              Ext.Msg.alert('Debe Ingresar Datos del Proveedor');
@@ -1989,6 +2115,7 @@ Ext.define('Infosys_web.controller.Ordencompra', {
                 fecha: Ext.Date.format(fecha,'Y-m-d'),
                 fecharecepcion: Ext.Date.format(fecharecepcion,'Y-m-d'),
                 descuento: descuentofinal,
+                iddescuento: iddescuentofinal,
                 total: view.down('#finaltotalpostId').getValue()
             },
             success: function(response){

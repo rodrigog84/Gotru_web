@@ -7,6 +7,7 @@ Ext.define('Infosys_web.model.ordencompra.Item', {
     	{name: 'subtotal'},
         {name: 'id_producto'},
         {name: 'id_descuento'},
+        {name: 'id_descuento2'},
         {name: 'cant_medida', decimalPrecision:3},
         {name: 'precio', decimalPrecision:3},
         {name: 'total'},
