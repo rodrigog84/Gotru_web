@@ -2101,10 +2101,16 @@ Ext.define('Infosys_web.controller.Ordencompra', {
              return;
         }
 
+        var descuento = view.down('#tipoDescuentoId').getValue();
+
+        if (descuento){
+
         var descuento = view.down('#tipoDescuentoId');
         var stCombo = descuento.getStore();
         var record = stCombo.findRecord('id', descuento.getValue()).data;
         var dcto = (record.porcentaje);
+
+        };
 
         Ext.Ajax.request({
             url: preurl + 'ordencompra/save',

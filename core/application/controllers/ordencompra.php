@@ -386,26 +386,30 @@ class Ordencompra extends CI_Controller {
 		   };
 		   $v->stock=($v->stock * $v->cant_medida);
 		   $v->valor= ($v->valor / $v->cant_medida);
+		   $puc = ($v->valor / 1.19);
+		   $cero=0;
 
 		   $query = $this->db->query('SELECT * FROM productos WHERE id="'.$producto.'"');
 		   if($query->num_rows()>0){
-
-			 	$row = $query->first_row();
+			 $row = $query->first_row();
+			 $query2 = $this->db->query('SELECT * FROM existencia_detalle WHERE id_producto='.$producto.' and cantidad_entrada > '.$cero.'');	    	 
+	    	 $ppm=0;
+	    	 $cal = 1;
+			 if ($query2->num_rows()>0){
+			 	foreach ($query2->result() as $r){			 	
+				 	$ppm = $ppm + ($r->valor_producto);
+				 	$cal = $cal +1;
+			    };
+			    $ppm = $ppm + $puc;
+                $ppm = ($ppm / $cal);
 			 	$saldo = ($row->stock)+($v->stock);
-			 	$ppm = ($row->p_promedio);
 			 	$pmc = ($row->p_may_compra);
-			 	$pco = ($row->p_costo);
-			};
-	         $puc = ($v->valor);
-	         if ($pmc < $v->valor ){
-	         	
-	         	$pmc = ($v->valor);
-
-	         };
-
-             $ppm = (($pco+$puc)/2);
-
-
+			 	if ($pmc < $puc){			 		
+			 		$pmc = $puc;
+			 	};			 
+			};                
+		   };
+	        
 		   $prod = array(
 	         'stock' => $saldo,
 	         'p_ult_compra' => $puc,
