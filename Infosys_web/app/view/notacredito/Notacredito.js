@@ -430,7 +430,7 @@ Ext.define('Infosys_web.view.notacredito.Notacredito', {
                                                                     cantidad: detalle_factura[i].cantidad,
                                                                     //neto: (parseInt(detalle_factura[i].neto/ 1.19)),
                                                                     neto: (parseInt(detalle_factura[i].totalproducto/ 1.19)),
-                                                                    dcto: detalle_factura[i].descuento,
+                                                                    descuento: detalle_factura[i].descuento,
                                                                     totaliva: detalle_factura[i].neto,
                                                                     iva: detalle_factura[i].iva          
                                                                 }));

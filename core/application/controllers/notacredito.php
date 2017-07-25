@@ -369,7 +369,7 @@ class Notacredito extends CI_Controller {
 
 		foreach($items as $v){
 
-			$neto_producto = round(round($v->precio,3)*$v->cantidad - round($v->dcto,0),0);
+			$neto_producto = round(round($v->precio,3)*$v->cantidad - round($v->descuento,0),0);
 			$factura_clientes_item = array(
 		        'id_producto' => $v->id,
 		        'id_factura' => $idfactura,
@@ -377,7 +377,7 @@ class Notacredito extends CI_Controller {
 		        'precio' => $v->precio,
 		        'cantidad' => $v->cantidad,
 		        'neto' =>$neto_producto,
-		        'descuento' => $v->dcto,
+		        'descuento' => $v->descuento,
 		        'iva' => $v->iva,
 		        'totalproducto' => $v->totaliva,
 		        'fecha' => $fechafactura
